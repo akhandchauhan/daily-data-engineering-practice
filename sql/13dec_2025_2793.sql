@@ -21,8 +21,8 @@
 -- booking_time column contains distinct values.
 -- Each row of this table contains passenger id, booking time, and their flight id.
 -- Passengers book tickets for flights in advance. If a passenger books a ticket for a 
---flight and there are still empty seats available on the flight, the passenger's ticket 
---will be confirmed. However, the passenger will be on a waitlist if the flight is already
+-- flight and there are still empty seats available on the flight, the passenger's ticket 
+-- will be confirmed. However, the passenger will be on a waitlist if the flight is already
 -- at full capacity.
 -- Write a solution to determine the current status of flight tickets for each passenger.
 -- Return the result table ordered by passenger_id in ascending order.
