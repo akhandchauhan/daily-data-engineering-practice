@@ -33,6 +33,7 @@
 # -- | 10         | 10           |
 # -- +------------+--------------+
 
+
 import pandas as pd
 
 logs = {
@@ -40,16 +41,30 @@ logs = {
     }
 df = pd.DataFrame(logs)
 
-df['diff'] = df['log_id'] - df['log_id'].rank(ascending=True)
 
-# Step 2: Group by the identifier and compute start and end of each range
-df = df.groupby('diff')['log_id'].agg(['min', 'max']).reset_index()
-df = df.rename(columns={'min': 'start_id', 'max': 'end_id'})
+# m1 
+# df = df.sort_values('log_id').reset_index(drop=True)
+# df['rank'] = range(1, len(df) + 1)
+# df['diff'] = df['log_id']  - df['rank']
+# df = df.groupby('diff').agg(
+#     start_id = ('log_id','min'),
+#     end_id = ('log_id','max')
+# )
+# df = df.sort_values(by='start_id')[['start_id', 'end_id']]
+# print(df)
 
-# Step 4: Sort by 'start_id' and select the required columns
-df = df.sort_values(by='start_id')[['start_id', 'end_id']]
 
-print(df)
+# m2 somewhat tricky and misaligned
+# df['diff'] = df['log_id'] - df['log_id'].rank(ascending=True)
+
+# # Step 2: Group by the identifier and compute start and end of each range
+# df = df.groupby('diff')['log_id'].agg(['min', 'max']).reset_index()
+# df = df.rename(columns={'min': 'start_id', 'max': 'end_id'})
+
+# # Step 4: Sort by 'start_id' and select the required columns
+# df = df.sort_values(by='start_id')[['start_id', 'end_id']]
+
+# print(df)
 
 
 
@@ -98,14 +113,14 @@ print(df)
 # -- | 7           |
 # -- +-------------+
 
-import pandas as pd
-data = {
-    "employee_id": [1, 3, 2, 4, 7, 8, 9, 77],
-    "employee_name": ["Boss", "Alice", "Bob", "Daniel", "Luis", "Jhon", "Angela", "Robert"],
-    "manager_id": [1, 3, 1, 2, 4, 3, 8, 1]
-}
+# import pandas as pd
+# data = {
+#     "employee_id": [1, 3, 2, 4, 7, 8, 9, 77],
+#     "employee_name": ["Boss", "Alice", "Bob", "Daniel", "Luis", "Jhon", "Angela", "Robert"],
+#     "manager_id": [1, 3, 1, 2, 4, 3, 8, 1]
+# }
 
-df1 = pd.DataFrame(data)
-df1 = df1.merge(df1,left_on='manager_id',right_on ='employee_id', how='left').merge(df1,left_on='manager_id_y',right_on ='employee_id', how='left')
-df1 = df1.query("employee_name_x != 'Boss' and manager_id == 1")[["employee_id_x"]]
-print(df1)
+# df1 = pd.DataFrame(data)
+# df1 = df1.merge(df1,left_on='manager_id',right_on ='employee_id', how='left').merge(df1,left_on='manager_id_y',right_on ='employee_id', how='left')
+# df1 = df1.query("employee_name_x != 'Boss' and manager_id == 1")[["employee_id_x"]]
+# print(df1)
