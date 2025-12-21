@@ -18,6 +18,3 @@ class Passenger:
         return f"Passenger[ID={self.passenger_id}, Name={self.name}, Age={self.age}]"
 
 
-Prashant = Passenger(1,"Prashant",23,'male')
-Prashant.display_info()
-print(Prashant)
