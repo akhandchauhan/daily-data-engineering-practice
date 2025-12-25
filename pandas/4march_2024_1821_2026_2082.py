@@ -39,18 +39,18 @@
 # -- Customer 4 has revenue equal to 20 in year 2021.
 # -- Thus only customers 1 and 4 have postive revenue in year 2021.
 
-import pandas as pd
-# Sample data
-data = {
-    'customer_id': [1, 1, 1, 2, 3, 3, 4],
-    'year': [2018, 2021, 2020, 2021, 2018, 2016, 2021],
-    'revenue': [50, 30, 70, -50, 10, 50, 20]
-}
+# import pandas as pd
+# # Sample data
+# data = {
+#     'customer_id': [1, 1, 1, 2, 3, 3, 4],
+#     'year': [2018, 2021, 2020, 2021, 2018, 2016, 2021],
+#     'revenue': [50, 30, 70, -50, 10, 50, 20]
+# }
 
-# Create DataFrame
-df = pd.DataFrame(data)
-df_der = df[(df['year'] == 2021) & (df['revenue'] > 0)][['customer_id']]
-print(df_der)
+# # Create DataFrame
+# df = pd.DataFrame(data)
+# df_der = df[(df['year'] == 2021) & (df['revenue'] > 0)][['customer_id']]
+# print(df_der)
 
 
 
@@ -114,8 +114,22 @@ data = {
 
 # Create DataFrame
 df = pd.DataFrame(data)
+df['ratio'] = df['likes']/(df['likes']+ (df['dislikes']))
+df = df[df['ratio'] < 0.60]
+df = df[['problem_id']].sort_values(by ='problem_id')
+print(df)
 
-df_selected = df[(df['likes'])/(df['likes']+df['dislikes']) < 0.6][['problem_id']].sort_values(by ='problem_id')
+
+
+
+
+
+
+
+
+
+
+#df_selected = df[(df['likes'])/(df['likes']+df['dislikes']) < 0.6][['problem_id']].sort_values(by ='problem_id')
 #print(df_selected)
 
 
