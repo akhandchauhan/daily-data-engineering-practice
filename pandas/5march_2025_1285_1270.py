@@ -68,6 +68,19 @@ df = pd.DataFrame(logs)
 
 
 
+# m3 
+
+
+
+
+
+
+
+
+
+
+
+
 # -- 1270. All People Report to the Given Manager
 # -- Description
 # -- Table: Employees
