@@ -103,32 +103,25 @@
 # -- - Problem 13: (2050 / (2050 + 4164)) * 100 = 32.99002%
 # -- Problems 7, 10, 11, and 13 are low-quality problems because their like percentages are less than 60%.4
 
-import pandas as pd
+# import pandas as pd
 
-# Sample data
-data = {
-    'problem_id': [6, 11, 1, 7, 13, 10],
-    'likes': [1290, 2677, 4446, 8569, 2050, 9002],
-    'dislikes': [425, 8659, 2760, 6086, 4164, 7446]
-}
+# # Sample data
+# data = {
+#     'problem_id': [6, 11, 1, 7, 13, 10],
+#     'likes': [1290, 2677, 4446, 8569, 2050, 9002],
+#     'dislikes': [425, 8659, 2760, 6086, 4164, 7446]
+# }
 
 # Create DataFrame
-df = pd.DataFrame(data)
-df['ratio'] = df['likes']/(df['likes']+ (df['dislikes']))
-df = df[df['ratio'] < 0.60]
-df = df[['problem_id']].sort_values(by ='problem_id')
-print(df)
+# df = pd.DataFrame(data)
 
+# m1
+# df['ratio'] = df['likes']/(df['likes']+ (df['dislikes']))
+# df = df[df['ratio'] < 0.60]
+# df = df[['problem_id']].sort_values(by ='problem_id')
+# print(df)
 
-
-
-
-
-
-
-
-
-
+ # m2
 #df_selected = df[(df['likes'])/(df['likes']+df['dislikes']) < 0.6][['problem_id']].sort_values(by ='problem_id')
 #print(df_selected)
 
@@ -181,12 +174,13 @@ data = {
 }
 
 df2 = pd.DataFrame(data)
+
+
 # df1 = df1.query('amount > 500')[['customer_id']]
 # df1 = df1.drop_duplicates().shape[0]
 # print(df1)  # problem not giving row
 
 rich_count = df2.query('amount > 500')['customer_id'].nunique()
-
 result_df = pd.DataFrame({'rich_count': [rich_count]})
 
 print(result_df)

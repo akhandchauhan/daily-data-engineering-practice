@@ -105,6 +105,8 @@ ORDER BY problem_id;
 -- Customer 2 does not have any bills with an amount strictly greater than 500.
 -- Customer 3 has one bill with an amount strictly greater than 500.
 
+
+drop table store;
 CREATE TABLE Store (
     bill_id INT PRIMARY KEY,
     customer_id INT,
