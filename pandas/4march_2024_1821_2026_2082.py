@@ -40,8 +40,6 @@
 # -- Thus only customers 1 and 4 have postive revenue in year 2021.
 
 import pandas as pd
-import datetime as dt
-
 # Sample data
 data = {
     'customer_id': [1, 1, 1, 2, 3, 3, 4],
@@ -52,7 +50,7 @@ data = {
 # Create DataFrame
 df = pd.DataFrame(data)
 df_der = df[(df['year'] == 2021) & (df['revenue'] > 0)][['customer_id']]
-# print(df_der)
+print(df_der)
 
 
 
