@@ -80,7 +80,6 @@
 -- Average weather_state in Morocco in November is (25 + 27 + 31) / 3 = 27.667 so weather type is Hot.
 -- We know nothing about the average weather_state in Spain in November so we do not include it in the result table.
 
-
 DROP TABLE Countries;
 DROP TABLE Weather;
 -- Create Countries table
@@ -136,7 +135,6 @@ WHERE YEAR(day)=2019 and month(day)=11
 GROUP BY c.country_name;
 
 -- m2 
-----------------------------------------------------------------------------------------------------------------------------------
 
 WITH country_weather_info as (
     SELECT c.country_name,
@@ -154,20 +152,7 @@ SELECT country_name,
        ELSE 'warm'
        END AS weather_type
 FROM country_weather_info;
-----------------------------------------------------------------------------------------------------------------------------------
--- m3 
-SELECT c.country_name,
-       CASE WHEN AVG(w.weather_state) <= 15 THEN 'Cold'
-       WHEN AVG(w.weather_state) >= 25 THEN 'Hot'
-       ELSE 'Warm' END AS weather_type
-FROM Countries c 
-LEFT JOIN Weather w 
-ON c.country_id = w.country_id
-WHERE DATE_FORMAT(w.day,'%Y-%m') = '2019-11'
-GROUP BY c.country_name;
 
-
-----------------------------------------------------------------------------------------------------------------------------------
 -- 1303. Find the Team Size
 -- Description
 -- Table: Employee
