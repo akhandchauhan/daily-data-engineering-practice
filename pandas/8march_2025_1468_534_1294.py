@@ -296,8 +296,8 @@ print(df_avg)
 
 #m2 
 
-country_weather_info = pd.merge(countries_df, weather_df, on = 'country_id', how ='left')
-country_weather_info['day'] = pd.to_datetime(country_weather_info['day'])
-country_weather_info = country_weather_info[(country_weather_info['day'].dt.year == 2019) & (country_weather_info['day'].dt.month == 11)]
-country_weather_info = country_weather_info.groupby('country_name')['weather_state'].mean().reset_index()
-print(country_weather_info)
+# country_weather_info = pd.merge(countries_df, weather_df, on = 'country_id', how ='left')
+# country_weather_info['day'] = pd.to_datetime(country_weather_info['day'])
+# country_weather_info = country_weather_info[(country_weather_info['day'].dt.year == 2019) & (country_weather_info['day'].dt.month == 11)]
+# country_weather_info = country_weather_info.groupby('country_name')['weather_state'].mean().reset_index()
+# print(country_weather_info)
