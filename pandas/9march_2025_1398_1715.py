@@ -197,5 +197,3 @@ chests_df = pd.DataFrame(chests_data)
 #     'orange_count': [df['orange_count'].sum()]
 # })
 
-
-# hello 
