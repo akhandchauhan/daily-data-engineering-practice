@@ -90,12 +90,12 @@ rounds_df = pd.DataFrame(rounds_data)
 # print(df)
 
 # m2 
-interview_df = (pd.merge(candidates_df, rounds_df, how ='left', on ='interview_id')
-                .query("years_of_exp >= 2")
-                .groupby('candidate_id')['score']
-                .sum()
-                .reset_index()
-                .query("score > 15")
-                [['candidate_id']]
-)
-print(interview_df)
+# interview_df = (pd.merge(candidates_df, rounds_df, how ='left', on ='interview_id')
+#                 .query("years_of_exp >= 2")
+#                 .groupby('candidate_id')['score']
+#                 .sum()
+#                 .reset_index()
+#                 .query("score > 15")
+#                 [['candidate_id']]
+# )
+# print(interview_df)
