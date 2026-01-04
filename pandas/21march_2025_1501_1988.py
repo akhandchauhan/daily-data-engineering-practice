@@ -107,6 +107,10 @@ exam_data = {
 # FROM cte
 # WHERE rnk = 1;
 
+
+
+############################################################################################################################ 
+
 # -- 1501. Countries You Can Safely Invest In
 # -- Description
 # -- Table Person:
@@ -200,65 +204,74 @@ exam_data = {
 # -- Global call duration average = (2 * (33 + 4 + 59 + 102 + 330 + 5 + 13 + 3 + 1 + 7)) / 20 = 55.70000
 # -- Since Peru is the only country where the average call duration is greater than the global average, it is the only
 
-# DROP TABLE IF EXISTS Person;
-# DROP TABLE IF EXISTS Country;
-# DROP TABLE IF EXISTS Calls;
+import pandas as pd
+
+person_df = pd.DataFrame({
+    "id": [3, 12, 1, 2, 7, 9],
+    "name": ["Jonathan", "Elvis", "Moncef", "Maroua", "Meir", "Rachel"],
+    "phone_number": ["051-1234567", "051-7654321", "212-1234567", "212-6523651", "972-1234567", "972-0011100"]
+})
+
+country_df = pd.DataFrame({
+    "name": ["Peru", "Israel", "Morocco", "Germany", "Ethiopia"],
+    "country_code": ["051", "972", "212", "049", "251"]
+})
+
+calls_df = pd.DataFrame({
+    "caller_id": [1, 2, 1, 3, 3, 12, 7, 7, 9, 1],
+    "callee_id": [9, 9, 2, 12, 12, 3, 9, 1, 7, 7],
+    "duration": [33, 4, 59, 102, 330, 5, 13, 3, 1, 7]
+})
 
 
-# CREATE TABLE Person (
-#     id INT PRIMARY KEY,
-#     name VARCHAR(100),
-#     phone_number VARCHAR(11)
-# );
+# Step 1: Extract country code from phone number
+# -----------------------
+person_df['country_code'] = person_df['phone_number'].str[:3]
 
-# CREATE TABLE Country (
-#     name VARCHAR(100),
-#     country_code VARCHAR(3) PRIMARY KEY
-# );
+# -----------------------
+# Step 2: Map person -> country
+# -----------------------
+person_country = (
+    person_df
+    .merge(country_df, on='country_code', how='left')
+    [['id', 'name_y']]
+    .rename(columns={'name_y': 'country'})
+)
 
-# CREATE TABLE Calls (
-#     caller_id INT,
-#     callee_id INT,
-#     duration INT
-# );
+# -----------------------
+# Step 3: Attach country to caller
+# -----------------------
+caller_calls = (
+    calls_df
+    .merge(person_country, left_on='caller_id', right_on='id', how='left')
+    [['country', 'duration']]
+)
 
-# INSERT INTO Person (id, name, phone_number)
-# VALUES
-# (3, 'Jonathan', '051-1234567'),
-# (12, 'Elvis', '051-7654321'),
-# (1, 'Moncef', '212-1234567'),
-# (2, 'Maroua', '212-6523651'),
-# (7, 'Meir', '972-1234567'),
-# (9, 'Rachel', '972-0011100');
+# -----------------------
+# Step 4: Attach country to callee
+# -----------------------
+callee_calls = (
+    calls_df
+    .merge(person_country, left_on='callee_id', right_on='id', how='left')
+    [['country', 'duration']]
+)
 
-# INSERT INTO Country (name, country_code)
-# VALUES
-# ('Peru', '051'),
-# ('Israel', '972'),
-# ('Morocco', '212'),
-# ('Germany', '049'),
-# ('Ethiopia', '251');
+# -----------------------
+# Step 5: Combine both sides of calls
+# -----------------------
+all_calls = pd.concat([caller_calls, callee_calls])
 
-# INSERT INTO Calls (caller_id, callee_id, duration)
-# VALUES
-# (1, 9, 33),
-# (2, 9, 4),
-# (1, 2, 59),
-# (3, 12, 102),
-# (3, 12, 330),
-# (12, 3, 5),
-# (7, 9, 13),
-# (7, 1, 3),
-# (9, 7, 1),
-# (1, 7, 7);
+# -----------------------
+# Step 6: Compute averages
+# -----------------------
+country_avg = all_calls.groupby('country')['duration'].mean()
+global_avg = all_calls['duration'].mean()
 
-# SELECT c.name AS country
-# FROM Country c
-# JOIN Person p 
-# ON SUBSTRING(p.phone_number, 1, 3) COLLATE utf8mb4_general_ci = CAST(c.country_code AS CHAR) COLLATE utf8mb4_general_ci
-# LEFT JOIN Calls ca 
-# ON p.id = ca.caller_id OR p.id = ca.callee_id
-# GROUP BY c.name
-# HAVING AVG(duration) > (SELECT 2 * AVG(duration) FROM Calls);
+# -----------------------
+# Step 7: Filter countries
+# -----------------------
+result = country_avg[country_avg > global_avg].reset_index()
+
+print(result)
 
 
