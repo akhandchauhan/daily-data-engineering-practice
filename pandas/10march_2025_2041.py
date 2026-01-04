@@ -82,7 +82,7 @@ rounds_data = {
 rounds_df = pd.DataFrame(rounds_data)
 
 
- # m1
+# m1
 # df  = pd.merge(candidates_df, rounds_df, on ='interview_id',how='left')
 # df = df.query("years_of_exp >= 2")
 # df = df.groupby('candidate_id')['score'].sum().reset_index()
