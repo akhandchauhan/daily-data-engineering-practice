@@ -123,6 +123,11 @@ VALUES
 -- but ultimately we want to maximise the student_count
 -- so the correct solutin is score - 800 with student_count 80
 
+-- UPDATE
+-- both of these query are right because there is constraint of less students compared to previous
+-- score.
+
+-- m1 
 select school_id, ifnull(min(score),-1) as score
 from Schools 
 left join Exam
