@@ -188,12 +188,12 @@ senior_exp as (
     FROM salary_info
     WHERE experience = 'Senior' AND cum_sum <= 70000
 )
-SELECT experience, senior_cnt as accepted_candidates
+SELECT experience, IFNULL(senior_cnt,0) as accepted_candidates
 FROM senior_exp
 UNION ALL 
-SELECT 'junior', COUNT(employee_id) as accepted_candidates
+SELECT 'junior', IFNULL(COUNT(employee_id), 0) as accepted_candidates
 FROM salary_info 
 WHERE experience = 'Junior'  AND cum_sum <= (
           SELECT 70000 - senior_spent
           FROM senior_exp
-      )
+      );
