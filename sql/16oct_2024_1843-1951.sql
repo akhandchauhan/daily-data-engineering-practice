@@ -22,12 +22,12 @@
 -- transaction_id is the primary key for this table.
 -- Each row contains information about one transaction.
 -- type is ENUM ('Creditor','Debtor') where 'Creditor' means the user deposited money into their account and 
---'Debtor' means the user withdrew money from their account.
+-- 'Debtor' means the user withdrew money from their account.
 -- amount is the amount of money depositied/withdrawn during the transaction.
 -- Write an  SQL query to report the IDs of all suspicious bank accounts.
 
 -- A bank account is suspicious if the total income exceeds the max_income for this account 
---for two or more consecutive months. The total income of an account in some month is
+-- for two or more consecutive months. The total income of an account in some month is
 -- the sum of all its deposits in that month (i.e., transactions of the type 'Creditor').
 
 -- Return the result table in ascending order by transaction_id.
