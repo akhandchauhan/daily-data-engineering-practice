@@ -75,8 +75,6 @@ df['purchase_date'] = pd.to_datetime(df['purchase_date'])
 
 
 ############################################################################################################################################
-
-
 #m3
 
 df = (df.merge(df, how = 'inner', on ='user_id')
@@ -85,4 +83,24 @@ df = (df.merge(df, how = 'inner', on ='user_id')
 df['days_diff'] = (df['purchase_date_y'] - df['purchase_date_x']).dt.days
 
 df = df.query('days_diff <= 7')[['user_id']].drop_duplicates().sort_values('user_id')
+print(df)
+
+
+
+############################################################################################################################################
+#m4
+
+df = (
+    df.sort_values(['user_id', 'purchase_date'])
+      .assign(
+          days_diff=lambda d: (
+              d.groupby('user_id')['purchase_date'].shift(-1) - d['purchase_date']
+          ).dt.days
+      )
+      .query('days_diff <= 7')
+      [['user_id']]
+      .drop_duplicates()
+      .sort_values('user_id')
+)
+
 print(df)
