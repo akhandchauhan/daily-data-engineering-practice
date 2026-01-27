@@ -9,7 +9,6 @@
 -- +-------------+------+
 -- This table does not have a primary key.
 -- This table contains logs of the dates that users vistied a certain retailer.
- 
 
 -- Assume today's date is '2021-1-1'.
 -- Write an SQL query that will, for each user_id, find out the largest window 
@@ -66,6 +65,7 @@ INSERT INTO Visits (user_id, visit_date) VALUES
 (2, '2020-12-09'),
 (3, '2020-11-11');
 
+-- m1 using lead/lag
 WITH user_visit_info AS (
     SELECT user_id,
         visit_date,
@@ -76,4 +76,55 @@ SELECT user_id,
         MAX(DATEDIFF(nxt_visit_dt,visit_date)) AS biggest_window
 FROM user_visit_info 
 GROUP BY user_id
-ORDER BY user_id ;
+ORDER BY user_id;
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+-- m2 not working overcomplicated
+-- using ranking 
+
+WITH user_visit_info AS (
+    SELECT user_id,
+        visit_date,
+        ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY visit_date) AS user_visit_rank,
+        COUNT(user_id) OVER(PARTITION BY user_id) AS user_count
+    FROM Visits
+)
+SELECT * 
+FROM user_visit_info uvi1
+JOIN user_visit_info uvi2 
+ON uvi1.user_id = uvi2.user_id 
+AND
+( CASE WHEN uvi1.user_count = 1 
+    THEN uvi1.user_visit_rank = uvi2.user_visit_rank 
+    ELSE uvi1.user_visit_rank = uvi2.user_visit_rank + 1
+    END 
+)
+
+
+-- m3 
+
+WITH ranked_visits AS (
+    SELECT 
+        user_id,
+        visit_date,
+        ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY visit_date) AS rn
+    FROM Visits
+),
+paired_visits AS (
+    SELECT 
+        v1.user_id,
+        v1.visit_date,
+        COALESCE(v2.visit_date, '2021-01-01') AS next_visit_date
+    FROM ranked_visits v1
+    LEFT JOIN ranked_visits v2
+      ON v1.user_id = v2.user_id
+     AND v1.rn + 1 = v2.rn
+)
+SELECT
+    user_id,
+    MAX(DATEDIFF(next_visit_date, visit_date)) AS biggest_window
+FROM paired_visits
+GROUP BY user_id
+ORDER BY user_id;
+
