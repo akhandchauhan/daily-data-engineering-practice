@@ -9,10 +9,13 @@
 -- | day           | date    |
 -- | score_points  | int     |
 -- +---------------+---------+
--- (gender, day) is the primary key (combination of columns with unique values) for this table.
+-- (gender, day) is the primary key (combination of columns with unique values) 
+--for this table.
 -- A competition is held between the female team and the male team.
--- Each row of this table indicates that a player_name and with gender has scored score_point in someday.
--- Gender is 'F' if the player is in the female team and 'M' if the player is in the male team.
+-- Each row of this table indicates that a player_name and with gender has scored
+-- score_point in someday.
+-- Gender is 'F' if the player is in the female team and 'M' if the player is in 
+--the male team.
 -- Write a solution to find the total score for each gender on each day.
 -- Return the result table ordered by gender and day in ascending order.
 -- The result format is in the following example.
@@ -90,75 +93,59 @@ FROM Scores
 WHERE gender='M'
 ORDER BY gender,day;
 
+
+-------------------------------------------------------------------------------------------------------------------------------------
 --method 2
-SELECT gender,day,SUM(score_points) OVER(PARTITION BY gender ORDER BY gender,day ROWS BETWEEN UNBOUNDED
-PRECEDING AND CURRENT ROW) as total
-FROM Scores;
+SELECT
+    gender,
+    day,
+    SUM(score_points) OVER (
+        PARTITION BY gender
+        ORDER BY day
+    ) AS total
+FROM Scores
+ORDER BY gender, day;
 
 
--- 1285. Find the Start and End Number of Continuous Ranges
--- Description
--- Table: Logs
--- +---------------+---------+
--- | Column Name   | Type    |
--- +---------------+---------+
--- | log_id        | int     |
--- +---------------+---------+
--- log_id is the column of unique values for this table.
--- Each row of this table contains the ID in a log Table.
--- Write a solution to find the start and end number of continuous ranges in the table Logs.
--- Return the result table ordered by start_id.
--- The result format is in the following example.
--- Example 1:
--- Input: 
--- Logs table:
--- +------------+
--- | log_id     |
--- +------------+
--- | 1          |
--- | 2          |
--- | 3          |
--- | 7          |
--- | 8          |
--- | 10         |
--- +------------+
--- Output: 
--- +------------+--------------+
--- | start_id   | end_id       |
--- +------------+--------------+
--- | 1          | 3            |
--- | 7          | 8            |
--- | 10         | 10           |
--- +------------+--------------+
--- Explanation: 
--- The result table should contain all ranges in table Logs.
--- From 1 to 3 is contained in the table.
--- From 4 to 6 is missing in the table
--- From 7 to 8 is contained in the table.
--- Number 9 is missing from the table.
--- Number 10 is contained in the table.
+-------------------------------------------------------------------------------------------------------------------------------------
 
+-- m3 
 
-DROP TABLE Logs;
-CREATE TABLE Logs (
-    log_id INT PRIMARY KEY
-);
-INSERT INTO Logs (log_id)
-VALUES 
-(1),
-(2),
-(3),
-(7),
-(8),
-(10);
-
-with cte as(
-SELECT log_id, log_id - ROW_NUMBER() OVER(order by log_id) as rnk
-FROM Logs
+WITH score_info AS (
+    SELECT gender,
+        day,
+        SUM(score_points) AS total_score_points
+    FROM scores 
+    GROUP BY gender,
+            day
 )
-SELECT Min(log_id) as start_id, Max(log_id) as end_id
-FROM cte
-GROUP BY rnk
-ORDER BY start_id;
+SELECT gender,
+       day,
+       SUM(total_score_points) OVER(
+                    PARTITION BY gender 
+                    ORDER BY day 
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS total
+FROM score_info 
+ORDER BY gender,
+         day;
 
-
+-------------------------------------------------------------------------------------------------------------------------------------
+--m4
+WITH daily_scores AS (
+    SELECT
+        gender,
+        day,
+        SUM(score_points) AS daily_total
+    FROM Scores
+    GROUP BY gender, day
+)
+SELECT
+    d1.gender,
+    d1.day,
+    SUM(d2.daily_total) AS total
+FROM daily_scores d1
+JOIN daily_scores d2
+  ON d1.gender = d2.gender
+ AND d2.day <= d1.day  -- “For the current row (d1.day), join all rows (d2) that happened on or before this day.”
+GROUP BY d1.gender, d1.day
+ORDER BY d1.gender, d1.day;
