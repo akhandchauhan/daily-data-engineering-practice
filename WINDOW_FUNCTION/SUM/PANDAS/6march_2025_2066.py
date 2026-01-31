@@ -42,7 +42,7 @@
 # -- +------------+------------+---------+
 
 import pandas as pd
-
+import numpy as np
 data = {
     "account_id": [1, 1, 1, 2, 2],
     "day": ["2021-11-07", "2021-11-09", "2021-11-11", "2021-12-07", "2021-12-12"],
@@ -53,11 +53,64 @@ data = {
 transactions_df = pd.DataFrame(data)
 transactions_df['day'] = pd.to_datetime(transactions_df['day'])
 
-transactions_df['act_amt'] = transactions_df.apply(lambda x: -1* x['amount'] if x['type'] == 'Withdraw' else x['amount'],axis = 1)
-
-transactions_df['balance'] = transactions_df.groupby('account_id')['act_amt'].transform('cumsum')
-transactions_df = transactions_df[['account_id','day','balance']]
+# m1 
+# transactions_df['act_amt'] = transactions_df.apply(lambda x: -1* x['amount'] if x['type'] == 'Withdraw' else x['amount'],axis = 1)
+# transactions_df['balance'] = transactions_df.groupby('account_id')['act_amt'].transform('cumsum')
+# transactions_df = transactions_df[['account_id','day','balance']]
 #print(transactions_df)
 
+
+#####################################################################################################
+
+# m2 self join
+
+# transactions_df_merged = (
+#     transactions_df
+#         .merge(transactions_df, how='inner', on='account_id')
+#         .query('day_x >= day_y')
+#         .assign(
+#             daily_amount=lambda d: np.where(
+#                 d['type_y'] == 'Deposit',
+#                 d['amount_y'],
+#                 -d['amount_y']
+#             )
+#         )
+#         .groupby(['account_id','day_x'])['daily_amount']
+#         .sum()
+#         .reset_index(name= 'balance')
+#         .sort_values(['account_id','day_x'])
+#         .rename(columns = {'day_x':'day'})
+# )
+
+# print(transactions_df_merged)
+
+
+###############################################################################
+
+
+# m3
+
+import numpy as np
+
+# ensure correct ordering
+transactions_df = transactions_df.sort_values(['account_id', 'day'])
+
+# convert transaction type to signed amount
+transactions_df['signed_amount'] = np.where(
+    transactions_df['type'] == 'Deposit',
+    transactions_df['amount'],
+    -transactions_df['amount']
+)
+
+# running balance per account
+transactions_df['balance'] = (
+    transactions_df
+        .groupby('account_id')['signed_amount']
+        .cumsum()
+)
+
+# final result
+result = transactions_df[['account_id', 'day', 'balance']]
+print(result)
 
 
