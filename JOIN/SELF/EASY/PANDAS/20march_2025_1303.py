@@ -25,6 +25,7 @@
 # -- |     5       |     9      |
 # -- |     6       |     9      |
 # -- +-------------+------------+
+
 # -- Output: 
 # -- +-------------+------------+
 # -- | employee_id | team_size  |
@@ -52,10 +53,13 @@ df = pd.DataFrame(data)
 # m1 
 
 # df1 = df.groupby('team_id')['employee_id'].count().reset_index().rename(columns = {'employee_id':'team_size'})
-# df2 = pd.merge(df,df1,on ='team_id',how ='left')[['employee_id','team_size']]
+# df2 = pd.merge(df,df1,on ='team_id',how ='inner')[['employee_id','team_size']]
 # print(df2)
 
+
+#########################################################################################################################
 #m2
+
 df['team_size'] = df.groupby('team_id')['employee_id'].transform('count')
 df = df[['employee_id','team_size']]
 print(df)
