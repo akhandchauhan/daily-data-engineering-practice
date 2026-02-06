@@ -11,9 +11,9 @@
 -- +-----------------------------+---------+
 -- delivery_id is the primary key (column with unique values) of this table.
 -- The table holds information about food delivery to customers that make orders at some date 
---and specify a preferred delivery date (on the same order date or after it).
+-- and specify a preferred delivery date (on the same order date or after it).
 -- If the customer's preferred delivery date is the same as the order date, then the order 
---is called immediate; otherwise, it is called scheduled.
+-- is called immediate; otherwise, it is called scheduled.
 -- Write a solution to find the percentage of immediate orders in the table, rounded to 2 decimal places.
 -- The result format is in the following example.
 -- Input: 
@@ -35,14 +35,6 @@
 -- | 33.33                |
 -- +----------------------+
 -- Explanation: The orders with delivery id 2 and 3 are immediate while the others are scheduled.
-
-SELECT ROUND(
-        SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END) * 100.0/
-       COUNT(order_date)
-       , 2)  AS  immediate_percentage
-FROM Delivery ;
-
-
 DROP TABLE IF EXISTS Delivery;
 CREATE TABLE Delivery (
     delivery_id INT PRIMARY KEY,
@@ -69,14 +61,24 @@ WITH cte as(
 SELECT ROUND(imm * 100/(SELECT COUNT(*) FROM Delivery),2) as immediate_percentage
 FROM cte;
 
+-----------------------------------------------------------------------------------------------------------
 -- m2
 SELECT 
     ROUND(SUM(order_date = customer_pref_delivery_date) / COUNT(1) * 100, 2) AS immediate_percentage
 FROM Delivery;
 
+-----------------------------------------------------------------------------------------------------------
 -- m3
 SELECT ROUND(COUNT(CASE WHEN order_date = customer_pref_delivery_date THEN 1 END) * 100.0/
        COUNT(order_date),2) as immediate_percentage
 FROM Delivery;
+
+-----------------------------------------------------------------------------------------------------------
+-- m4 
+SELECT ROUND(
+        SUM(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END) * 100.0/
+       COUNT(order_date)
+       , 2)  AS  immediate_percentage
+FROM Delivery ;
 
 
