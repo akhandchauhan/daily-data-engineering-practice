@@ -77,7 +77,6 @@
 --   - The overall time spent by this user is 6.24 + 5.25 = 11.49. 
 --   - Therefore, the sending snap percentage will be (6.24 / 11.49) * 100 = 54.31, and the opening snap percentage will be (5.25 / 11.49) * 100 = 45.69.
 -- All percentages in output table rounded to the two decimal places.
-
 DROP TABLE IF EXISTS Activities;
 DROP TABLE IF EXISTS Age;
 
@@ -111,9 +110,15 @@ GROUP BY a.age_bucket;
 
 -- m2 
 SELECT a.age_bucket,
-       ROUND(SUM(CASE WHEN activity_type = 'send' THEN time_spent ELSE 0 END) *100.0/SUM(time_spent), 2) AS send_perc,
-       ROUND(SUM(CASE WHEN activity_type = 'open' THEN time_spent ELSE 0 END) *100.0/SUM(time_spent), 2) AS open_perc
-FROM Age a 
-LEFT JOIN activities ac 
-ON a.user_id = ac.user_id
-GROUP BY a.age_bucket
+       ROUND(
+        SUM(CASE WHEN act.activity_type = 'send' THEN act.time_spent ELSE 0 END) *100.0/
+        SUM(act.time_spent) 
+        , 2)AS send_perc,
+       ROUND(
+        SUM(CASE WHEN act.activity_type = 'open' THEN act.time_spent ELSE 0 END) *100.0/
+        SUM(act.time_spent)
+        , 2) AS open_perc
+FROM Activities act 
+JOIN Age a 
+ON act.user_id = a.user_id
+GROUP BY a.age_bucket;

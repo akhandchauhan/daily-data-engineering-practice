@@ -1,4 +1,3 @@
-
 # # -- 3056. Snapshot Analysis 
 # # -- Title Description
 # # -- surface:Activities
@@ -90,82 +89,91 @@
 # data = [[123, '31-35'], [789, '21-25'], [456, '26-30']]
 # age = pd.DataFrame(data, columns=['user_id', 'age_bucket']).astype({'user_id':'Int64', 'age_bucket':'object'})
 
-
-# df = pd.merge(age,activities, on ='user_id',how ='left')
-
-# result = df.groupby(['age_bucket', 'activity_type'])['time_spent'].sum().unstack(fill_value=0)
-# result['total_time'] = result['send'] + result['open']
-
-# result['send_perc'] = (result['send'] / result['total_time']) * 100
-# result['open_perc'] = (result['open'] / result['total_time']) * 100
-
-# result = result[['send_perc', 'open_perc']].round(2)
-# result = result.reset_index()
-# print(result)
-
-
-
-# -- 3050. Pizza Toppings Cost Analysis 
-# -- Description
-# -- Table: Toppings
-# -- +--------------+---------+ 
-# -- | Column Name  | Type    | 
-# -- +--------------+---------+ 
-# -- | topping_name | varchar | 
-# -- | cost         | decimal |
-# -- +--------------+---------+
-# -- topping_name is the primary key for this table.
-# -- Each row of this table contains topping name and the cost of the topping. 
-# -- Write a solution to calculate the total cost of all possible 3-topping pizza 
-# --combinations from a given list of toppings. The total cost of toppings must be rounded to 2 decimal places.
-# -- Note:
-# -- Do not include the pizzas where a topping is repeated. For example, ‘Pepperoni, Pepperoni, Onion Pizza’.
-# -- Toppings must be listed in alphabetical order. For example, 'Chicken, Onions, Sausage'. 'Onion, Sausage, 
-# --Chicken' is not acceptable.
-# -- Return the result table ordered by total cost in descending order and combination of toppings in ascending 
-# --order.
-# -- The result format is in the following example.
-# -- Example 1:
-# -- Input: 
-# -- Toppings table:
-# -- +--------------+------+
-# -- | topping_name | cost |
-# -- +--------------+------+
-# -- | Pepperoni    | 0.50 |
-# -- | Sausage      | 0.70 |
-# -- | Chicken      | 0.55 |
-# -- | Extra Cheese | 0.40 |
-# -- +--------------+------+
-# -- Output: 
-# -- +--------------------------------+------------+
-# -- | pizza                          | total_cost | 
-# -- +--------------------------------+------------+
-# -- | Chicken,Pepperoni,Sausage      | 1.75       |  
-# -- | Chicken,Extra Cheese,Sausage   | 1.65       |
-# -- | Extra Cheese,Pepperoni,Sausage | 1.60       |
-# -- | Chicken,Extra Cheese,Pepperoni | 1.45       | 
-# -- +--------------------------------+------------+
-# -- Explanation: 
-# -- There are only four different combinations possible with the three topings:
-# -- - Chicken, Pepperoni, Sausage: Total cost is $1.75 (Chicken $0.55, Pepperoni $0.50, Sausage $0.70).
-# -- - Chicken, Extra Cheese, Sausage: Total cost is $1.65 (Chicken $0.55, Extra Cheese $0.40, Sausage $0.70).
-# -- - Extra Cheese, Pepperoni, Sausage: Total cost is $1.60 (Extra Cheese $0.40, Pepperoni $0.50, Sausage $0.70).
-# -- - Chicken, Extra Cheese, Pepperoni: Total cost is $1.45 (Chicken $0.55, Extra Cheese $0.40, Pepperoni $0.50).
-# -- Output table is ordered by the total cost in descending order.
-
-
 import pandas as pd
 
-data = [
-    ['Pepperoni', 0.50],
-    ['Sausage', 0.70],
-    ['Chicken', 0.55],
-    ['Extra Cheese', 0.40]
-]
+# -----------------------------
+# Input DataFrames
+# -----------------------------
+activities = pd.DataFrame(
+    [
+        [7274, 123, 'open', 4.50],
+        [2425, 123, 'send', 3.50],
+        [1413, 456, 'send', 5.67],
+        [2536, 456, 'open', 3.00],
+        [8564, 456, 'send', 8.24],
+        [5235, 789, 'send', 6.24],
+        [4251, 123, 'open', 1.25],
+        [1435, 789, 'open', 5.25],
+    ],
+    columns=['activity_id', 'user_id', 'activity_type', 'time_spent']
+)
 
-toppings = pd.DataFrame(data, columns=['topping_name', 'cost'])
+age = pd.DataFrame(
+    [
+        [123, '31-35'],
+        [789, '21-25'],
+        [456, '26-30'],
+    ],
+    columns=['user_id', 'age_bucket']
+)
 
-df = pd.merge(toppings,toppings,how ='cross')
-df = pd.merge(df,toppings,how ='cross')
-df = df.query("'topping_name_x' < 'topping_name_y' and 'topping_name_y' < 'topping_name'")
-print(df)
+# m1
+# df_merged = (
+#     activities
+#     .merge(age, how ='inner', on ='user_id')
+# )
+
+# open_merge = (
+#     df_merged
+#     .query('activity_type == "open"')
+#     .groupby('age_bucket')['time_spent']
+#     .sum()
+#     .reset_index(name = 'open_time')
+# )
+
+# send_merge = (
+#     df_merged
+#     .query('activity_type == "send"')
+#     .groupby('age_bucket')['time_spent']
+#     .sum()
+#     .reset_index(name = 'send_time')
+# )
+
+# df_merged_time = (
+#     open_merge
+#     .merge(send_merge,on ='age_bucket')
+#     .assign(
+#         send_perc = (lambda d: (d['send_time'] *100.0/(d['open_time'] + d['send_time'])).round(2)),
+#         open_perc = (lambda d: (d['open_time'] *100.0/(d['open_time'] + d['send_time'])).round(2))
+#     )
+#     [['age_bucket','send_perc','open_perc']]
+# )
+
+# print(df_merged_time)
+
+
+##################################################################################
+
+
+# m2
+
+result = (
+    activities
+    .merge(age, on='user_id')
+    .pivot_table(
+        index='age_bucket',
+        columns='activity_type',
+        values='time_spent',
+        aggfunc='sum',
+        fill_value=0
+    )
+    .reset_index()
+    .assign(
+        total=lambda d: d['send'] + d['open'],
+        send_perc=lambda d: (d['send'] / d['total'] * 100).round(2),
+        open_perc=lambda d: (d['open'] / d['total'] * 100).round(2)
+    )
+    [['age_bucket', 'send_perc', 'open_perc']]
+)
+result.columns.name = None
+print(result)
