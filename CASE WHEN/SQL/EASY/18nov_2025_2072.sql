@@ -20,7 +20,7 @@
 -- Each row contains information about the score of one student from California University in an exam.
 -- There is a competition between New York University and California University.
 -- The competition is held between the same number of students from both universities. 
---The university that has more excellent students wins the competition. If the two universities have
+-- The university that has more excellent students wins the competition. If the two universities have
 -- the same number of excellent students, the competition ends in a draw.
 -- An excellent student is a student that scored 90% or more in the exam.
 -- Write an  SQL query to report:
