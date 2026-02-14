@@ -10,7 +10,7 @@
 -- +---------------+---------+
 -- (ad_id, user_id) is the primary key (combination of columns with unique values) for this table.
 -- Each row of this table contains the ID of an Ad, the ID of a user, and the action taken by this user 
---regarding this Ad.
+-- regarding this Ad.
 -- The action column is an ENUM (category) type of ('Clicked', 'Viewed', 'Ignored').
 -- A company is running Ads and wants to calculate the performance of each Ad.
 -- Performance of the Ad is measured using Click-Through Rate (CTR) where:
