@@ -58,9 +58,16 @@ triangles = pd.DataFrame({
 
 triangle_classify = triangles.copy()
 
-conditions = [((triangle_classify['a']+ triangle_classify['b'] <= triangle_classify['c']) | (triangle_classify['b']+ triangle_classify['c'] <= triangle_classify['a']) | (triangle_classify['a']+ triangle_classify['c'] <= triangle_classify['b'])),
-                ((triangle_classify['a'] == triangle_classify['b']) & (triangle_classify['b'] == triangle_classify['c'])),
-                ((triangle_classify['a'] != triangle_classify['b']) & (triangle_classify['b'] != triangle_classify['c']) & (triangle_classify['a'] != triangle_classify['c']))
+conditions = [((triangle_classify['a']+ triangle_classify['b'] <= triangle_classify['c']) 
+               | (triangle_classify['b']+ triangle_classify['c'] <= triangle_classify['a']) 
+               | (triangle_classify['a']+ triangle_classify['c'] <= triangle_classify['b'])),
+              
+                ((triangle_classify['a'] == triangle_classify['b'])
+                 & (triangle_classify['b'] == triangle_classify['c'])),
+                
+                ((triangle_classify['a'] != triangle_classify['b']) 
+                 & (triangle_classify['b'] != triangle_classify['c']) 
+                 & (triangle_classify['a'] != triangle_classify['c']))
             ]
 
 values = ['Not A Triangle', 'Equilateral','Scalene']
