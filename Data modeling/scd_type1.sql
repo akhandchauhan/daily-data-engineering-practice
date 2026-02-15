@@ -54,3 +54,22 @@ FROM product_stg s
 LEFT JOIN product_dim d
     ON s.product_id = d.product_id
 WHERE d.product_id IS NULL;
+
+
+
+------------------------------------------------------------------------------------------------------
+
+-- method 2
+
+INSERT INTO product_dim (product_id, product_name, price, last_update)
+SELECT 
+    s.product_id,
+    s.product_name,
+    s.price,
+    @today
+FROM product_stg s
+ON DUPLICATE KEY UPDATE
+    product_name = s.product_name,
+    price = s.price,
+    last_update = @today;
+
