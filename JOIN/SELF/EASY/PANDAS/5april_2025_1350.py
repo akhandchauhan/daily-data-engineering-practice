@@ -77,16 +77,31 @@ departments_df = pd.DataFrame(departments_data)
 students_df = pd.DataFrame(students_data)
 
 
+# m1 
 # df = pd.merge(students_df, departments_df, left_on ='department_id', right_on ='id', how ='left')
 # df = df[df['id_y'].isnull() == True][['id_x','name_x']].rename(columns = {'id_x':'id','name_x':'name'})
 # print(df)
 
 
+###########################################################################################################
 # m2
-
 valid_department_ids = departments_df['id'].tolist()
 invalid_students_df = students_df[~students_df['department_id'].isin(valid_department_ids)]
 result = invalid_students_df[['id', 'name']]
 
 # Show the result
 print(result)
+
+###########################################################################################################
+
+#m3
+
+df = (pd
+      .merge(students_df,departments_df, how ='left' ,left_on ='department_id', right_on ='id')
+      .query("id_y.isnull() == True")
+      .rename(columns= {'id_x':'id', 'name_x':'name'})
+      [['id','name']]
+)
+
+print(df)
+
