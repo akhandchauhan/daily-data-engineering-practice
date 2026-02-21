@@ -1,78 +1,3 @@
--- 1369. Get the Second Most Recent Activity
--- SQL Schema 
--- Table: UserActivity
--- +---------------+---------+
--- | Column Name   | Type    |
--- +---------------+---------+
--- | username      | varchar |
--- | activity      | varchar |
--- | startDate     | Date    |
--- | endDate       | Date    |
--- +---------------+---------+
--- This table does not contain primary key.
--- This table contain information about the activity performed of each user in a period of time.
--- A person with username performed a activity from startDate to endDate.
--- Write an  SQL query to show the second most recent activity of each user.
--- If the user only has one activity, return that one. 
--- A user can't perform more than one activity at the same time. Return the result table in any order.
--- The query result format is in the following example:
--- UserActivity table:
--- +------------+--------------+-------------+-------------+
--- | username   | activity     | startDate   | endDate     |
--- +------------+--------------+-------------+-------------+
--- | Alice      | Travel       | 2020-02-12  | 2020-02-20  |
--- | Alice      | Dancing      | 2020-02-21  | 2020-02-23  |
--- | Alice      | Travel       | 2020-02-24  | 2020-02-28  |
--- | Bob        | Travel       | 2020-02-11  | 2020-02-18  |
--- +------------+--------------+-------------+-------------+
--- Result table:
--- +------------+--------------+-------------+-------------+
--- | username   | activity     | startDate   | endDate     |
--- +------------+--------------+-------------+-------------+
--- | Alice      | Dancing      | 2020-02-21  | 2020-02-23  |
--- | Bob        | Travel       | 2020-02-11  | 2020-02-18  |
--- +------------+--------------+-------------+-------------+
-
--- The most recent activity of Alice is Travel from 2020-02-24 to 2020-02-28, before that she was dancing from 2020-02-21 to 2020-02-23.
--- Bob only has one record, we just take that one.
-DROP TABLE UserActivity;
-CREATE TABLE UserActivity (
-    username VARCHAR(50),
-    activity VARCHAR(50),
-    startDate DATE,
-    endDate DATE
-);
-
-INSERT INTO UserActivity (username, activity, startDate, endDate) VALUES
-('Alice', 'Travel', '2020-02-12', '2020-02-20'),
-('Alice', 'Dancing', '2020-02-21', '2020-02-23'),
-('Alice', 'Travel', '2020-02-24', '2020-02-28'),
-('Bob', 'Travel', '2020-02-11', '2020-02-18');
-
- -- #method 1
-WITH cte as(
-    SELECT *,
-    dense_rank() over(partition by username ORDER BY startDate DESC) as rnk,
-    count(username) OVER(PARTITION BY username) as cnt
-    FROM UserActivity
-)
-SELECT username, activity, startDate, endDate
-FROM cte
-WHERE IF(cnt>1,rnk=2,rnk=1);
-
-
---method 2
-
-WITH cte as(
-SELECT *, dense_rank() over(partition by username ORDER BY startDate DESC) as rnk,
-count(username) OVER(PARTITION BY username) as cnt
-FROM UserActivity
-)
-SELECT username, activity, startDate, endDate
-FROM cte
-WHERE rnk=2 or cnt = 1;
-
-
 -- 1479. Sales by Day of the Week
 -- SQL Schema 
 -- Table: Orders
@@ -99,7 +24,7 @@ WHERE rnk=2 or cnt = 1;
 -- item_id is the primary key for this table.
 -- item_name is the name of the item.
 -- item_category is the category of the item.
--- ou are the business owner and would like to obtain a sales report for category items and day of the week.
+-- You are the business owner and would like to obtain a sales report for category items and day of the week.
 -- Write an  SQL query to report how many units in each category have been ordered on each day of the week.
 -- Return the result table ordered by category.
 -- The query result format is in the following example:
@@ -145,7 +70,6 @@ WHERE rnk=2 or cnt = 1;
 -- On Saturday there are no items sold.
 -- On Sunday (2020-06-14, 2020-06-21) were sold a total of 10 units (5 +5) in the category Phone (ids: 3, 4).
 -- There are no sales of T-Shirt.
-
 drop table Orders;
 drop table Items;
 -- Create the Orders table
@@ -207,28 +131,20 @@ GROUP BY 1
 order by 1;
 
 
--- method 2
+-----------------------------------------------------------------------------------------------------------
+-- m2
 
-WITH cte as ( SELECT DAYNAME(order_date) as nameday, item_id,quantity
-FROM Orders 
-)
-SELECT item_category, SUM(IF(nameday= 'Monday',quantity,0)) as monday,SUM(IF(nameday= 'Tuesday',quantity,0)) as Tuesday,
-SUM(IF(nameday= 'Wednesday',quantity,0)) as Wednesday,SUM(IF(nameday= 'Thursday',quantity,0)) as Thursday,
-SUM(IF(nameday= 'Friday',quantity,0)) as Friday,SUM(IF(nameday= 'Saturday',quantity,0)) as Saturday,
-SUM(IF(nameday= 'Sunday',quantity,0)) as Sunday
-FROM  Items i 
-LEFT JOIN cte c 
-ON c.item_id = i.item_id
-GROUP BY item_category
-ORDER BY 1;
-
-
--- m3
-
-SELECT i.item_category AS category,
-       SUM(CASE WHEN DAYNAME(order_date) = 'Monday' THEN quantity ELSE 0 END) AS Monday
-       
+SELECT 
+    i.item_category,
+    SUM(CASE WHEN DAYNAME(o.order_date) = 'Monday' THEN quantity ELSE 0 END) AS Monday,
+    SUM(CASE WHEN DAYNAME(o.order_date) = 'Tuesday' THEN quantity ELSE 0 END) AS Tuesday,
+    SUM(CASE WHEN DAYNAME(o.order_date) = 'Wednesday' THEN quantity ELSE 0 END) AS Wednesday,
+    SUM(CASE WHEN DAYNAME(o.order_date) = 'Thursday' THEN quantity ELSE 0 END) AS Thursday,
+    SUM(CASE WHEN DAYNAME(o.order_date) = 'Friday' THEN quantity ELSE 0 END) AS Friday,
+    SUM(CASE WHEN DAYNAME(o.order_date) = 'Saturday' THEN quantity ELSE 0 END) AS Saturday,
+    SUM(CASE WHEN DAYNAME(o.order_date) = 'Sunday' THEN quantity ELSE 0 END) AS Sunday
 FROM Items i 
-LEFT JOIN Orders o 
-ON i.item_id = o.item_id
-GROUP BY category;
+LEFT JOIN Orders o   
+    ON i.item_id = o.item_id
+GROUP BY i.item_category
+ORDER BY i.item_category;
