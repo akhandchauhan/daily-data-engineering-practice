@@ -118,7 +118,7 @@ WITH cte as(
     ON i.item_id = o.item_id
     GROUP BY 1 , 2
 )
-SELECT item_category,
+SELECT item_category AS category,
 SUM(CASE WHEN dayn = 'Monday' THEN total ELSE 0 END) AS Monday,
     SUM(CASE WHEN dayn = 'Tuesday' THEN total ELSE 0 END) AS Tuesday,
     SUM(CASE WHEN dayn = 'Wednesday' THEN total ELSE 0 END) AS Wednesday,
@@ -135,7 +135,7 @@ order by 1;
 -- m2
 
 SELECT 
-    i.item_category,
+    i.item_category AS category,
     SUM(CASE WHEN DAYNAME(o.order_date) = 'Monday' THEN quantity ELSE 0 END) AS Monday,
     SUM(CASE WHEN DAYNAME(o.order_date) = 'Tuesday' THEN quantity ELSE 0 END) AS Tuesday,
     SUM(CASE WHEN DAYNAME(o.order_date) = 'Wednesday' THEN quantity ELSE 0 END) AS Wednesday,
