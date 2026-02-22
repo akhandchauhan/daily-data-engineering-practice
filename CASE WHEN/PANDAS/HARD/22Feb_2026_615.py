@@ -72,7 +72,8 @@
 
 import pandas as pd
 import datetime as dt
-import numpy as np 
+import numpy as np
+ 
 # Salary table
 salary = pd.DataFrame({
     "id": [1, 2, 3, 4, 5, 6],
@@ -96,28 +97,79 @@ employee = pd.DataFrame({
 
 # m1 using join 
 
+# wrong method
 #salary['pay_month'] = (salary['pay_date'].dt.year).astype(str) + "-" + salary['pay_date'].dt.month.astype(str)
+# salary['pay_month'] = salary['pay_date'].dt.strftime('%Y-%m')
+
+# employee_avg_salary = (salary
+#                        .groupby('pay_month')
+#                        ['amount'].mean()
+#                        .reset_index()
+# )
+
+# department_avg_salary = (
+#                         salary.merge(employee, on ='employee_id')
+#                         .groupby(['department_id','pay_month'])
+#                         ['amount'].mean()
+#                         .reset_index()
+# )
+
+# df = employee_avg_salary.merge(department_avg_salary, on ='pay_month')
+
+
+# conditions = [
+#     df['amount_y'] > df['amount_x'],
+#     df['amount_y'] < df['amount_x']
+# ]
+
+# values = [
+#     'higher',
+#     'lower'
+# ]
+
+# df['comparison'] = np.select(conditions, values, default = 'same')
+# df = df[['pay_month','department_id','comparison']]
+# print(df)
+
+
+##################################################################################################################
+
+# m2
+
+# salary['pay_month'] = salary['pay_date'].dt.strftime('%Y-%m')
+
+# df = salary.merge(employee, on ='employee_id')
+# df['employee_average_salary'] = df.groupby('pay_month')['amount'].transform('mean')
+# df['department_average_salary'] = df.groupby(['department_id','pay_month'])['amount'].transform('mean')
+
+# conditions = [
+#     df['department_average_salary'] > df['employee_average_salary'],
+#     df['department_average_salary'] < df['employee_average_salary']
+# ]
+
+# values = [
+#     'higher',
+#     'lower'
+# ]
+
+# df['comparison'] = np.select(conditions, values, default = 'same')
+# df = df[['pay_month','department_id','comparison']].drop_duplicates()
+# print(df)
+
+
+##################################################################################################################################################
+
+#m3
+
 salary['pay_month'] = salary['pay_date'].dt.strftime('%Y-%m')
 
-employee_avg_salary = (salary
-                       .groupby('pay_month')
-                       ['amount'].mean()
-                       .reset_index()
-)
-
-department_avg_salary = (
-                        salary.merge(employee, on ='employee_id')
-                        .groupby(['department_id','pay_month'])
-                        ['amount'].mean()
-                        .reset_index()
-)
-
-df = employee_avg_salary.merge(department_avg_salary, on ='pay_month')
-
+df = salary.merge(employee, on ='employee_id')
+df['employee_average_salary'] = df.groupby('pay_month')['amount'].transform('mean')
+df['department_average_salary'] = df.groupby(['department_id','pay_month'])['amount'].transform('mean')
 
 conditions = [
-    df['amount_y'] > df['amount_x'],
-    df['amount_y'] < df['amount_x']
+    df['department_average_salary'] > df['employee_average_salary'],
+    df['department_average_salary'] < df['employee_average_salary']
 ]
 
 values = [
@@ -126,5 +178,5 @@ values = [
 ]
 
 df['comparison'] = np.select(conditions, values, default = 'same')
-df = df[['pay_month','department_id','comparison']]
+df = df.groupby(['pay_month','department_id'])['comparison'].max().reset_index()
 print(df)

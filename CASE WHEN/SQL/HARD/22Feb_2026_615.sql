@@ -148,4 +148,29 @@ SELECT DISTINCT
             WHEN average_department_salary < company_average_salary THEN 'lower'
             ELSE 'same'
        END AS comparison
+FROM company_department_info;
+
+
+-----------------------------------------------------------------------------------------------------------
+
+--m3
+
+WITH company_department_info AS (
+    SELECT 
+        DATE_FORMAT(s.pay_date, '%Y-%m') AS pay_month,
+        e.department_id,
+        AVG(amount) OVER(PARTITION BY DATE_FORMAT(s.pay_date, '%Y-%m'), department_id) AS average_department_salary,
+        AVG(amount) OVER(PARTITION BY DATE_FORMAT(s.pay_date, '%Y-%m')) AS company_average_salary  
+       FROM Employee e    
+    LEFT JOIN Salary s 
+    ON e.employee_id = s.employee_id
+)
+SELECT  
+       pay_month,
+       department_id,
+       MAX(CASE WHEN average_department_salary > company_average_salary THEN 'higher'
+            WHEN average_department_salary < company_average_salary THEN 'lower'
+            ELSE 'same'
+       END) AS comparison
 FROM company_department_info
+GROUP BY 1,2;
