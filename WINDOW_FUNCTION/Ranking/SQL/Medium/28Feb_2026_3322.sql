@@ -18,7 +18,7 @@
 -- This table contains season id, team id, team name, matches played, wins, draws, losses, goals
 -- scored (goals_for), and goals conceded (goals_against) for each team in each season.
 -- Write a solution to calculate the points, goal difference, and position for each team in each 
---season. The position ranking should be determined as follows:
+-- season. The position ranking should be determined as follows:
 
 -- Teams are first ranked by their total points (highest to lowest)
 -- If points are tied, teams are then ranked by their goal difference (highest to lowest)
@@ -31,10 +31,9 @@
 -- Goal difference is calculated as: goals_for - goals_against
 
 -- Return the result table ordered by season_id in ascending order, then by position in ascending 
---order, and finally by team_name in ascending order.
+-- order, and finally by team_name in ascending order.
 
 -- SeasonStats table:
-
 -- +------------+---------+-------------------+----------------+------+-------+--------+-----------+---------------+
 -- | season_id  | team_id | team_name         | matches_played | wins | draws | losses | goals_for | goals_against |
 -- +------------+---------+-------------------+----------------+------+-------+--------+-----------+---------------+
@@ -83,3 +82,48 @@
 -- The output is ordered by season_id ascending, then by rank ascending, and finally by team_name ascending.
 
 
+CREATE TABLE SeasonStats (
+    season_id INT,
+    team_id INT,
+    team_name VARCHAR(100),
+    matches_played INT,
+    wins INT,
+    draws INT,
+    losses INT,
+    goals_for INT,
+    goals_against INT,
+    PRIMARY KEY (season_id, team_id)
+);
+
+INSERT INTO SeasonStats 
+(season_id, team_id, team_name, matches_played, wins, draws, losses, goals_for, goals_against)
+VALUES
+(2021, 1, 'Manchester City', 38, 29, 6, 3, 99, 26),
+(2021, 2, 'Liverpool', 38, 28, 8, 2, 94, 26),
+(2021, 3, 'Chelsea', 38, 21, 11, 6, 76, 33),
+(2021, 4, 'Tottenham', 38, 22, 5, 11, 69, 40),
+(2021, 5, 'Arsenal', 38, 22, 3, 13, 61, 48),
+(2022, 1, 'Manchester City', 38, 28, 5, 5, 94, 33),
+(2022, 2, 'Arsenal', 38, 26, 6, 6, 88, 43),
+(2022, 3, 'Manchester United', 38, 23, 6, 9, 58, 43),
+(2022, 4, 'Newcastle', 38, 19, 14, 5, 68, 33),
+(2022, 5, 'Liverpool', 38, 19, 10, 9, 75, 47);
+
+
+
+SELECT 
+    season_id,
+    team_id,
+    team_name,
+    wins*3 + draws AS points,
+    goals_for - goals_against AS goal_difference,
+    ROW_NUMBER() OVER(
+        PARTITION BY season_id 
+        ORDER BY wins*3+draws DESC, 
+        goals_for- goals_against DESC,
+        team_name
+    ) AS position
+FROM seasonstats
+ORDER BY season_id,
+         position,
+         team_name;
