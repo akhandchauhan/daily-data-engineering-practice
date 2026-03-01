@@ -154,3 +154,27 @@ item_df = item_df[item_df['num_items'] == max_num_items].sort_values(by ='seller
 
 print(item_df)
 
+##############################################################################################
+# m3 = production friendly
+
+df = (
+    orders
+    .merge(items, on='item_id')
+    .merge(users, on='seller_id')
+)
+
+df = df[df['item_brand'] != df['favorite_brand']]
+
+# Deduplicate first
+df = df[['seller_id', 'item_id']].drop_duplicates()
+
+result = (
+    df.groupby('seller_id', as_index=False)
+      .size()
+      .rename(columns={'size': 'num_items'})
+)
+
+max_val = result['num_items'].max()
+
+final = result[result['num_items'] == max_val] \
+            .sort_values('seller_id')
