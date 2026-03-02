@@ -12,7 +12,7 @@
 -- +------------------+---------+
 -- transaction_id is the unique identifier for this table.
 -- Each row of this table contains information about a transaction, including the 
---customer ID, product ID, date, and amount spent.
+-- customer ID, product ID, date, and amount spent.
 -- Table: Products
 -- +-------------+---------+
 -- | Column Name | Type    |
@@ -29,11 +29,11 @@
 -- The number of unique product categories purchased.
 -- The average amount spent. 
 -- The most frequently purchased product category (if there is a tie, choose the one with the most 
---recent transaction).
+-- recent transaction).
 -- A loyalty score defined as: (Number of transactions * 10) + (Total amount spent / 100).
 -- Round total_amount, avg_transaction_amount, and loyalty_score to 2 decimal places.
 -- Return the result table ordered by loyalty_score in descending order, then by customer_id 
---in ascending order.
+-- in ascending order.
 -- The query result format is in the following example.
 -- Example:
 -- Input:
@@ -69,7 +69,7 @@
 -- Unique categories: A, B, C (3 categories)
 -- Average transaction amount: 450.00 / 3 = 150.00
 -- Top category: C (Customer 101 made 1 purchase each in categories A, B, and C. 
---Since the count is the same for all categories, we choose the most recent transaction,
+-- Since the count is the same for all categories, we choose the most recent transaction,
 -- which is category C on 2023-02-10)
 -- Loyalty score: (3 * 10) + (450.00 / 100) = 34.50
 -- For customer 102:
@@ -78,8 +78,8 @@
 -- Unique categories: A, C (2 categories)
 -- Average transaction amount: 300.00 / 2 = 150.00
 -- Top category: C (Customer 102 made 1 purchase each in categories A and C. Since the 
---count is the same for both categories, we choose the most recent transaction, which is 
---category C on 2023-01-22)
+-- count is the same for both categories, we choose the most recent transaction, which is 
+-- category C on 2023-01-22)
 -- Loyalty score: (2 * 10) + (300.00 / 100) = 23.00
 -- Note: The output is ordered by loyalty_score in descending order, then by customer_id in
 -- ascending order.
