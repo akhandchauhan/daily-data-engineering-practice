@@ -131,7 +131,7 @@ JOIN max_exp m
 
 ----------------------------------------------------------------------------------------------------------
 
---m3 
+--m3 using max window function
 WITH cte AS (
     SELECT 
         p.project_id,
