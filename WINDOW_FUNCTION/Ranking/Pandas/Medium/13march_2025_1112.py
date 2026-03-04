@@ -1,4 +1,3 @@
-
 # -- 1112. Highest Grade For Each Student
 # -- Description
 # -- Table: Enrollments
@@ -40,6 +39,7 @@
 # -- +------------+-----------+-------+
 
 
+
 import pandas as pd
 
 # Create the DataFrame from the provided data
@@ -54,12 +54,37 @@ data = [
 ]
 
 df = pd.DataFrame(data, columns=['student_id', 'course_id', 'grade'])
-df_sorted = df.sort_values(['student_id', 'grade', 'course_id'], 
-                          ascending=[True, False, True])
 
-df_sorted['rnk'] = df_sorted.groupby('student_id')['grade'].rank(method='first', ascending=False)
+# m1 using rank
+df = df.sort_values(
+    by=['student_id','grade','course_id'],
+    ascending=[True, False, True]
+)
 
-# Filter to keep only rank 1 records (highest grade, smallest course_id on tie)
-result = df_sorted[df_sorted['rnk'] == 1].drop(columns=['rnk'])
-print(result)
+df['grade_rank'] = (
+    df.groupby('student_id').cumcount() + 1
+)
+
+df = (
+    df[df['grade_rank'] == 1]
+    [['student_id','course_id','grade']]
+    .sort_values('student_id')
+)
+
+print(df)
+###########################################################################################################
+
+#m2 using head
+
+df = (
+    df.sort_values(
+        ['student_id','grade','course_id'],
+        ascending=[True, False, True]
+    )
+    .groupby('student_id')
+    .head(1)
+    .sort_values('student_id')
+)
+
+print(df)
 
