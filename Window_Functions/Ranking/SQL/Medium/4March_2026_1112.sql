@@ -93,12 +93,12 @@ SELECT
 )
 SELECT 
     student_id,
-    course_id,
-    grade,
-    max_grade_student
+    MIN(course_id) AS course_id ,
+    MAX(grade) AS grade
 FROM student_grade_info
 WHERE max_grade_student = grade
-ORDER BY student_id, course_id;
+GROUP BY student_id
+ORDER BY student_id;
 
 ---------------------------------------------------------------------------------------------------------
 
