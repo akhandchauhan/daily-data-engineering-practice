@@ -111,14 +111,43 @@ INSERT INTO Orders (order_id, order_date, customer_id, cost) VALUES
 (9, '2020-08-07', 2, 32),
 (10, '2020-07-15', 1, 2);
 
+--m1 
 WITH cte as(
-SELECT name,o.customer_id,o.order_id,o.order_date,
-RANK() OVER(PARTITION BY c.customer_id ORDER BY order_date DESC ) AS rnk
-FROM Orders o
-LEFT JOIN Customers c  
-USING (customer_id)
+    SELECT name,o.customer_id,o.order_id,o.order_date,
+    RANK() OVER(PARTITION BY c.customer_id ORDER BY order_date DESC ) AS rnk
+    FROM Orders o
+    LEFT JOIN Customers c  
+    USING (customer_id)
 )
 SELECT name,customer_id,order_id,order_date
 FROM cte 
 WHERE rnk<=3
 ORDER BY 1,2,4 desc;
+
+
+
+------------------------------------------------------------------------------------------------------------
+-- m2
+
+WITH order_info AS (
+    SELECT 
+            c.name AS customer_name,
+            c.customer_id,
+            o.order_id,
+            o.order_date,
+            ROW_NUMBER() OVER(PARTITION BY c.customer_id ORDER BY o.order_date DESC) AS order_rank
+    FROM Orders o  
+    JOIN Customers c 
+    ON o.customer_id = c.customer_id
+)
+SELECT 
+      customer_name,
+      customer_id,
+      order_id,
+      order_date
+FROM order_info
+WHERE order_rank <= 3
+ORDER BY 
+        customer_name,
+        customer_id,
+        order_date DESC;

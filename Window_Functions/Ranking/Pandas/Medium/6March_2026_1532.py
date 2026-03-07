@@ -115,3 +115,18 @@ df = (
 )
 print(df)
 
+##########################################################################################################
+
+#m2
+
+df = (
+    orders
+    .sort_values(['customer_id','order_date'], ascending=[True, False])
+    .groupby('customer_id')
+    .head(3)
+    .merge(customers, on='customer_id')
+    .rename(columns={'name':'customer_name'})
+    .sort_values(['customer_name','customer_id','order_date'],
+                 ascending=[True, True, False])
+    [['customer_name','customer_id','order_id','order_date']]
+)
