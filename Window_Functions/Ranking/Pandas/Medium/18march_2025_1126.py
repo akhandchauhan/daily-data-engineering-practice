@@ -64,7 +64,7 @@ df = pd.DataFrame({
 # )
 # final = ( df.merge(event_average_df, on = 'event_type')
 #             .query("occurences > average_event_occurence")
-#             .groupby('business_id')['occurences']
+#             .groupby('business_id')['event_type']
 #             .count()
 #             .reset_index(name = 'df_size')
 #             .query("df_size > 1")
@@ -73,15 +73,13 @@ df = pd.DataFrame({
 # print(final)
 
 #####################################################################################################################3
-
 #m3
-
 
 df['average_event_occurence'] = df.groupby('event_type')['occurences'].transform('mean')
 
 final = (   df
             .query("occurences > average_event_occurence")
-            .groupby('business_id')['occurences']
+            .groupby('business_id')['event_type']
             .count()
             .reset_index(name = 'df_size')
             .query("df_size > 1")
@@ -90,3 +88,16 @@ final = (   df
 
 print(final)
 
+#####################################################################################################################3
+
+# m4 
+avg_occ = df.groupby('event_type')['occurences'].transform('mean')
+
+active = (
+    df[df['occurences'] > avg_occ]
+    .groupby('business_id')
+    .size()
+    .loc[lambda x: x > 1]
+    .reset_index(name='event_count')
+    [['business_id']]
+)

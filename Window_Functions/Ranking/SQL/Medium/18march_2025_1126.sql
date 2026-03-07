@@ -12,7 +12,7 @@
 -- a number of times.
 -- Write an  SQL query to find all active businesses.
 -- An active business is a business that has more than one event type with occurences greater 
---than the average occurences of that event type among all businesses.
+-- than the average occurences of that event type among all businesses.
 -- Events table:
 -- +-------------+------------+------------+
 -- | business_id | event_type | occurences |
@@ -33,7 +33,7 @@
 -- +-------------+
 -- Average for 'reviews', 'ads' and 'page views' are (7+3)/2=5, (11+7+6)/3=8, (3+12)/2=7.5 respectively.
 -- Business with id 1 has 7 'reviews' events (more than 5) and 11 'ads' events (more than 8) so it is an 
---active business.
+-- active business.
 DROP TABLE IF EXISTS Events;
 CREATE TABLE Events (
     business_id INT,
