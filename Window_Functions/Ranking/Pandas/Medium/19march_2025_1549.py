@@ -32,7 +32,6 @@
 # -- product_id is the column with unique values for this table.
 # -- This table contains information about the Products.
 # -- Write a solution to find the most recent order(s) of each product.
-
 # -- Return the result table ordered by product_name in ascending order and 
 # -- in case of a tie by the product_id in ascending order. If there still a tie, order them by
 # -- order_id in ascending order.
@@ -111,14 +110,79 @@
 # customers_df = pd.DataFrame(customers_data)
 # orders_df = pd.DataFrame(orders_data)
 # products_df = pd.DataFrame(products_data)
+import pandas as pd
+import datetime as dt
 
-# orders_df['order_date'] = pd.to_datetime(orders_df['order_date'])
+customers_data = {
+    'customer_id': [1, 2, 3, 4, 5],
+    'name': ['Winston', 'Jonathan', 'Annabelle', 'Marwan', 'Khaled']
+}
+orders_data = {
+    'order_id': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'order_date': ['2020-07-31', '2020-07-30', '2020-08-29', '2020-07-29', '2020-06-10', 
+                   '2020-08-01', '2020-08-01', '2020-08-03', '2020-08-07', '2020-07-15'],
+    'customer_id': [1, 2, 3, 4, 1, 2, 3, 1, 2, 1],
+    'product_id': [1, 2, 3, 1, 2, 1, 1, 2, 3, 2]
+}
 
-# df = pd.merge(orders_df,products_df, on ='product_id', how = 'left')
-# df = df.sort_values(by =['order_date'],ascending = False)
-# df['rank_product'] = df.groupby('product_id')['order_date'].rank(method='dense',ascending = False)
-# df = df.query('rank_product == 1')[['product_name','product_id','order_id','order_date']].sort_values(by =['product_name','product_id','order_id'])
-# print(df)
+products_data = {
+    'product_id': [1, 2, 3, 4],
+    'product_name': ['keyboard', 'mouse', 'screen', 'hard disk'],
+    'price': [120, 80, 600, 450]
+}
+
+customers_df = pd.DataFrame(customers_data)
+orders_df = pd.DataFrame(orders_data)
+products_df = pd.DataFrame(products_data)
+
+# Convert order_date to datetime
+orders_df['order_date'] = pd.to_datetime(orders_df['order_date'])
+
+#for each product if ordered find the most recent order_date
+orders_df['product_rank'] = (
+                                orders_df
+                                .groupby('product_id')['order_date']
+                                .rank(method = 'dense', ascending = False)
+)
+orders_df = orders_df[orders_df['product_rank'] == 1].reset_index()[['product_id','order_id','order_date']]
+
+# get the product_name and sort based on condition.
+df = (
+        orders_df.merge(products_df, on ='product_id')
+        .sort_values(by = ['product_name','product_id','order_id'])
+        [['product_name','product_id','order_id','order_date']]
+)
+print(df)
+
+
+###################################################################################################################
+
+# m2 using max agg function
+
+recent_order_df = orders_df.groupby('product_id')['order_date'].max().reset_index()
+
+df = (
+        orders_df.merge(recent_order_df, on = ['product_id','order_date'])
+        .merge(products_df, on ='product_id')
+        .sort_values(by = ['product_name','product_id','order_id'])
+        [['product_name','product_id','order_id','order_date']]
+)
+print(df)
+
+
+###################################################################################################################
+
+# m3 using transform 
+latest_dates = orders_df.groupby('product_id')['order_date'].transform('max')
+
+df = (
+    orders_df[orders_df['order_date'] == latest_dates]
+    .merge(products_df, on='product_id')
+    .sort_values(['product_name','product_id','order_id'])
+    [['product_name','product_id','order_id','order_date']]
+)
+
+print(df)
 
 
 
