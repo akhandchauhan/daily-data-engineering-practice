@@ -53,14 +53,29 @@
 # -- We arrange the table alternating between 'female', 'other', and 'male'.
 # -- Note that the IDs of each gender are sorted in ascending order.
 
-# import pandas as pd
+import pandas as pd
+import numpy as np
+data = {
+    'user_id': [4, 7, 2, 5, 3, 8, 6, 1, 9],
+    'gender': ['male', 'female', 'other', 'male', 'female', 'male', 'other', 'other', 'female']
+}
+df = pd.DataFrame(data)
+df = df.sort_values(['user_id'])
+df['user_rank'] = df.groupby('gender')['user_id'].cumcount() + 1
 
-# data = {
-#     'user_id': [4, 7, 2, 5, 3, 8, 6, 1, 9],
-#     'gender': ['male', 'female', 'other', 'male', 'female', 'male', 'other', 'other', 'female']
-# }
-# df = pd.DataFrame(data)
+conditions = [df['gender'] == 'female', df['gender'] == 'other', df['gender'] == 'male']
+values = [1,2,3]
 
+df['gender_rank'] = np.select(conditions, values)
+
+df = df.sort_values(['user_rank','gender_rank'])[['user_id','gender']]
+print(df)
+
+
+
+###################################################################################################################################
+
+#m2
 # df = df.sort_values(by='user_id')
 # df['rank_rk'] = df.groupby('gender')['user_id'].rank(method='first')
 
