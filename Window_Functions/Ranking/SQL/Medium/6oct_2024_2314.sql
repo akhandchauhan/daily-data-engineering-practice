@@ -101,7 +101,6 @@ WITH max_degree AS (
     FROM Weather
     GROUP BY city_id
 )
-
 SELECT 
     w.city_id,
     MIN(w.day) AS day,
