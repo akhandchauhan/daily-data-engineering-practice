@@ -100,7 +100,6 @@ print(team_creation(employee_df))
 
 ###################################################################################################################
 # m3 using chatgpt
-
 import pandas as pd
 
 def create_salary_teams(employee_df: pd.DataFrame) -> pd.DataFrame:
