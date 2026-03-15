@@ -66,19 +66,19 @@
 # --     - Spent 10 * 15 = 150 on product 3.
 # -- User 102 spent the most money on products 1, 2, and 3.
 
-# import pandas as pd
-# sales_data = {
-#     'sale_id': [1, 2, 3, 4, 5, 6],
-#     'product_id': [1, 3, 1, 2, 3, 1],
-#     'user_id': [101, 101, 102, 102, 102, 102],
-#     'quantity': [10, 7, 9, 6, 10, 6]
-# }
-# sales_df = pd.DataFrame(sales_data)
-# product_data = {
-#     'product_id': [1, 2, 3],
-#     'price': [10, 25, 15]
-# }
-# product_df = pd.DataFrame(product_data)
+import pandas as pd
+sales_data = {
+    'sale_id': [1, 2, 3, 4, 5, 6],
+    'product_id': [1, 3, 1, 2, 3, 1],
+    'user_id': [101, 101, 102, 102, 102, 102],
+    'quantity': [10, 7, 9, 6, 10, 6]
+}
+sales_df = pd.DataFrame(sales_data)
+product_data = {
+    'product_id': [1, 2, 3],
+    'price': [10, 25, 15]
+}
+product_df = pd.DataFrame(product_data)
 
 #m1
 # df = pd.merge(sales_df,product_df,on='product_id')
@@ -88,6 +88,8 @@
 # df = df[df['total'] == df['max_total']][['user_id','product_id']].drop_duplicates()
 # print(df)
 
+############################################################################################################
+
 #m2
 
 # df = pd.merge(sales_df, product_df, on='product_id')
@@ -96,6 +98,43 @@
 # df['max_total'] = df.groupby('user_id')['tot'].transform('max')
 # df = df[df['tot'] == df['max_total']][['user_id', 'product_id']]
 # print(df)
+
+############################################################################################################
+# m3
+
+sales_product_df = (
+             sales_df
+            .merge(product_df, on = 'product_id')
+            .assign(amount = lambda x: x['quantity']*x['price'])
+            .groupby(['user_id','product_id'], as_index = False)['amount']
+            .sum()
+            .rename(columns = {'amount':'total_amount'})
+            .assign(product_ranked = lambda x: x.groupby('user_id')['total_amount']
+                                    .rank(method = 'dense', ascending = False)
+                                    .astype(int)
+            )
+            .query("product_ranked == 1")
+            .reset_index(drop=True)
+            [['user_id','product_id']]
+                     
+)
+
+print(sales_product_df)
+
+############################################################################################################
+#m4
+
+df = (
+    sales_df
+    .merge(product_df, on='product_id')
+    .assign(amount=lambda x: x['quantity'] * x['price'])
+    .groupby(['user_id','product_id'], as_index=False)['amount']
+    .sum()
+)
+
+df = df[df['amount'] == df.groupby('user_id')['amount'].transform('max')]
+
+result = df[['user_id','product_id']]
 
 # -- 1555. Bank Account Summary
 # -- Description
@@ -171,37 +210,37 @@
 # -- Luis did not received any transfer, credit = 800
 
 
-import pandas as pd
+# import pandas as pd
 
-users_data = {
-    'user_id': [1, 2, 3, 4],
-    'user_name': ['Moustafa', 'Jonathan', 'Winston', 'Luis'],
-    'credit': [100, 200, 10000, 800]
-}
-users_df = pd.DataFrame(users_data)
+# users_data = {
+#     'user_id': [1, 2, 3, 4],
+#     'user_name': ['Moustafa', 'Jonathan', 'Winston', 'Luis'],
+#     'credit': [100, 200, 10000, 800]
+# }
+# users_df = pd.DataFrame(users_data)
 
-transactions_data = {
-    'trans_id': [1, 2, 3],
-    'paid_by': [1, 3, 2],
-    'paid_to': [3, 2, 1],
-    'amount': [400, 500, 200],
-    'transacted_on': ['2020-08-01', '2020-08-02', '2020-08-03']
-}
-transactions_df = pd.DataFrame(transactions_data)
+# transactions_data = {
+#     'trans_id': [1, 2, 3],
+#     'paid_by': [1, 3, 2],
+#     'paid_to': [3, 2, 1],
+#     'amount': [400, 500, 200],
+#     'transacted_on': ['2020-08-01', '2020-08-02', '2020-08-03']
+# }
+# transactions_df = pd.DataFrame(transactions_data)
 
-outgoing = transactions_df[['paid_by', 'amount']].copy()
-outgoing['amount'] = -outgoing['amount']
-incoming = transactions_df[['paid_to', 'amount']].rename(columns={'paid_to': 'paid_by'})
+# outgoing = transactions_df[['paid_by', 'amount']].copy()
+# outgoing['amount'] = -outgoing['amount']
+# incoming = transactions_df[['paid_to', 'amount']].rename(columns={'paid_to': 'paid_by'})
 
-all_transactions = pd.concat([outgoing, incoming])
-transaction_totals = all_transactions.groupby('paid_by', as_index=False)['amount'].sum()
+# all_transactions = pd.concat([outgoing, incoming])
+# transaction_totals = all_transactions.groupby('paid_by', as_index=False)['amount'].sum()
 
-result = pd.merge(users_df, transaction_totals, left_on='user_id', right_on='paid_by', how='left')
-result['amount'] = result['amount'].fillna(0)
-result['credit'] = result['credit'] + result['amount']
-result['credit_limit_breached'] = result['credit'].apply(lambda x: 'Yes' if x < 0 else 'No')
+# result = pd.merge(users_df, transaction_totals, left_on='user_id', right_on='paid_by', how='left')
+# result['amount'] = result['amount'].fillna(0)
+# result['credit'] = result['credit'] + result['amount']
+# result['credit_limit_breached'] = result['credit'].apply(lambda x: 'Yes' if x < 0 else 'No')
 
-result = result[['user_id', 'user_name', 'credit', 'credit_limit_breached']]
-result = result.rename(columns={'credit': 'balance'})
+# result = result[['user_id', 'user_name', 'credit', 'credit_limit_breached']]
+# result = result.rename(columns={'credit': 'balance'})
 
-print(result)
+# print(result)
