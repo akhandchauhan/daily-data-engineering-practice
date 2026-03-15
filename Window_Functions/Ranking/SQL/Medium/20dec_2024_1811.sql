@@ -13,7 +13,7 @@
 -- This table contains the LeetCode contest ID and the user IDs of the gold,
 -- silver, and bronze medalists.
 -- It is guaranteed that any consecutive contests have consecutive IDs and 
---that no ID is skipped.
+-- that no ID is skipped.
 -- Table: Users
 -- +-------------+---------+
 -- | Column Name | Type    |
@@ -26,11 +26,11 @@
 -- This table contains information about the users.
  
 -- Write an SQL query to report the name and the mail of all interview 
---candidates. A user is an interview candidate if at least one of these two 
---conditions is true:
+-- candidates. A user is an interview candidate if at least one of these two 
+-- conditions is true:
 -- The user won any medal in three or more consecutive contests.
 -- The user won the gold medal in three or more different contests 
---(not necessarily consecutive).
+-- (not necessarily consecutive).
 -- Return the result table in any order.
 -- Contests table:
 -- +------------+------------+--------------+--------------+
