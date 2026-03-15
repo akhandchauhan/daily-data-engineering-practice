@@ -1,7 +1,6 @@
 -- 1811. Find Interview Candidates
 -- SQL Schema
 -- Table: Contests
-
 -- +--------------+------+
 -- | Column Name  | Type |
 -- +--------------+------+
@@ -15,10 +14,7 @@
 -- silver, and bronze medalists.
 -- It is guaranteed that any consecutive contests have consecutive IDs and 
 --that no ID is skipped.
- 
-
 -- Table: Users
-
 -- +-------------+---------+
 -- | Column Name | Type    |
 -- +-------------+---------+
@@ -29,20 +25,13 @@
 -- user_id is the primary key for this table.
 -- This table contains information about the users.
  
-
 -- Write an SQL query to report the name and the mail of all interview 
 --candidates. A user is an interview candidate if at least one of these two 
 --conditions is true:
-
 -- The user won any medal in three or more consecutive contests.
 -- The user won the gold medal in three or more different contests 
 --(not necessarily consecutive).
 -- Return the result table in any order.
-
--- The query result format is in the following example:
-
- 
-
 -- Contests table:
 -- +------------+------------+--------------+--------------+
 -- | contest_id | gold_medal | silver_medal | bronze_medal |
@@ -100,6 +89,25 @@ CREATE TABLE Contests (
     FOREIGN KEY (bronze_medal) REFERENCES Users(user_id)
 );
 
+-- Contests table
+INSERT INTO Contests (contest_id, gold_medal, silver_medal, bronze_medal) VALUES
+(190, 1, 5, 2),
+(191, 2, 3, 5),
+(192, 5, 2, 3),
+(193, 1, 3, 5),
+(194, 4, 5, 2),
+(195, 4, 2, 1),
+(196, 1, 5, 2);
+
+-- Users table
+INSERT INTO Users (user_id, mail, name) VALUES
+(1, 'sarah@leetcode.com', 'Sarah'),
+(2, 'bob@leetcode.com', 'Bob'),
+(3, 'alice@leetcode.com', 'Alice'),
+(4, 'hercy@leetcode.com', 'Hercy'),
+(5, 'quarz@leetcode.com', 'Quarz');
+
+-- m1
 WITH cte AS (
     -- Combine all users who won a medal (gold, silver, or bronze) along with contest_id
     SELECT gold_medal AS user, contest_id FROM contests
@@ -134,3 +142,69 @@ SELECT u.name, u.mail
 FROM cte3
 LEFT JOIN Users u 
 ON cte3.user = u.user_id;
+
+
+-------------------------------------------------------------------------------------------------------
+
+-- m2 
+
+WITH contest_ranking_info AS (
+    SELECT 
+            contest_id,
+            'gold' AS medal_type,
+            gold_medal AS user_id  
+    FROM Contests
+    UNION ALL
+    SELECT 
+            contest_id,
+            'silver' AS medal_type,
+            silver_medal AS user_id  
+    FROM Contests
+    UNION ALL
+    SELECT 
+            contest_id,
+            'bronze' AS medal_type,
+            bronze_medal AS user_id  
+    FROM Contests
+)
+, user_contest_ranked AS (
+    SELECT 
+            contest_id,
+            user_id,
+            contest_id - ROW_NUMBER() OVER(
+                    PARTITION BY user_id 
+                    ORDER BY contest_id
+            ) AS user_contest_ranked
+    FROM contest_ranking_info
+),
+consecutive_medal_info AS (
+    SELECT 
+            DISTINCT user_id
+    FROM user_contest_ranked
+    GROUP BY user_id,
+            user_contest_ranked
+    HAVING COUNT(*) >= 3
+),
+gold_medal_info AS (
+    SELECT 
+            user_id
+    FROM contest_ranking_info 
+    WHERE medal_type = 'gold'
+    GROUP BY user_id
+    HAVING COUNT(*) >= 3
+
+)
+, final AS
+(
+    SELECT user_id
+    FROM consecutive_medal_info
+    UNION  
+    SELECT user_id
+    FROM gold_medal_info
+)
+SELECT 
+        u.name,
+        u.mail
+FROM final f 
+JOIN Users u 
+ON f.user_id = u.user_id;
