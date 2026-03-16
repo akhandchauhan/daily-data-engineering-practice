@@ -34,7 +34,7 @@
 -- Explanation: 
 -- The maximum customer_id present
 --  in the table is 5, so in the range [1,5], IDs 2 and 3 are missing from the table.
-
+DROP TABLE Orders;
 DROP TABLE Customers;
 -- Create the Customers table
 CREATE TABLE Customers (
@@ -59,3 +59,21 @@ SELECT ids
 FROM NumberSeries
 WHERE ids NOT IN (SELECT customer_id FROM Customers)
 ORDER BY ids;
+
+
+----------------------------------------------------------------------------------------------------------
+-- m2
+WITH recursive customer_info AS (
+    SELECT 
+        1 as id
+    UNION ALL
+    SELECT id+1 AS id
+    FROM customer_info
+    WHERE id < (SELECT MAX(customer_id) FROM Customers)
+)
+SELECT ci.id 
+FROM customer_info ci 
+LEFT JOIN customers c 
+ON c.customer_id = ci.id
+WHERE c.customer_id IS NULL
+ORDER BY ci.id;
