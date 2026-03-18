@@ -43,12 +43,8 @@
 -- +------------+-------------+
 -- Note that we only care about dates with non zero user count.
 -- The user with id 5 first logged in on 2019-03-01 so he's not counted on 2019-06-21.
-
-
--- Drop table if exists
 DROP TABLE IF EXISTS Traffic;
 
--- Create table
 CREATE TABLE Traffic (
     user_id INT,
     activity VARCHAR(50),
@@ -72,3 +68,36 @@ INSERT INTO Traffic (user_id, activity, activity_date) VALUES
 (5, 'logout', '2019-03-01'),
 (5, 'login', '2019-06-21'),
 (5, 'logout', '2019-06-21');
+
+-- m1
+WITH user_info AS (
+    SELECT 
+            user_id,
+            activity_date,
+            ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY activity_date) AS user_activity_rank
+    FROM Traffic
+    WHERE activity = 'login'
+)
+SELECT 
+        activity_date,
+        COUNT(user_id) AS user_count
+FROM user_info
+WHERE user_activity_rank = 1
+AND activity_date between DATE_ADD('2019-06-30',  INTERVAL - 90 DAY) AND '2019-06-30'
+GROUP BY activity_date;
+
+-- m2
+WITH user_info AS (
+    SELECT 
+            user_id,
+            MIN(activity_date) AS activity_date
+    FROM Traffic
+    WHERE activity = 'login'
+    GROUP BY user_id
+)
+SELECT 
+        activity_date,
+        COUNT(user_id) AS user_count
+FROM user_info
+WHERE activity_date between DATE_SUB('2019-06-30', INTERVAL 90 DAY) AND '2019-06-30'
+GROUP BY activity_date;

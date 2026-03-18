@@ -45,27 +45,71 @@
 # -- The user with id 5 first logged in on 2019-03-01 so he's not counted on 2019-06-21.
 
 
-# import pandas as pd
-# import datetime as dt
-# data = {
-#     'user_id': [1, 1, 1, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5],
-#     'activity': ['login', 'homepage', 'logout', 'login', 'logout', 'login', 'jobs', 'logout', 'login', 'groups', 'logout', 'login', 'logout', 'login'],
-#     'activity_date': ['2019-05-01', '2019-05-01', '2019-05-01', '2019-06-21', '2019-06-21', '2019-01-01', '2019-01-01', '2019-01-01', '2019-06-21', '2019-06-21', '2019-06-21', '2019-03-01', '2019-03-01', '2019-06-21']
-# }
+import pandas as pd
+import datetime as dt
+data = {
+    'user_id': [1, 1, 1, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5],
+    'activity': ['login', 'homepage', 'logout', 'login', 'logout', 'login', 'jobs', 'logout', 'login', 'groups', 'logout', 'login', 'logout', 'login'],
+    'activity_date': ['2019-05-01', '2019-05-01', '2019-05-01', '2019-06-21', '2019-06-21', '2019-01-01', '2019-01-01', '2019-01-01', '2019-06-21', '2019-06-21', '2019-06-21', '2019-03-01', '2019-03-01', '2019-06-21']
+}
 
-# df = pd.DataFrame(data)
+df = pd.DataFrame(data)
 
-# df['activity_date'] = pd.to_datetime(df['activity_date'])
-# df = df.sort_values(by =['user_id','activity_date'])
-# df = df.query("activity =='login'")
-# df['rnk']  = df.groupby('user_id')['activity_date'].rank(method ='first')
-# today = pd.to_datetime('2019-06-30')
-# act_date = today - pd.Timedelta(days=90)
+df['activity_date'] = pd.to_datetime(df['activity_date'])
+df = df.sort_values(by =['user_id','activity_date'])
+df = df.query("activity =='login'")
+df['rnk']  = df.groupby('user_id')['activity_date'].rank(method ='first')
+today = pd.to_datetime('2019-06-30')
+act_date = today - pd.Timedelta(days=90)
 
-# df = df.query("rnk == 1 and @act_date <= activity_date <= @today")
-# df = df.groupby('activity_date', as_index=False)['user_id'].count().rename(columns={'user_id': 'user_count'})
+df = df.query("rnk == 1 and @act_date <= activity_date <= @today")
+df = df.groupby('activity_date', as_index=False)['user_id'].count().rename(columns={'user_id': 'user_count'})
 
-# print(df)
+print(df)
 
+#####################################################################################################################
+
+# m2 
+
+import datetime as dt
+import pandas as pd
+
+def user_activity(df : pd.DataFrame) -> pd.DataFrame:
+    
+    df['activity_date'] = pd.to_datetime(df['activity_date'])
+
+    df = (
+        df[df['activity'] == 'login']
+        .groupby('user_id')['activity_date']
+        .min()
+        .reset_index()
+    )
+
+    start_date = pd.to_datetime('2019-06-30') - dt.timedelta(days = 90)
+    end_date = pd.to_datetime('2019-06-30')
+
+    df = (
+        df[df['activity_date'].between(start_date,end_date)]
+        .groupby('activity_date')['user_id']
+        .count()
+        .reset_index()
+        .rename(columns = {"user_id" :"user_count", "activity_date":"login_date"})
+        .sort_values(by = 'login_date')
+    )
+    
+    return df
+
+
+data = {
+    'user_id': [1, 1, 1, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5],
+    'activity': ['login', 'homepage', 'logout', 'login', 'logout', 'login', 'jobs', 'logout', 'login', 
+                 'groups', 'logout', 'login', 'logout', 'login'],
+    'activity_date': ['2019-05-01', '2019-05-01', '2019-05-01', '2019-06-21', '2019-06-21', 
+                      '2019-01-01', '2019-01-01', '2019-01-01', '2019-06-21', '2019-06-21', 
+                       '2019-06-21', '2019-03-01', '2019-03-01', '2019-06-21']
+}
+
+df = pd.DataFrame(data)
+print(user_activity(df))
 
 
