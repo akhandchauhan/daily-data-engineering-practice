@@ -157,3 +157,38 @@ FROM car_total ct
 JOIN ranked r 
 ON ct.car_id = r.car_id AND r.rn = 1
 ORDER BY ct.car_id;
+
+
+------------------------------------------------------------------------------------------------------
+
+-- m4
+
+WITH cte AS (
+    SELECT 
+        *,
+        TIMESTAMPDIFF(SECOND, entry_time, exit_time) / 3600 AS hours
+    FROM ParkingTransactions
+),
+
+cte2 AS (
+    SELECT 
+        car_id, 
+        lot_id, 
+        SUM(fee_paid) AS total_fee_paid_lot, 
+        SUM(hours) AS parking_hours_lot, 
+        DENSE_RANK() OVER (
+            PARTITION BY car_id 
+            ORDER BY SUM(hours) DESC
+        ) AS rnk
+    FROM cte
+    GROUP BY car_id, lot_id
+)
+
+SELECT 
+    car_id, 
+    SUM(total_fee_paid_lot) AS total_fee_paid, 
+    ROUND(SUM(total_fee_paid_lot) / SUM(parking_hours_lot), 2) AS avg_hourly_fee, 
+    SUM(CASE WHEN rnk = 1 THEN lot_id ELSE 0 END) AS most_time_lot
+FROM cte2
+GROUP BY car_id
+ORDER BY car_id;
