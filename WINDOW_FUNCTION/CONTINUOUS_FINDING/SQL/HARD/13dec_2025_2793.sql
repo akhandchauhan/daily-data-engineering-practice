@@ -94,7 +94,7 @@ INSERT INTO Passengers (passenger_id, flight_id, booking_time) VALUES
 (107, 3, '2023-07-08 09:10:00');
 
 
-
+ --m1
 WITH cte as(
 SELECT p.passenger_id,capacity , row_number() over(partition by p.flight_id ORDER BY booking_time ) as seq
 FROM Passengers p
@@ -107,7 +107,7 @@ FROM cte
 ORDER BY 1;
 
 
-
+-------------------------------------------------------------------------------------------------------------------------
 -- METHOD 2 DURING PRACTICE
 WITH confirm_cte as(
 SELECT passenger_id,capacity, ROW_NUMBER() OVER(PARTITION BY p.flight_id ORDER BY booking_time) as rnk
@@ -119,7 +119,7 @@ SELECT passenger_id,IF(capacity-CAST(rnk AS signed) >=0 ,'Confirmed','Waitlist')
 FROM confirm_cte
 ORDER BY 1;
 
-
+-------------------------------------------------------------------------------------------------------------------------
 --m3
 
 WITH ranked_passengers AS (
