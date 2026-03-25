@@ -43,25 +43,9 @@ The goal is to develop **strong problem-solving ability**, **production-level th
 
 ## 📁 Repository Structure
 
-
-sql/
-├── topics/
-│ ├── easy/
-│ ├── medium/
-│ └── hard/
-
-pandas/
-├── topics/
-│ ├── easy/
-│ ├── medium/
-│ └── hard/
-
-pyspark/
-├── topics/
-│ ├── easy/
-│ ├── medium/
-│ └── hard/
-
+sql → topics -> easy · medium · hard <br>
+pandas → topics -> easy · medium · hard<br>
+pyspark →  topics -> easy · medium · hard
 
 Each section is structured for **easy navigation by topic and difficulty level**.
 
