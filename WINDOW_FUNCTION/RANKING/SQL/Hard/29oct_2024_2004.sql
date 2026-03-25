@@ -85,7 +85,7 @@ INSERT INTO Candidates (employee_id, experience, salary) VALUES
 (13, 'Senior', 50000),
 (4, 'Junior', 40000);
 
-
+-- m1
 WITH cte as(
     SELECT *,SUM(salary) OVER(PARTITION BY experience ORDER BY salary) as cum_sum
     FROM Candidates
@@ -106,6 +106,7 @@ FROM cte
 WHERE experience='Junior'
 AND cum_sum <= 70000 -IFNULL((SELECT max(cum_sum) FROM cte2),0);
 
+------------------------------------------------------------------------------------------------------------------------------------------
 -- m2  = not working my sol
 WITH cte as(
     SELECT *, 
@@ -124,6 +125,7 @@ FROM cte3
 WHERE experience = 'Junior' and 
 cum_sum + (SELECT maxi FROM cte3 where experience =' Senior') < 70000;
 
+------------------------------------------------------------------------------------------------------------------------------------------
 -- m3 =easy way
 WITH s AS (
     SELECT employee_id,
@@ -151,7 +153,7 @@ SELECT
 FROM j
 WHERE cur <= 70000;
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 --- m4 agian i attempted
 WITH senior as (
     SELECT *, sum(salary) OVER(order by salary ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as cum_sum
@@ -172,9 +174,8 @@ SELECT 'junior',COUNT(salary)
 FROM junior
 WHERE cum_sum_junior < 70000;
 
-
+------------------------------------------------------------------------------------------------------------------------------------------
 -- m5 22 Jan 2026
-
 
 WITH salary_info as (
     SELECT *,
