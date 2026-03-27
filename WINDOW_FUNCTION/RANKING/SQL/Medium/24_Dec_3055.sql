@@ -87,7 +87,8 @@ FROM (
         ) as rnk
     FROM Fraud
 ) a 
-WHERE rnk <=0.05;
+WHERE rnk <=0.05
+ORDER BY state ASC, fraud_score DESC, policy_id ASC;;
 
 
 ---------------------------------------------------------------------------------------------------------
