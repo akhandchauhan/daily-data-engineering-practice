@@ -76,6 +76,8 @@ df['transaction_date'] = pd.to_datetime(df['transaction_date'])
 #             .rename(columns = {'spend': 'third_transaction_spend','transaction_date':'third_transaction_date'})
 # print(df)
 
+
+###############################################################################################
 #m2
 
 df = df.sort_values(by=['user_id', 'transaction_date'])
@@ -95,3 +97,23 @@ df_result = df_result.rename(columns={
 }).sort_values(by='user_id').reset_index(drop=True)
 
 print(df_result)
+
+
+###############################################################################################
+#m3
+
+df = (
+    df
+    .sort_values(['user_id','transaction_date'])
+    .assign(
+        prev_spend = lambda d : d.groupby('user_id')['spend'].shift(1),
+        prev_to_prev_spend = lambda d : d.groupby('user_id')['spend'].shift(2),
+        transaction_rank = lambda d : d.groupby('user_id')['transaction_date'].cumcount() +1 
+    )
+    .query("transaction_rank == 3 and spend > prev_spend and spend > prev_to_prev_spend")
+    [['user_id','spend','transaction_date']]
+    .rename(columns= {'spend':'third_transaction_spend','transaction_date':'third_transaction_date'})
+    .sort_values('user_id')
+)
+
+print(df)
