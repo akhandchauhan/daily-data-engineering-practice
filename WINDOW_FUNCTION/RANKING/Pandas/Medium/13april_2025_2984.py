@@ -44,6 +44,8 @@
 # Output table is ordered by peak_calling_hour and city in descending order.
 
 import pandas as pd
+import datetime as dt
+
 data = {
     'caller_id': [8, 4, 5, 8, 11, 8],
     'recipient_id': [4, 8, 1, 3, 3, 11],
@@ -60,11 +62,56 @@ data = {
 
 df = pd.DataFrame(data)
 df['call_time'] = pd.to_datetime(df['call_time'])
+
 df['hr'] = df['call_time'].dt.hour
 df['cnt'] = df.groupby(['city', 'hr'])['caller_id'].transform('count')
 df = df[df['cnt'] == df.groupby('city')['cnt'].transform('max')]
 df = df.rename(columns={'hr': 'peak_calling_hour', 'cnt': 'number_of_calls'})
 
-df = df[['city', 'peak_calling_hour', 'number_of_calls']].drop_duplicates()
+df = df[['city', 'peak_calling_hour', 'number_of_calls']]
 df = df.sort_values(by=['peak_calling_hour', 'city'], ascending=[False, False]).reset_index(drop=True)
+print(df)
+
+
+#####################################################################################################################
+
+# m2 
+df['call_hour'] = df['call_time'].dt.hour
+
+df= (
+    df.groupby(['city','call_hour'])['caller_id']
+    .count()
+    .reset_index()
+    .rename(columns = {'caller_id' : 'number_of_calls'})
+    .assign(
+        call_rank = lambda d : d.groupby('city')['number_of_calls']
+        .rank(method = 'dense',ascending= False)
+    )
+    .query("call_rank == 1")
+    .rename(columns = {'call_hour':'peak_calling_hour'})
+    [['city','peak_calling_hour','number_of_calls']]
+    .sort_values(by = ['peak_calling_hour','city'], ascending= [False, False])
+)
+
+print(df)
+
+#####################################################################################################################
+
+# m3
+
+df= (
+    df.groupby(['city','call_hour'])['caller_id']
+    .count()
+    .reset_index()
+    .rename(columns = {'caller_id' : 'number_of_calls'})
+    .assign(
+        max_call = lambda d : d.groupby('city')['number_of_calls']
+        .transform('max')
+    )
+    .loc[lambda d: d['max_call'] == d['number_of_calls']]
+    .rename(columns = {'call_hour':'peak_calling_hour'})
+    [['city','peak_calling_hour','number_of_calls']]
+    .sort_values(by = ['peak_calling_hour','city'], ascending= [False, False])
+)
+
 print(df)
