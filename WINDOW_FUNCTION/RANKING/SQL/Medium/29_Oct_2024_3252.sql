@@ -21,9 +21,9 @@
 -- Note: Teams with the same points must be assigned the same position.
 -- Tier ranking:
 -- Divide the league into 3 tiers based on points:
--- Tier 1: Top 33% of teams
--- Tier 2: Middle 33% of teams
--- Tier 3: Bottom 34% of teams
+-- Tier 1: Top 33% of teams = 67 - 100
+-- Tier 2: Middle 33% of teams = 35 - 66
+-- Tier 3: Bottom 34% of teams = 0 -34
 -- In case of ties at tier boundaries, place tied teams in the higher tier.
 -- Return the result table ordered by points in descending, and then by team_name in ascending order.
 -- +---------+-------------------+----------------+------+-------+--------+
@@ -41,7 +41,6 @@
 -- | 10      | Everton           | 14             | 2    | 6     | 6      |
 -- +---------+-------------------+----------------+------+-------+--------+
 -- Output:
-
 -- +-------------------+--------+----------+---------+
 -- | team_name         | points | position | tier    |
 -- +-------------------+--------+----------+---------+
@@ -105,7 +104,7 @@ SELECT team_name, points, position,
 FROM T
 ORDER BY 2 DESC, 1;
 
-
+------------------------------------------------------------------------------------------------------------
 --m2
 WITH PointsTable AS (
     SELECT 
@@ -131,4 +130,5 @@ SELECT
             WHEN percent_rank <= 0.66 THEN 'Tier 2'
             ELSE 'Tier 3'
         END AS tier
-FROM RankedTeams;
+FROM RankedTeams
+ORDER BY 2 DESC, 1;
