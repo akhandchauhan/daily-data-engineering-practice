@@ -138,7 +138,7 @@ SELECT
     CASE WHEN 
             sc.seller_id IS NULL THEN 'no'
         ELSE 'yes'
-    END AS item_brand
+    END AS 2nd_item_fav_brand
 FROM Users u 
 LEFT JOIN shopping_cte sc 
 ON u.user_id = sc.seller_id
@@ -150,8 +150,8 @@ AND sc.item_brand = u.favorite_brand ;
 -- "Is NULL because: user sold nothing?
 --              OR: user sold <2 items?
 --              OR: 2nd item brand ≠ favorite brand?"
-------------------------------------------------------------------------------------------------------------
 
+------------------------------------------------------------------------------------------------------------
 -- m2 
 
 WITH ranked_orders AS (
@@ -179,3 +179,22 @@ SELECT
 FROM Users u
 LEFT JOIN second_item si 
 ON u.user_id = si.seller_id;
+
+------------------------------------------------------------------------------------------------------------
+-- m3
+
+WITH DATA AS (
+    SELECT U.USER_ID,
+        U.FAVORITE_BRAND,
+        O.ORDER_DATE,
+        ITEM_BRAND,
+        RANK() OVER (PARTITION BY U.USER_ID ORDER BY O.ORDER_DATE ) AS RN
+    FROM USERS U
+    LEFT JOIN ORDERS O ON U.USER_ID = O.SELLER_ID
+    LEFT JOIN ITEMS I ON I.ITEM_ID = O.ITEM_ID
+    ORDER BY U.USER_ID
+)
+SELECT USER_ID AS SELLER_ID,
+CASE WHEN (RN = 2 AND ITEM_BRAND = FAVORITE_BRAND) THEN 'YES' ELSE 'NO' END AS "2ND_FAV_BRAND"
+FROM DATA
+WHERE RN = 2 OR ORDER_DATE IS NULL;
