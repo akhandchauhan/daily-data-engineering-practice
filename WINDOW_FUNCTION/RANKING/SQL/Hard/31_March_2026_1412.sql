@@ -162,3 +162,27 @@ GROUP BY student_id,
 HAVING COUNT(CASE WHEN score = min_score THEN 1 END) = 0
 AND COUNT(CASE WHEN score = max_score THEN 1 END) = 0
 ORDER BY student_id;
+
+-----------------------------------------------------------------------------------------------------------
+-- m3
+
+WITH all_scores AS (
+    SELECT 
+        exam_id,
+        MIN(score) AS min_score,
+        MAX(score) AS max_score
+    FROM Exam
+    GROUP BY exam_id
+)
+SELECT e.student_id
+FROM Exam e
+JOIN all_scores a 
+    ON e.exam_id = a.exam_id
+GROUP BY e.student_id
+HAVING MAX(
+    CASE 
+        WHEN e.score = a.min_score OR e.score = a.max_score 
+        THEN 1 
+        ELSE 0 
+    END
+) = 0;
