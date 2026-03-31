@@ -85,7 +85,7 @@
 -- Explanation: 
 -- The answer for the user with id 1 is no because they sold nothing.
 -- The answer for the users with id 2 and 3 is yes because the brands of their second sold items 
---are their favorite brands.
+-- are their favorite brands.
 -- The answer for the user with id 4 is no because the brand of their second sold item is not the
 drop table contest;
 drop table Users;
