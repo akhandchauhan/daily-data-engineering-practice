@@ -31,6 +31,25 @@ def shortest_distance(point: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame({'shortest': [min_distance]})
     
     
+#print(shortest_distance(point))
 
 
-print(shortest_distance(point))
+######################################################################################
+
+# m2 
+
+point_df = (
+    point
+    .sort_values('x')  
+    .assign(
+        prev_points=lambda d: d['x'].shift(1)
+    )
+    .dropna()
+    .assign(
+        diff=lambda d: d['x'] - d['prev_points']
+    )
+    ['diff']
+    .min()
+)
+final_df = pd.DataFrame({'shortest': [point_df]})
+print(final_df)
