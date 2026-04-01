@@ -93,8 +93,38 @@ final = (
     )
     [['product_id','quantity','price']]
 )
-print(final)
+# print(final)
 
-################################################################
+####################################################################################
 
 # m2 using window functions
+
+# Step 1
+df = products_df.merge(purchases_df, on='product_id')
+
+# Step 2
+df['total_price'] = df['price'] * df['quantity']
+
+# Step 3
+invoice_totals = (
+    df.groupby('invoice_id', as_index=False)['total_price']
+      .sum()
+      .rename(columns={'total_price': 'invoice_total'})
+)
+
+# Step 4 
+invoice_totals = invoice_totals.sort_values(
+    ['invoice_total', 'invoice_id'],
+    ascending=[False, True]
+)
+
+best_invoice = invoice_totals.iloc[0]['invoice_id']
+
+# Step 5
+result = (
+    df[df['invoice_id'] == best_invoice]
+    [['product_id', 'quantity', 'total_price']]
+    .rename(columns={'total_price': 'price'})
+)
+
+print(result)
