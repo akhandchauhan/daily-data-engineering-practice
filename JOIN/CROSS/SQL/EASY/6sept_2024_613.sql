@@ -60,11 +60,5 @@ FROM points2 p1
 JOIN points2 p2
 ON p1.id < p2.id ;
 
--- m2 
-SELECT MIN(x - prev_x) AS shortest
-FROM (
-    SELECT x, LAG(x) OVER (ORDER BY x) AS prev_x
-    FROM points2
-) t
-WHERE prev_x IS NOT NULL;
+
 
