@@ -22,7 +22,7 @@
 -- order_id is the primary key for this table.
 -- Each row of this table contains all orders made in the webstore.
 -- sale_date is the date when the transaction was made between the 
---customer (customer_id) and the seller (seller_id).
+-- customer (customer_id) and the seller (seller_id).
 -- Table: Seller
 -- +---------------+---------+
 -- | Column Name   | Type    |
