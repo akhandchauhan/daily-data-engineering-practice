@@ -17,7 +17,6 @@
 -- break the ties by id.
 
 -- Return the result table in any order.
-
 -- Input: 
 -- Employee table:
 -- +----+---------+--------+
@@ -118,7 +117,7 @@ INSERT INTO Employee (Id, Company, Salary) VALUES
 -- m1
 WITH cte AS (
     SELECT Id, Company, Salary, 
-        ROW_NUMBER() OVER (PARTITION BY Company ORDER BY Salary) AS rnk,
+        ROW_NUMBER() OVER (PARTITION BY Company ORDER BY Salary, id) AS rnk,
         COUNT(*) OVER (PARTITION BY Company) AS ṇ
     FROM Employee
 )
@@ -131,7 +130,7 @@ OR (n % 2 = 0 AND (rnk = n / 2 OR rnk = n / 2 + 1));
 -- m2
 WITH cte AS (
     SELECT Id, Company, Salary, 
-        ROW_NUMBER() OVER (PARTITION BY Company ORDER BY Salary) AS rnk,
+        ROW_NUMBER() OVER (PARTITION BY Company ORDER BY Salary, id) AS rnk,
         COUNT(*) OVER (PARTITION BY Company) AS n
     FROM Employee
 )
@@ -142,7 +141,7 @@ WHERE rnk BETWEEN n/2 and (n/2)+1;
 ----------------------------------------------------------------------------------------
 -- m3
 WITH cte as(
-SELECT *,ROW_NUMBER() OVER(PARTITION BY company ORDER BY salary) as rnk,
+SELECT *,ROW_NUMBER() OVER(PARTITION BY company ORDER BY salary, id) as rnk,
 COUNT(company) OVER(PARTITION BY company) as cnt
 FROM employee
 )
@@ -161,7 +160,7 @@ WITH employee_info AS (
             id,
             company,
             salary,
-            ROW_NUMBER() OVER(PARTITION BY company ORDER BY salary) AS employee_rank,
+            ROW_NUMBER() OVER(PARTITION BY company ORDER BY salary, id) AS employee_rank,
             COUNT(company) OVER(PARTITION BY company) AS employee_count
     FROM employee
 )
