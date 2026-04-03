@@ -87,3 +87,39 @@
 # Follow up: Could you solve it without using any built-in or window functions?
 
 
+import pandas as pd
+import numpy as np
+
+data = {
+    "id": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
+    "company": ["A","A","A","A","A","A","B","B","B","B","B","B","C","C","C","C","C"],
+    "salary": [2341,341,15,15314,451,513,15,13,1154,1345,1221,234,2345,2645,2645,2652,65]
+}
+
+df = pd.DataFrame(data)
+df = (
+    df.sort_values(
+        by=['salary', 'id'],
+        ascending=[True, True]
+    )
+    .assign(
+        company_rank=lambda d: d.groupby('company').cumcount() + 1,
+        company_count=lambda d: d.groupby('company')['id'].transform('count'),
+    )
+    .loc[
+        lambda d: (
+            (d['company_count'] % 2 == 1) & 
+            (d['company_rank'] == np.ceil(d['company_count'] / 2))
+        ) |
+        (
+            (d['company_count'] % 2 == 0) &
+            (
+                (d['company_rank'] == d['company_count'] / 2) |
+                (d['company_rank'] == d['company_count'] / 2 + 1)
+            )
+        )
+    ]
+    [['id','company','salary']]
+)
+
+print(df)
