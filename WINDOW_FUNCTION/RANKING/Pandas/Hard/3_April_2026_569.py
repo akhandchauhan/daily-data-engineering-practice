@@ -99,8 +99,7 @@ data = {
 df = pd.DataFrame(data)
 df = (
     df.sort_values(
-        by=['salary', 'id'],
-        ascending=[True, True]
+        by=['company','salary', 'id']
     )
     .assign(
         company_rank=lambda d: d.groupby('company').cumcount() + 1,
