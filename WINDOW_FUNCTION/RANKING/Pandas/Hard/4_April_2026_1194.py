@@ -112,3 +112,64 @@ df = (
     
 )
 print(df)
+
+
+#######################################################################################
+# m2 
+
+import pandas as pd
+
+# Normalize (UNION ALL equivalent)
+scores_df = pd.concat([
+    matches_df[['first_player', 'first_score']]
+        .rename(columns={'first_player': 'player_id', 'first_score': 'score'}),
+    matches_df[['second_player', 'second_score']]
+        .rename(columns={'second_player': 'player_id', 'second_score': 'score'})
+])
+
+# Compute total score per player (including players with no matches)
+df = (
+    players_df
+    .merge(scores_df, how='left', on='player_id')
+    .assign(score=lambda d: d['score'].fillna(0))  # 🔥 explicit handling
+    .groupby(['group_id', 'player_id'], as_index=False)['score']
+    .sum()
+)
+
+# Rank within each group (tie → smaller player_id wins)
+result = (
+    df.sort_values(['group_id', 'score', 'player_id'], ascending=[True, False, True])
+      .assign(rnk=lambda d: d.groupby('group_id').cumcount() + 1)
+      .query("rnk == 1")[['group_id', 'player_id']]
+)
+
+print(result)
+
+
+#######################################################################################
+# m3
+
+scores_df = pd.concat([
+    matches_df[['first_player', 'first_score']]
+        .rename(columns={'first_player': 'player_id', 'first_score': 'score'}),
+    matches_df[['second_player', 'second_score']]
+        .rename(columns={'second_player': 'player_id', 'second_score': 'score'})
+])
+
+df = (
+    players_df
+    .merge(scores_df, how='left', on='player_id')
+    .assign(score=lambda d: d['score'].fillna(0))
+    .groupby(['group_id', 'player_id'], as_index=False)['score']
+    .sum()
+)
+
+df = df.sort_values(['group_id','score','player_id'], ascending=[True, False, True])
+
+df['max_score'] = df.groupby('group_id')['score'].transform('max')
+
+result = (
+    df[df['score'] == df['max_score']]
+    .sort_values(['group_id','player_id'])
+    .drop_duplicates('group_id')[['group_id','player_id']]
+)
