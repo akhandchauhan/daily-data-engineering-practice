@@ -22,7 +22,7 @@
 -- Each row is a record of a match, first_player and second_player contain the 
 -- player_id of each match.
 -- first_score and second_score contain the number of points of the first_player 
---and second_player respectively.
+-- and second_player respectively.
 -- You may assume that, in each match, players belongs to the same group.
 
 -- The winner in each group is the player who scored the maximum total points 
@@ -121,7 +121,7 @@ FROM players p
 LEFT JOIN cte c 
 ON p.player_id = c.player_id
 ),cte3 as(
-SELECT group_id,player_id,row_number() over(PARTITION BY group_id ORDER BY sum_score desc) as rnk
+SELECT group_id,player_id,row_number() over(PARTITION BY group_id ORDER BY sum_score desc, player_id) as rnk
 FROM cte2
 )
 SELECT group_id, player_id
@@ -131,6 +131,16 @@ WHERE rnk = 1;
 
 ------------------------------------------------------------------------------------------
 --m3
+
+-- Every player in the Players table must be considered; if they didn’t play any match,
+--  their total score is 0, not “excluded.”
+
+-- Group 1:
+-- Player 1 → 0 matches → score = 0
+-- Player 2 → 1 match → score = 0
+
+-- 👉 Tie → smallest player_id wins
+-- 👉 Winner = Player 1 (who played ZERO matches)
 WITH match_info AS (
     SELECT match_id,
         first_player AS player_id,
@@ -148,10 +158,10 @@ SELECT
         p.player_id,
         ROW_NUMBER() OVER(
             PARTITION BY p.group_id 
-            ORDER BY SUM(mi.score) DESC,
+            ORDER BY COALESCE(SUM(mi.score),0) DESC,
                     p.player_id) AS player_rank
 FROM Players p 
-JOIN match_info mi 
+LEFT JOIN match_info mi 
 ON p.player_id = mi.player_id 
 GROUP BY 
     p.group_id,
