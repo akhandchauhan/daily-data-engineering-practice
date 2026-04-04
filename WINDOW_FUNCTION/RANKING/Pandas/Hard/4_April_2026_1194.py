@@ -61,3 +61,54 @@
 # | 2         | 35         |
 # | 3         | 40         |
 # +-----------+------------+
+
+
+import pandas as pd
+
+# Players DataFrame
+players_df = pd.DataFrame({
+    "player_id": [15, 25, 30, 45, 10, 35, 50, 20, 40],
+    "group_id":  [1,  1,  1,  1,  2,  2,  2,  3,  3]
+})
+
+# Matches DataFrame
+matches_df = pd.DataFrame({
+    "match_id":     [1, 2, 3, 4, 5],
+    "first_player": [15, 30, 30, 40, 35],
+    "second_player":[45, 25, 15, 20, 50],
+    "first_score":  [3, 1, 2, 5, 1],
+    "second_score": [0, 2, 0, 2, 1]
+})
+
+
+first_player_df =(
+    matches_df[['match_id','first_player','first_score']]
+    .rename(columns = {'first_player':'player_id',
+                        'first_score':'score'})
+)
+second_player_df = (
+    matches_df[['match_id','second_player','second_score']]
+    .rename(columns = {'second_player':'player_id',
+                        'second_score':'score'})
+)
+
+merge_matches_df = pd.concat([first_player_df, second_player_df])
+
+df = (
+    players_df
+    .merge(merge_matches_df, how ='left', on ='player_id')
+    .groupby(['group_id', 'player_id'], as_index = False)['score']
+    .sum()
+    .sort_values(by = ['group_id','score','player_id'],
+                 ascending= [True, False, True]
+    )
+    .assign(
+        player_rank = (
+            lambda d : d.groupby(['group_id']).cumcount() + 1
+        )
+    )
+    .loc[lambda d: d['player_rank'] == 1]
+    [['group_id','player_id']]
+    
+)
+print(df)
