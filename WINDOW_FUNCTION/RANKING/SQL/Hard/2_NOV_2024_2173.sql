@@ -10,9 +10,10 @@
 -- +-------------+------+
 -- (player_id, match_day) is the primary key for this table.
 -- Each row of this table contains the ID of a player, the day of the match they 
---played, and the result of that match.
+-- played, and the result of that match.
 -- The result column is an ENUM type of ('Win', 'Draw', 'Lose').
--- The winning streak of a player is the number of consecutive wins uninterrupted by draws or losses.
+-- The winning streak of a player is the number of consecutive wins uninterrupted
+--  by draws or losses.
 -- Write an  SQL query to count the longest winning streak for each player.
 -- Return the result table in any order.
 -- Input: 
@@ -53,14 +54,15 @@
 DROP TABLE Matches;
 Create table If Not Exists Matches (player_id int, match_day date, result ENUM('Win', 'Draw', 'Lose'));
 Truncate table Matches;
-insert into Matches (player_id, match_day, result) values ('1', '2022-01-17', 'Win');
-insert into Matches (player_id, match_day, result) values ('1', '2022-01-18', 'Win');
-insert into Matches (player_id, match_day, result) values ('1', '2022-01-25', 'Win');
-insert into Matches (player_id, match_day, result) values ('1', '2022-01-31', 'Draw');
-insert into Matches (player_id, match_day, result) values ('1', '2022-02-08', 'Win');
-insert into Matches (player_id, match_day, result) values ('2', '2022-02-06', 'Lose');
-insert into Matches (player_id, match_day, result) values ('2', '2022-02-08', 'Lose');
-insert into Matches (player_id, match_day, result) values ('3', '2022-03-30', 'Win');
+INSERT INTO Matches (player_id, match_day, result) VALUES
+('1', '2022-01-17', 'Win'),
+('1', '2022-01-18', 'Win'),
+('1', '2022-01-25', 'Win'),
+('1', '2022-01-31', 'Draw'),
+('1', '2022-02-08', 'Win'),
+('2', '2022-02-06', 'Lose'),
+('2', '2022-02-08', 'Lose'),
+('3', '2022-03-30', 'Win');
 
 
 WITH S AS (
