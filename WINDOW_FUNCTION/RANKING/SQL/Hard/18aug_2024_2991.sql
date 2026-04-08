@@ -13,12 +13,12 @@
 -- This table contains id, country, points, and winery.
 
 -- Write a solution to find the top three wineries in each country based on 
---their total points. If multiple wineries have the same total points, 
---order them by winery name in ascending order. If there's no second winery,
+-- their total points. If multiple wineries have the same total points, 
+-- order them by winery name in ascending order. If there's no second winery,
 -- output 'No Second Winery,' and if there's no third winery, output 'No Third Winery.'
 -- Return the result table ordered by country in ascending order.
 -- The result format is in the following example.
---  
+ 
 -- Example 1:
 -- Input: 
 -- Wineries table:
@@ -130,7 +130,7 @@ SELECT
       COALESCE(
           MAX(CASE WHEN winery_rank = 2 THEN CONCAT(winery,' (',total_points,')') 
         END
-          )
+          )    
        , 'No Second Winery') AS second_winery,
       COALESCE(
         MAX(CASE WHEN winery_rank = 3 THEN CONCAT(winery,' (',total_points,')') 
