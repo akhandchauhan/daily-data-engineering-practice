@@ -27,7 +27,7 @@
 -- Each row of this table contains some information about one sale.
  
 -- Write a solution that reports the best seller by total sales price, 
---If there is a tie, report them all.
+-- If there is a tie, report them all.
 
 -- Return the result table in any order.
 
@@ -60,7 +60,7 @@
 -- | 3           |
 -- +-------------+
 -- Explanation: Both sellers with id 1 and 3 sold products with the most 
---total price of 2800.
+-- total price of 2800.
 
 DROP TABLE IF EXISTS Sales;
 DROP TABLE IF EXISTS Product;
