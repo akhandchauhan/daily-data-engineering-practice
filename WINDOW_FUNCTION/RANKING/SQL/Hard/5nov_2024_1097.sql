@@ -23,7 +23,7 @@
 -- Write a solution to report for each install date, the number of players that 
 -- installed the game on that day, and the day one retention.
 -- Return the result table in any order.
--- The result format is in the following example.
+-- The resul1511t format is in the following example.
 -- Input: 
 -- Activity table:
 -- +-----------+-----------+------------+--------------+
