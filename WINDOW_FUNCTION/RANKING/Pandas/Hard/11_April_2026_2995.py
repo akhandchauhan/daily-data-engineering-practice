@@ -87,7 +87,7 @@ df = (
         # sessions_count = lambda d: d.query("session_type == 'Streamer' ")
         #                              .groupby('user_id')['user_id']
         #                              .transform('count')
-        #                              .fillna(0)
+        #                              .fillna(0) # having na problem
         sessions_count = lambda d: (
                 (d['session_type'] == 'Streamer')
                 .groupby(d['user_id'])
