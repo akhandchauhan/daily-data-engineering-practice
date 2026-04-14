@@ -53,14 +53,16 @@
 # -- | 3          | 15          | Morninngcat   | 5911   |
 # -- +------------+-------------+---------------+--------+
 
-# import pandas as pd
+import pandas as pd
+import numpy as np
 
-# data = {
-#     "company_id": [1, 1, 1, 2, 2, 2, 3, 3, 3, 3],
-#     "employee_id": [1, 2, 3, 1, 7, 9, 7, 2, 13, 15],
-#     "employee_name": ["Tony", "Pronub", "Tyrrox", "Pam", "Bassem", "Hermione", "Bocaben", "Ognjen", "Nyancat", "Morninngcat"],
-#     "salary": [2000, 21300, 10800, 300, 450, 700, 100, 2200, 3300, 7777]
-# }
+data = {
+    "company_id": [1, 1, 1, 2, 2, 2, 3, 3, 3, 3],
+    "employee_id": [1, 2, 3, 1, 7, 9, 7, 2, 13, 15],
+    "employee_name": ["Tony", "Pronub", "Tyrrox", "Pam", "Bassem", "Hermione", 
+                      "Bocaben", "Ognjen", "Nyancat", "Morninngcat"],
+    "salary": [2000, 21300, 10800, 300, 450, 700, 100, 2200, 3300, 7777]
+}
 # def checksal(maxi,salary):
 #     if maxi >= 1000 and maxi <=10000:
 #         salary = salary - (0.24*salary)
@@ -68,13 +70,43 @@
 #         salary = salary - (0.49*salary)
 #     return round(salary)
     
-# df = pd.DataFrame(data)
+df = pd.DataFrame(data)
+
+# m1
 # df['maxi'] = df.groupby('company_id')['salary'].transform('max')
 # df['salary'] = df.apply(lambda x :checksal(x['maxi'],x['salary']),axis = 1)
 # df = df.drop(columns = ['maxi'])
 #print(df)
 
+########################################################################################
+# m2 
+df['max_salary'] = df.groupby('company_id')['salary'].transform('max')
 
+conditions = [
+            df['max_salary'] <1000,
+            df['max_salary'].between(1000, 10000),
+            df['max_salary'] > 10000
+            ]
+values = [np.int16(df['salary']),
+          np.int16(np.round(df['salary']- (df['salary']*0.24), 0)),
+          np.int16(np.round(df['salary']- (df['salary']*0.49), 0))
+        ]
 
+df['salary'] = np.select(conditions,values)
+df = df[['company_id','employee_id','employee_name','salary']]
+print(df)
 
+########################################################################################
+# m3
+df['max_salary'] = df.groupby('company_id')['salary'].transform('max')
 
+df['multiplier'] = np.select(
+    [
+        df['max_salary'] < 1000,
+        df['max_salary'] <= 10000,
+        df['max_salary'] > 10000
+    ],
+    [1, 0.76, 0.51]
+)
+
+df['salary'] = np.round(df['salary'] * df['multiplier']).astype(int)
