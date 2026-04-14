@@ -9,10 +9,13 @@
 # -- | flights_count     | int  |
 # -- +-------------------+------+
 # -- (departure_airport, arrival_airport) is the primary key column for this table.
-# -- Each row of this table indicates that there were flights_count flights that departed from departure_airport and 
+# -- Each row of this table indicates that there were flights_count flights that 
+# departed from departure_airport and 
 # --arrived at arrival_airport.
-# -- Write an  SQL query to report the ID of the airport with the most traffic. The airport with the most traffic
-# -- is the airport that -- has the largest total number of flights that either departed from or arrived at the airport. 
+# -- Write an  SQL query to report the ID of the airport with the most traffic. 
+#  The airport with the most traffic
+# -- is the airport that -- has the largest total number of flights that either 
+# departed from or arrived at the airport. 
 # --If there is more than one airport with the most traffic, report them all.
 # -- Return the result table in any order.
 # -- The query result format is in the following example.
@@ -77,14 +80,13 @@ data = {
     'flights_count': [4, 5, 5]
 }
 
-df1 = pd.DataFrame(data)
+df = pd.DataFrame(data)
 
+# m1 = wrong and overcomplicateds
+df2 = df[["arrival_airport", "departure_airport", "flights_count"]]
 
-df2 = df1[["arrival_airport", "departure_airport", "flights_count"]]
-
-
-df = pd.concat([df1, df2])
-print(df)
+df = pd.concat([df, df2])
+# print(df)
 
 # Now calculating the total flights for each airport (departure + arrival)
 airport_traffic = df.groupby(['departure_airport']).agg({'flights_count': 'sum'}).reset_index()
@@ -101,5 +103,20 @@ total_traffic = pd.concat([airport_traffic, arrival_traffic]).groupby('airport_i
 max_traffic = total_traffic['flights_count'].max()
 result = total_traffic[total_traffic['flights_count'] == max_traffic]
 
-# Displaying the result
+#Displaying the result
 print(result[['airport_id']])
+
+
+########################################################################################
+# m2
+df1 = df[["departure_airport",'flights_count']].rename(columns = {'departure_airport':'airport_id'})
+df2 = df[["arrival_airport", "flights_count"]].rename(columns = {'arrival_airport':'airport_id'})
+final_df = pd.concat([df1, df2], ignore_index=True)
+df = (
+    final_df.groupby('airport_id', as_index = False)['flights_count']
+    .sum()
+    .loc[lambda d: d['flights_count'] == d['flights_count'].max()]
+    [['airport_id']]
+    .reset_index(drop = True)
+)
+print(df)
