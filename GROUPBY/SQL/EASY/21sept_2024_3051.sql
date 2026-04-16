@@ -61,7 +61,8 @@ INSERT INTO Candidates (candidate_id, skill) VALUES
 ('147', 'PostgreSQL'),
 ('256', 'Tableau'),
 ('102', 'DataAnalysis');
---METHOD 1
+
+-- m1
 SELECT candidate_id
 FROM Candidates 
 WHERE skill IN ('Python','Tableau','PostgreSQL')
