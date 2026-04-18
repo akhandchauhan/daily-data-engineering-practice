@@ -23,7 +23,7 @@ This repository documents my **daily problem-solving journey** focused on Data E
 - **PySpark** — Scalable data processing  
 
 I actively solve problems from:
-- LeetCode Premium  
+- LeetCode 
 - DataLemur  
 - StrataScratch  
 - Ankit Bansal  
