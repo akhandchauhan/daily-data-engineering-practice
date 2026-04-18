@@ -37,9 +37,6 @@
 -- +-------------+-------------+
 -- Explanation: All the matches of the league are shown in the table.
 
-CREATE DATABASE PRACTICE;
-
-USE  PRACTICE;
 DROP TABLE IF EXISTS Teams;
 
 CREATE TABLE Teams (
