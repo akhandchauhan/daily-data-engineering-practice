@@ -24,7 +24,7 @@
 --  the project.
 
 -- Leetcode is staffing for multiple data science projects. Write a 
---solution to find the best candidate for each project based on the following criteria:
+-- solution to find the best candidate for each project based on the following criteria:
 
 -- Candidates must have all the skills required for a project.
 -- Calculate a score for each candidate-project pair as follows:
