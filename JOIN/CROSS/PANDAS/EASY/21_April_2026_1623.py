@@ -48,7 +48,6 @@
 # Write an  SQL query to find all the possible triplets representing the 
 # country under the given constraints.
 
-
 # SchoolA table:
 # +------------+--------------+
 # | student_id | student_name |
@@ -89,3 +88,67 @@
 # and the same ID.
 # - (Bob, Tom, Jerry) --> Rejected because member_A and member_C have the same ID.
 # - (Bob, Tom, Alice) --> Valid triplet.
+
+import pandas as pd
+
+# SchoolA
+schoolA = pd.DataFrame({
+    "student_id": [1, 2],
+    "student_name": ["Alice", "Bob"]
+})
+
+# SchoolB
+schoolB = pd.DataFrame({
+    "student_id": [3],
+    "student_name": ["Tom"]
+})
+
+# SchoolC
+schoolC = pd.DataFrame({
+    "student_id": [3, 2, 10],
+    "student_name": ["Tom", "Jerry", "Alice"]
+})
+
+df =(
+    schoolA.merge(schoolB, how ='cross')
+    .merge(schoolC, how= 'cross')
+
+    .query('student_id_x != student_id_y and student_id_y != student_id and student_id != student_id_x and student_name_x != student_name_y and student_name_y != student_name and student_name_x != student_name')
+    [['student_name_x','student_name_y','student_name']]
+    .rename(columns = {
+        'student_name_x' : 'member_A',
+        'student_name_y' : 'member_B',
+        'student_name' : 'member_C'
+    })
+)
+print(df)
+
+##########################################################################################
+# m2
+
+# Step 1: Rename columns to avoid confusion
+A = schoolA.rename(columns={'student_id': 'id_A', 'student_name': 'name_A'})
+B = schoolB.rename(columns={'student_id': 'id_B', 'student_name': 'name_B'})
+C = schoolC.rename(columns={'student_id': 'id_C', 'student_name': 'name_C'})
+
+# Step 2: Generate all combinations (CROSS JOIN)
+df = A.merge(B, how='cross').merge(C, how='cross')
+
+# Step 3: Apply constraints (pairwise distinct IDs and names)
+df = df[
+    (df['id_A'] != df['id_B']) &
+    (df['id_A'] != df['id_C']) &
+    (df['id_B'] != df['id_C']) &
+    (df['name_A'] != df['name_B']) &
+    (df['name_A'] != df['name_C']) &
+    (df['name_B'] != df['name_C'])
+]
+
+# Step 4: Select final columns
+result = df[['name_A', 'name_B', 'name_C']].rename(columns={
+    'name_A': 'member_A',
+    'name_B': 'member_B',
+    'name_C': 'member_C'
+}).reset_index(drop=True)
+
+print(result)
