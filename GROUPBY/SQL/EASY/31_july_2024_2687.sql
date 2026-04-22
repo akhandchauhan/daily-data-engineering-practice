@@ -37,9 +37,12 @@
 -- | W00300      | 2012-03-25 10:50:00 |
 -- +-------------+---------------------+ 
 -- Explanation: 
--- bike with number W00576 has three rides, out of that, most recent ride is with ride_id 6 which ended on 2012-03-28 02:50:00.
--- bike with number W00300 has only 1 ride so we will include end_time in output directly. 
--- bike with number W00455 has two rides, out of that, most recent ride is with ride_id 3 which ended on 2012-03-26 17:40:00. 
+-- bike with number W00576 has three rides, out of that, most recent ride is with 
+-- ride_id 6 which ended on 2012-03-28 02:50:00.
+-- bike with number W00300 has only 1 ride so we will include end_time in output 
+-- directly. 
+-- bike with number W00455 has two rides, out of that, most recent ride is with 
+-- ride_id 3 which ended on 2012-03-26 17:40:00. 
 -- Returning output in order by the bike that were most recently used.
 Create table If Not Exists Bikes (ride_id int,bike_number varchar(100), 
 start_time datetime,end_time datetime);
