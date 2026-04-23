@@ -12,10 +12,10 @@
 -- +---------------+---------+
 -- (emp_id, salary) is the primary key for this table.
 -- Each row contains employees details and their yearly salaries, however, 
---some of the records are old and contain outdated salary information. 
+-- some of the records are old and contain outdated salary information. 
 
 -- Write an  SQL query to find the current salary of each employee assuming 
---that salaries increase each year. Output their emp_id, firstname, lastname,
+-- that salaries increase each year. Output their emp_id, firstname, lastname,
 --  salary, and department_id.
 
 -- Return the result table ordered by emp_id in ascending order.
