@@ -36,16 +36,13 @@
 -- +----------------+
 -- "2021-4-3"  --> We have one transaction with ID 8, so we add 8 to the result table.
 -- "2021-4-28" --> We have two transactions with IDs 5 and 9. The transaction with ID 5 
---has an amount of 40, while the transaction with ID 9 has an amount of 21. We only include 
---the transaction with ID 5 as it has the maximum amount this day.
+--has an amount of 40, while the transaction with ID 9 has an amount of 21. We only 
+-- include the transaction with ID 5 as it has the maximum amount this day.
 -- "2021-4-29" --> We have two transactions with IDs 1 and 6. Both transactions have the 
 --same amount of 58, so we include both in the result table.
 -- We order the result table by transaction_id after collecting these IDs.
 
 -- Follow up: Could you solve it without using the MAX() function?
-
-
-
 DROP TABLE IF EXISTS Transactions;
 
 CREATE TABLE Transactions (
@@ -61,6 +58,7 @@ INSERT INTO Transactions (transaction_id, day, amount) VALUES
 (5, '2021-04-28 16:39:59', 40),
 (6, '2021-04-29 23:39:28', 58);
 
+-- m1
 WITH cte AS (
 SELECT transaction_id, DATE_FORMAT(day, '%Y-%m-%d') AS DAY, amount
 FROM Transactions),
@@ -73,7 +71,8 @@ FROM cte2
 WHERE amount = maximum_amount
 ORDER BY transaction_id;
 
---method 2
+------------------------------------------------------------------------------------------
+--m2
 WITH cte AS(
 SELECT *, FIRST_VALUE(amount) OVER(PARTITION BY DATE(day) ORDER BY amount DESC) AS max_amount
 FROM Transactions
@@ -82,18 +81,24 @@ SELECT transaction_id FROM cte
 WHERE amount = max_amount 
 ORDER BY transaction_id;
 
+--------------------------------------------------------------------------------------
 -- m3
-WITH cte as(
-SELECT date(day) as trans_date,MAX(amount) as max_amt
-FROM transactions
-GROUP BY date(day)
+WITH max_trans_info AS (
+    SELECT
+        DATE(day) AS trans_date,
+        MAX(amount) AS max_amount
+    FROM Transactions
+    GROUP BY 
+        DATE(day)
 )
-SELECT transaction_id
-FROM transactions t 
-LEFT JOIN cte c 
-ON DATE(t.day) = c.trans_date 
-WHERE amount = max_amt;
+SELECT t.transaction_id
+FROM Transactions t 
+JOIN max_trans_info mti 
+ON DATE(t.day) = mti.trans_date
+AND t.amount = mti.max_amount
+ORDER BY t.transaction_id;
 
+--------------------------------------------------------------------------------------
 -- m4
 WITH cte as(
 SELECT *, DENSE_RANK() OVER(PARTITION BY DATE(day) ORDER BY amount desc) as rnk
