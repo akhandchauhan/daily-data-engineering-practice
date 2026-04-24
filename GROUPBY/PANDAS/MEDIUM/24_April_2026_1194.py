@@ -51,8 +51,48 @@ data = [
     [3, 4, 4, '2019-07-21']
 ]
 
-df = pd.DataFrame(data, columns=['article_id', 'author_id', 'viewer_id', 'view_date'])
+views = pd.DataFrame(data, columns=['article_id', 'author_id', 'viewer_id', 'view_date'])
 
+df = views.copy()
 df['view_date'] = pd.to_datetime(df['view_date'])
 
+df = (
+    df.groupby(['viewer_id','view_date'], as_index= False)['article_id']
+    .nunique()
+    .rename(columns = {'article_id':'count'})
+    .loc[lambda d: d['count'] >1]
+    [['viewer_id']]
+    .drop_duplicates()
+    .sort_values('viewer_id')
+)
 print(df)
+
+##########################################################################################
+# m2
+
+df = (
+    df.groupby(['viewer_id','view_date'], as_index= False)['article_id']
+    .nunique()
+    .rename(columns = {'article_id':'count'})
+    .loc[lambda d: d['count'] >1]
+    [['viewer_id']]
+    .groupby("viewer_id",as_index = False)['viewer_id']
+    .max()
+    .sort_values('viewer_id')
+)
+print(df)
+
+##########################################################################################
+# m3
+temp = (
+    views.groupby(['viewer_id','view_date'])['article_id']
+    .nunique()
+    .reset_index()
+)
+
+df = (
+    temp[temp['article_id'] > 1]
+    .groupby('viewer_id', as_index=False)
+    .size()[['viewer_id']]
+    .sort_values('viewer_id')
+)
