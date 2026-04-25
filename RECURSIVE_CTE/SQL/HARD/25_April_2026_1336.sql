@@ -91,7 +91,6 @@
 -- * For transactions_count >= 4, No customers visited the bank and did more 
 -- than three transactions so we will stop at transactions_count = 3
 
-
 -- Drop tables if they exist
 DROP TABLE IF EXISTS Visits;
 DROP TABLE IF EXISTS Transactions;
