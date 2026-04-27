@@ -11,18 +11,19 @@
 # -- +-------------+------+
 # -- (order_id, product_id) is the primary key for this table.
 # -- A single order is represented as multiple rows, one row for each product in the order.
-# -- Each row of this table contains the quantity ordered of the product product_id in the order order_id.
-# -- You are running an ecommerce site that is looking for imbalanced orders. An imbalanced order is 
-# -- one whose maximum quantity is strictly greater than the average quantity of every order (including itself).
+# -- Each row of this table contains the quantity ordered of the product product_id in 
+#  the order order_id.
+# -- You are running an ecommerce site that is looking for imbalanced orders. 
+#  An imbalanced order is one whose maximum quantity is strictly greater than 
+# the average quantity of every order (including itself).
 
-# -- The average quantity of an order is calculated as (total quantity of all products in the order) / 
-# -- (number of different products in the order). The maximum quantity of an order is the highest quantity of
+# -- The average quantity of an order is calculated as (total quantity of all 
+# products in the order) /  (number of different products in the order). 
+# The maximum quantity of an order is the highest quantity of 
 # any single product in the order.
 # -- Write an  SQL query to find the order_id of all imbalanced orders.
 
 # -- Return the result table in any order.
-
-# -- The query result format is in the following example:
 
 # -- OrdersDetails table:
 # -- +----------+------------+----------+
@@ -67,28 +68,28 @@
 # -- Orders 1 and 3 are imbalanced because they have a maximum quantity that exceeds 
 # the average quantity.
 
-# import pandas as pd
+import pandas as pd
 
-# # Create DataFrame
-# data = {
-#     "order_id": [1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 3, 2],
-#     "product_id": [1, 2, 3, 1, 4, 5, 3, 4, 5, 6, 7, 8, 9, 9],
-#     "quantity": [12, 10, 15, 8, 4, 6, 5, 18, 2, 8, 9, 9, 20, 4]
-# }
-# df = pd.DataFrame(data)
+# Create DataFrame
+data = {
+    "order_id": [1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 3, 2],
+    "product_id": [1, 2, 3, 1, 4, 5, 3, 4, 5, 6, 7, 8, 9, 9],
+    "quantity": [12, 10, 15, 8, 4, 6, 5, 18, 2, 8, 9, 9, 20, 4]
+}
+df = pd.DataFrame(data)
 
-# # Group by order_id and compute necessary statistics
-# order_stats = df.groupby("order_id").agg(
-#     total_quantity=("quantity", "sum"),
-#     product_count=("product_id", "nunique"),  # Ensure unique product count
-#     max_quantity=("quantity", "max")
-# ).reset_index()
+# Group by order_id and compute necessary statistics
+order_stats = df.groupby("order_id").agg(
+    total_quantity=("quantity", "sum"),
+    product_count=("product_id", "nunique"), 
+    max_quantity=("quantity", "max")
+).reset_index()
 
-# # Calculate the average quantity per order
-# order_stats["avg_quantity"] = order_stats["total_quantity"] / order_stats["product_count"]
+# Calculate the average quantity per order
+order_stats["avg_quantity"] = order_stats["total_quantity"] / order_stats["product_count"]
 
-# # Filter for imbalanced orders where max_quantity > avg_quantity
-# imbalanced_orders = order_stats[order_stats["max_quantity"] > order_stats["avg_quantity"]][["order_id"]]
+# Filter for imbalanced orders where max_quantity > avg_quantity
+imbalanced_orders = order_stats[order_stats["max_quantity"] > (order_stats["avg_quantity"]).max()][["order_id"]]
 
-# # Display result
-# print(imbalanced_orders)
+# Display result
+print(imbalanced_orders)
