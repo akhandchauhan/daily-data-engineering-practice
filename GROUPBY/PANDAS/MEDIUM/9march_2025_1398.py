@@ -19,8 +19,8 @@
 # -- +---------------+---------+
 # -- order_id is the column with unique values for this table.
 # -- customer_id is the id of the customer who bought the product "product_name".
-# -- Write a solution to report the customer_id and customer_name of customers who bought products "A",
-# "B" but did not buy the product "C"
+# -- Write a solution to report the customer_id and customer_name of customers who 
+# bought products "A", "B" but did not buy the product "C"
 # --  since we want to recommend them to purchase this product.
 # -- Return the result table ordered by customer_id.
 # -- Example 1:
@@ -58,8 +58,13 @@
 # -- but not the product C.
 
 import pandas as pd
+import numpy as np
 
-# Sample data
+
+pd.set_option('display.max_rows', None)        # show all rows
+pd.set_option('display.max_columns', None)    # show all columns
+pd.set_option('display.width', None)          # no line wrap limit
+pd.set_option('display.max_colwidth', None) 
 customers_data = {
     "customer_id": [1, 2, 3, 4],
     "customer_name": ["Daniel", "Diana", "Elizabeth", "Jhon"]
@@ -74,6 +79,7 @@ orders_data = {
 customers_df = pd.DataFrame(customers_data)
 orders_df = pd.DataFrame(orders_data)
 
+# m1 
 # Count occurrences of each product per customer
 df = pd.merge(customers_df, orders_df, on="customer_id", how="left")
 df["cnt"] = df.groupby(["customer_name", "product_name"])["product_name"].transform("count")
@@ -88,3 +94,22 @@ filtered_customers = customers_df[customers_df.apply(check, axis=1)]
 filtered_customers = filtered_customers.sort_values(by="customer_id")
 # print(filtered_customers)
 
+#########################################################################################
+# m2
+
+df = orders_df.merge(customers_df, on = 'customer_id')
+df['A_cnt'] = np.where(df['product_name'] == 'A',1,0)
+df['B_cnt'] = np.where(df['product_name'] == 'B',1,0)
+df['C_cnt'] = np.where(df['product_name'] == 'C',1,0)
+
+df = (
+    df.groupby(['customer_id','customer_name'], as_index= False)
+    .agg(
+        a_sum = ('A_cnt','sum'),
+        b_sum = ('B_cnt','sum'),
+        c_sum = ('C_cnt','sum')
+    )
+    .loc[lambda d : (d['a_sum'] > 0) & (d['b_sum'] > 0) & (d['c_sum'] ==0)]
+    [['customer_id','customer_name']]
+)
+print(df)
