@@ -83,44 +83,32 @@ INSERT INTO Orders (order_id, customer_id, order_date, price) VALUES
 ('8', '3', '2017-01-01', '900'),
 ('9', '3', '2018-11-07', '900');
 
-WITH cte AS (
+WITH yearly AS (
     SELECT 
-        customer_id, 
+        customer_id,
         YEAR(order_date) AS yr,
-        SUM(price) AS total,
-        MAX(YEAR(order_date)) OVER(PARTITION BY customer_id) - MIN(YEAR(order_date)) OVER(PARTITION BY customer_id) + 1 AS num_yrs,
-        DENSE_RANK() OVER(PARTITION BY customer_id ORDER BY YEAR(order_date)) AS rnk_yr,
-        DENSE_RANK() OVER(PARTITION BY customer_id ORDER BY SUM(price)) AS rnk_total
+        SUM(price) AS total
     FROM Orders
     GROUP BY customer_id, YEAR(order_date)
+),
+cte AS (
+    SELECT 
+        customer_id,
+        yr,
+        total,
+        MAX(yr) OVER (PARTITION BY customer_id) 
+        - MIN(yr) OVER (PARTITION BY customer_id) + 1 AS num_yrs,
+        DENSE_RANK() OVER (PARTITION BY customer_id ORDER BY yr) AS rnk_yr,
+        DENSE_RANK() OVER (PARTITION BY customer_id ORDER BY total) AS rnk_total
+    FROM yearly
 )
-SELECT * 
+SELECT customer_id
 FROM cte
 GROUP BY customer_id
-having sum(rnk_yr=rnk_total) = max(num_yrs);
+HAVING SUM(rnk_yr = rnk_total) = MAX(num_yrs);
 
 ----------------------------------------------------------------------------------------
 -- m2
-SELECT
-    customer_id
-FROM
-    (
-        SELECT
-            customer_id,
-            YEAR(order_date),
-            SUM(price) AS total,
-            YEAR(order_date) - RANK() OVER (
-                PARTITION BY customer_id
-                ORDER BY SUM(price)
-            ) AS rk
-        FROM Orders
-        GROUP BY customer_id, YEAR(order_date)
-    ) AS t
-GROUP BY customer_id
-HAVING COUNT(DISTINCT rk) = 1;
-
-----------------------------------------------------------------------------------------
--- m3
 WITH RECURSIVE year_info AS(
     SELECT 
         customer_id,
