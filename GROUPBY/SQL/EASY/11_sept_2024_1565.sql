@@ -13,7 +13,7 @@
 -- This table contains information about the orders made by customer_id.
 
 -- Write an  SQL query to find the number of unique orders and the number of unique 
---customers with invoices > $20 for each different month.
+-- customers with invoices > $20 for each different month.
 
 -- Return the result table sorted in any order.
 -- The query result format is in the following example.
