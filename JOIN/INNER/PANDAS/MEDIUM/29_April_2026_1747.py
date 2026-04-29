@@ -48,3 +48,47 @@
 # do not intersect at any moment.
 # Account ID 4 --> The account was active from "2021-02-01 17:00:00" to "2021-02-01 17:00:00" with two 
 # different IP addresses (10 and 11). It should be banned.
+
+
+import pandas as pd
+
+data = {
+    "account_id": [1, 1, 2, 2, 3, 3, 4, 4],
+    "ip_address": [1, 2, 6, 7, 9, 13, 10, 11],
+    "login": [
+        "2021-02-01 09:00:00",
+        "2021-02-01 08:00:00",
+        "2021-02-01 20:30:00",
+        "2021-02-02 20:30:00",
+        "2021-02-01 16:00:00",
+        "2021-02-01 17:00:00",
+        "2021-02-01 16:00:00",
+        "2021-02-01 17:00:00"
+    ],
+    "logout": [
+        "2021-02-01 09:30:00",
+        "2021-02-01 11:30:00",
+        "2021-02-01 22:00:00",
+        "2021-02-02 22:00:00",
+        "2021-02-01 16:59:59",
+        "2021-02-01 17:59:59",
+        "2021-02-01 17:00:00",
+        "2021-02-01 17:59:59"
+    ]
+}
+
+df = pd.DataFrame(data)
+
+df["login"] = pd.to_datetime(df["login"])
+df["logout"] = pd.to_datetime(df["logout"])
+
+final_df = (
+    df.merge(df, on = ['account_id'])
+    .loc[lambda d: 
+        (d['ip_address_x'] != d['ip_address_y']) &
+        (d['login_x'].between(d['login_y'],d['logout_y']))
+    ]
+    [['account_id']]
+    .drop_duplicates()
+)
+print(final_df)
