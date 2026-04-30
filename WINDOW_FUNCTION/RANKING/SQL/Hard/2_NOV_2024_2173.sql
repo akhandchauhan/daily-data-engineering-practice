@@ -19,17 +19,18 @@
 -- Input: 
 -- Matches table:
 -- +-----------+------------+--------+
--- | player_id | match_day  | result |
+-- | player_id | match_day  | result |overall_rank, result_rank
 -- +-----------+------------+--------+
--- | 1         | 2022-01-17 | Win    |
--- | 1         | 2022-01-18 | Win    |
--- | 1         | 2022-01-25 | Win    |
--- | 1         | 2022-01-31 | Draw   |
--- | 1         | 2022-02-08 | Win    |
--- | 2         | 2022-02-06 | Lose   |
--- | 2         | 2022-02-08 | Lose   |
--- | 3         | 2022-03-30 | Win    |
+-- | 1         | 2022-01-17 | Win    |1 , 1  
+-- | 1         | 2022-01-18 | Win    |2, 2
+-- | 1         | 2022-01-25 | Win    |3 ,3
+-- | 1         | 2022-01-31 | Draw   |4, 1
+-- | 1         | 2022-02-08 | Win    |5, 1
+-- | 2         | 2022-02-06 | Lose   |1, 1
+-- | 2         | 2022-02-08 | Lose   |2, 2
+-- | 3         | 2022-03-30 | Win    |1, 1
 -- +-----------+------------+--------+
+
 -- Output: 
 -- +-----------+----------------+
 -- | player_id | longest_streak |
@@ -64,7 +65,7 @@ INSERT INTO Matches (player_id, match_day, result) VALUES
 ('2', '2022-02-08', 'Lose'),
 ('3', '2022-03-30', 'Win');
 
-
+-- m1
 WITH S AS (
         SELECT *,
             row_number() OVER (PARTITION BY player_id ORDER BY match_day) - 
@@ -80,14 +81,38 @@ SELECT player_id, max(s) AS longest_streak
 FROM T
 GROUP BY player_id;
 
-
+---------------------------------------------------------------------------------------------------
+--m2
 -- EXPLANATION OF ABOVE QUERY
 WITH S AS (
         SELECT *,
-            row_number() OVER (PARTITION BY player_id ORDER BY match_day) - 
-            row_number() OVER (PARTITION BY player_id, result ORDER BY match_day) AS rk
+            row_number() OVER (PARTITION BY player_id 
+                                ORDER BY match_day) AS match_seq, 
+-- since the days of match are not consecutive,we need to give rank to give them a sequence 
+            row_number() OVER (PARTITION BY player_id, result 
+                              ORDER BY match_day) AS result_seq
         FROM Matches
-    )
-        SELECT player_id, sum(result = 'Win') AS s
-        FROM S
-        GROUP BY player_id, rk;
+ ),
+ ranked AS (
+    SELECT player_id,
+           (match_seq - result_seq) AS diff,
+           COUNT(*) AS streak,
+           ROW_NUMBER() OVER(PARTITION BY player_id
+                            ORDER BY COUNT(*) DESC
+            ) AS rnk
+    FROM s
+    WHERE result = 'Win'
+    GROUP BY player_id,
+             (match_seq - result_seq)
+ ),
+ match_info AS (
+ SELECT DISTINCT player_id
+ FROM matches
+ )
+ SELECT 
+      mi.player_id,
+      IFNULL(cte2.streak,0) AS streak
+ FROM match_info mi 
+ LEFT JOIN ranked cte2
+ ON mi.player_id = cte2.player_id
+ AND rnk = 1;
