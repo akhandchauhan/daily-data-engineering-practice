@@ -23,7 +23,7 @@
 -- category (values range from 0 to 100).
 
 -- Write a solution to find the final price of each product after applying the 
---category discount. If a product's category has no associated discount, its price 
+-- category discount. If a product's category has no associated discount, its price 
 -- remains unchanged.
 
 -- Return the result table ordered by product_id in ascending order.
