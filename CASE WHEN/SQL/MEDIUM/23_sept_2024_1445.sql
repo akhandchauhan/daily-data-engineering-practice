@@ -8,9 +8,11 @@
 -- | fruit         | enum    | 
 -- | sold_num      | int     | 
 -- +---------------+---------+
--- (sale_date, fruit) is the primary key (combination of columns with unique values) of this table.
--- This table contains the sales of "apples" and "oranges" sold each day.
--- Write a solution to report the difference between the number of  apples and  oranges sold each day.
+-- (sale_date, fruit) is the primary key (combination of columns with unique values) 
+-- of this table.This table contains the sales of "apples" and "oranges" sold each day.
+
+-- Write a solution to report the difference between the number of  apples 
+-- and  oranges sold each day.
 -- Return the result table ordered by sale_date.
 -- Inpt: 
 -- Sales table:
@@ -41,7 +43,6 @@
 -- Day 2020-05-03, 20 apples and 0 oranges were sold (Difference 20 - 0 = 20).
 -- Day 2020-05-04, 15 apples and 16 oranges were sold (Difference 15 - 16 = -1).
 
-
 drop table Sales;
 CREATE TABLE Sales (
     sale_date DATE,
@@ -62,7 +63,7 @@ INSERT INTO Sales (sale_date, fruit, sold_num) VALUES
 
 --m1 
 WITH cte as(
-SELECT *, LEAD(sold_num) OVER(PARTITION BY sale_date ORDER BY sale_date) as nxt_num
+SELECT *, LEAD(sold_num) OVER(PARTITION BY sale_date ORDER BY fruit) as nxt_num
 FROM Sales
 )
 SELECT sale_date, sold_num-nxt_num as diff
@@ -70,24 +71,17 @@ FROM cte
 WHERE fruit = 'apples'
 ORDER BY 1;
 
+--------------------------------------------------------------------------------------------------
 -- m2
-WITH cte as(
-    SELECT sale_date,CASE WHEN fruit='apples' Then sold_num ELSE -sold_num end as value
-    FROM Sales
-)
-SELECT sale_date,SUM(value) AS diff
-FROM cte
-GROUP BY sale_date
-ORDER BY 1;
-
--- m3
-SELECT sale_date,
-    SUM(IF(fruit = 'apples', sold_num, -sold_num)) AS diff
+SELECT 
+    sale_date,
+    SUM(CASE WHEN fruit = 'apples' THEN sold_num ELSE -sold_num END) AS diff
 FROM Sales
-GROUP BY 1
-ORDER BY 1;
+GROUP BY sale_date
+ORDER BY sale_date;
 
--- m4
+--------------------------------------------------------------------------------------------------
+-- m3
 WITH cte as(
 SELECT sale_date,SUM(CASE WHEN fruit = 'apples' THEN sold_num ELSE 0 end)  as apple_cnt,
 SUM(CASE WHEN fruit = 'oranges' THEN sold_num ELSE 0 end)  as orange_cnt
@@ -98,13 +92,8 @@ SELECT sale_date, apple_cnt - orange_cnt as diff
 FROM cte
 ORDER BY sale_date;
 
--- m5
-SELECT sale_date,SUM(IF(fruit = 'apples',sold_num, 0)) - SUM(IF(fruit = 'oranges',sold_num, 0)) as diff
-FROM Sales
-GROUP BY sale_date
-ORDER BY sale_date;
-
--- m6
+--------------------------------------------------------------------------------------------------
+-- m4
 WITH fruit_info as (
     SELECT sale_date,
         fruit,
@@ -118,8 +107,8 @@ FROM fruit_info
 WHERE fruit = 'apples' and nxt_fruit = 'oranges'
 ORDER BY sale_date
 
-
---m7
+--------------------------------------------------------------------------------------------------
+--m5
 SELECT a.sale_date, b.sold_num - a.sold_num as diff
 FROM (SELECT *
 FROM Sales
@@ -131,3 +120,21 @@ JOIN (SELECT *
 ) b
 ON a.sale_date = b.sale_date
 ORDER BY a.sale_date
+
+--------------------------------------------------------------------------------------------------
+-- m6
+SELECT 
+    sale_date,
+    sold_num - next_sold_num AS diff
+FROM (
+    SELECT 
+        sale_date,
+        sold_num,
+        LEAD(sold_num) OVER(
+            PARTITION BY sale_date
+            ORDER BY fruit
+        ) AS next_sold_num
+    FROM Sales
+ ) t
+ WHERE next_sold_num IS NOT NULL
+ ORDER BY sale_date;
