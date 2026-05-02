@@ -8,7 +8,7 @@
 -- +-------------+---------+
 -- player_id is the unique key for this table.
 -- Each row contains the unique identifier for player and the name of one of 
---the teams participating in that match.
+-- the teams participating in that match.
 
 -- Table: Passes
 -- +-------------+---------+
@@ -106,31 +106,6 @@ VALUES
 (3, '46:15', 4),
 (1, '46:45', 2),
 (5, '46:30', 6);
-
--- Teams table:
--- +------------+-----------+
--- | player_id  | team_name |
--- +------------+-----------+
--- | 1          | Arsenal   |
--- | 2          | Arsenal   |
--- | 3          | Arsenal   |
--- | 4          | Chelsea   |
--- | 5          | Chelsea   |
--- | 6          | Chelsea   |
--- +------------+-----------+
--- Passes table:
--- +-----------+------------+---------+
--- | pass_from | time_stamp | pass_to |
--- +-----------+------------+---------+
--- | 1         | 00:15      | 2       |
--- | 2         | 00:45      | 3       |
--- | 3         | 01:15      | 1       | 
--- | 4         | 00:30      | 1       | 
--- | 2         | 46:00      | 3       |
--- | 3         | 46:15      | 4       |
--- | 1         | 46:45      | 2       |
--- | 5         | 46:30      | 6       |
--- +-----------+------------+---------+
 
 -- m1
 WITH cte as(
