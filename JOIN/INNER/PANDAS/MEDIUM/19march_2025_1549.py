@@ -49,10 +49,32 @@ data = {
     'y_value': [7, 8, 10]
 }
 points_df = pd.DataFrame(data)
-df = pd.merge(points_df,points_df, how ='cross')
-df = df.query('x_value_x != x_value_y and y_value_x != y_value_y and id_x < id_y')
-df['area'] = abs(df['x_value_x'] - df['x_value_y']) * abs(df['y_value_x'] - df['y_value_y'])
-df = df.rename(columns ={'id_x':'p1','id_y':'p2'})
-df = df.sort_values(by =['area','p1','p2'], ascending= [False,True,True])
-df =df[['p1','p2','area']]
+
+
+df = (
+    points_df.merge(points_df, how ='cross')
+    .loc[lambda d: d['id_x'] < d['id_y']]
+    .assign(
+        area = lambda d: (d['x_value_x'] - d['x_value_y']).abs() * (d['y_value_x'] - d['y_value_y']).abs()
+    )
+    .loc[lambda d: d['area'] != 0]
+    [['id_x','id_y','area']]
+    .rename(columns = {'id_x':'p1', 'id_y':'p2'})
+    .sort_values(by = ['area','p1','p2'], ascending = [False, True,True])
+)
 print(df)
+
+###################################################################################################################
+# m2 
+
+df = (
+    points_df.merge(points_df, how='cross')
+    .loc[lambda d: d['id_x'] < d['id_y']]
+    .loc[lambda d: (d['x_value_x'] != d['x_value_y']) &
+                   (d['y_value_x'] != d['y_value_y'])]
+    .assign(
+        area=lambda d: (d['x_value_x'] - d['x_value_y']).abs() *
+                       (d['y_value_x'] - d['y_value_y']).abs()
+    )
+    [['id_x','id_y','area']]
+)
