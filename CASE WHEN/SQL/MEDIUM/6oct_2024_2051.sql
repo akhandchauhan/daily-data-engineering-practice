@@ -1,104 +1,3 @@
--- 2308. Arrange Table by Gender
--- Description
--- Table: Genders
--- +-------------+---------+
--- | Column Name | Type    |
--- +-------------+---------+
--- | user_id     | int     |
--- | gender      | varchar |
--- +-------------+---------+
--- user_id is the primary key for this table.
--- gender is ENUM of type 'female', 'male', or 'other'.
--- Each row in this table contains the ID of a user and their gender.
--- The table has an equal number of 'female', 'male', and 'other'.
--- Write an  SQL query to rearrange the Genders table such that the rows alternate between '
--- female', 'other', and 'male' in order. The table should be rearranged such that the IDs
--- of each gender are sorted in ascending order.
--- Return the result table in the mentioned order.
--- The query result format is shown in the following example.
--- Example 1:
--- Input: 
--- Genders table:
--- +---------+--------+
--- | user_id | gender |
--- +---------+--------+
--- | 4       | male   |
--- | 7       | female |
--- | 2       | other  |
--- | 5       | male   |
--- | 3       | female |
--- | 8       | male   |
--- | 6       | other  |
--- | 1       | other  |
--- | 9       | female |
--- +---------+--------+
--- Output: 
--- +---------+--------+
--- | user_id | gender |
--- +---------+--------+
--- | 3       | female |
--- | 1       | other  |
--- | 4       | male   |
--- | 7       | female |
--- | 2       | other  |
--- | 5       | male   |
--- | 9       | female |
--- | 6       | other  |
--- | 8       | male   |
--- +---------+--------+
--- Explanation: 
--- Female gender: IDs 3, 7, and 9.
--- Other gender: IDs 1, 2, and 6.
--- Male gender: IDs 4, 5, and 8.
--- We arrange the table alternating between 'female', 'other', and 'male'.
--- Note that the IDs of each gender are sorted in ascending order.
-
-DROP TABLE IF EXISTS Genders;
-CREATE TABLE Genders (
-    user_id INT PRIMARY KEY,
-    gender ENUM('female', 'male', 'other')
-);
-INSERT INTO Genders (user_id, gender)
-VALUES 
-(4, 'male'),
-(7, 'female'),
-(2, 'other'),
-(5, 'male'),
-(3, 'female'),
-(8, 'male'),
-(6, 'other'),
-(1, 'other'),
-(9, 'female');
-
--- m1 not working
-SELECT 
-        user_id,
-        gender,
-        ROW_NUMBER() OVER( ORDER BY CASE WHEN gender = 'female' THEN 1 
-             WHEN gender = 'other' THEN 2
-             ELSE 3 end) as gender_sequence,
-        ROW_NUMBER() OVER(PARTITION BY gender ORDER BY user_id) as user_rank
-FROM Genders ;
------------------------------------------------------------------------------------------------------
--- m2
-WITH cte as(
-	SELECT user_id,
-           gender,
-           ROW_NUMBER() OVER(PARTITION BY gender ORDER BY user_id) as rnk1,
-           CASE 
-                WHEN gender='female' THEN 1 
-                WHEN gender='other' THEN 2 
-                ELSE 3 
-           END AS rnk2 
-    FROM Genders
-)
-SELECT user_id,
-       gender
-FROM cte
-ORDER BY rnk1,
-         rnk2;
-
-
 -- 2051. The Category of Each Member in the Store
 -- Description
 -- Table: Members
@@ -258,7 +157,8 @@ WHEN (100 * purchase_visit)/total_visit>80 THEN 'Diamond' end as Category
 FROM cte
 GROUP BY 1,2;
 
--- METHOD 2 WHICH IS WORKING
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- M2 WHICH IS WORKING
 
 WITH cte AS (
     SELECT  m.member_id,m.name, COUNT(v.visit_id) AS total_visit, 
@@ -279,7 +179,7 @@ SELECT
     END AS Category
 FROM cte;
 
-
+--------------------------------------------------------------------------------------------------------------------------------------------
 -- m3
 WITH cte as(
 SELECT m.member_id,m.name,COUNT(charged_amount) as purchase_cnt, COUNT(v.visit_id) as visit_cnt
@@ -298,6 +198,7 @@ CASE  WHEN visit_cnt = 0 THEN 'Bronze'
 END AS category
 FROM cte;
 
+--------------------------------------------------------------------------------------------------------------------------------------------
 -- m4 
 WITH member_info as (
 SELECT 

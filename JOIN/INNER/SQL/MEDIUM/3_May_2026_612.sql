@@ -45,8 +45,7 @@ INSERT INTO Point2D (x, y) VALUES
 (0, 0),
 (-1, -2);
 
-sqrt((x2 - x1)2 + (y2 - y1)2).
-
+-- m1 
 SELECT 
     ROUND(
         MIN(
