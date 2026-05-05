@@ -29,16 +29,16 @@
 # -- +----------+
 # -- Explanation: The shortest distance is 1.00 from point (-1, -1) to (-1, 2).
 
-# import pandas as pd
-# import numpy as np
+import pandas as pd
+import numpy as np
 
-# data = {'x': [-1, 0, -1],
-#         'y': [-1, 0, -2]}
+data = {'x': [-1, 0, -1],
+        'y': [-1, 0, -2]}
 
-# df = pd.DataFrame(data)
-# df = pd.merge(df, df, how='cross')
-# df = df.query('x_x != x_y or y_x != y_y')
-# df['dist'] = np.sqrt(np.power(df['x_x'] - df['x_y'], 2) + np.power(df['y_x'] - df['y_y'], 2))
+df = pd.DataFrame(data)
+df = pd.merge(df, df, how='cross')
+df = df.query('x_x != x_y or y_x != y_y')
+df['dist'] = np.sqrt(np.power(df['x_x'] - df['x_y'], 2) + np.power(df['y_x'] - df['y_y'], 2))
 
-# shortest_distance = df['dist'].min()
-# print(f"Shortest distance: {shortest_distance:.2f}")
+shortest_distance = df['dist'].min()
+print(f"Shortest distance: {shortest_distance:.2f}")
