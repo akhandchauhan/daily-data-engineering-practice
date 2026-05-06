@@ -27,7 +27,10 @@
 -- User with id (paid_by) transfer money to user with id (paid_to).
  
 
--- Leetcode Bank (LCB) helps its coders in making virtual payments. Our bank records all transactions in the table Transaction, we want to find out the current balance of all users and check wheter they have breached their credit limit (If their current credit is less than 0).
+-- Leetcode Bank (LCB) helps its coders in making virtual payments. Our bank records 
+-- all transactions in the table Transaction, we want to find out the current balance of 
+-- all users and check wheter they have breached their credit limit (If their current 
+-- credit is less than 0).
 
 -- Write an  SQL query to report.SQL database courses
 
@@ -38,8 +41,6 @@
 -- Return the result table in any order.
 
 -- The query result format is in the following example.
-
- 
 
 -- Users table:
 -- +------------+--------------+-------------+
@@ -69,9 +70,12 @@
 -- | 3          | Winston    | 9990       | No                    |
 -- | 4          | Luis       | 800        | No                    |
 -- +------------+------------+------------+-----------------------+
--- Moustafa paid $400 on "2020-08-01" and received $200 on "2020-08-03", credit (100 -400 +200) = -$100
--- Jonathan received $500 on "2020-08-02" and paid $200 on "2020-08-08", credit (200 +500 -200) = $500
--- Winston received $400 on "2020-08-01" and paid $500 on "2020-08-03", credit (10000 +400 -500) = $9990
+-- Moustafa paid $400 on "2020-08-01" and received $200 on "2020-08-03",
+-- credit (100 -400 +200) = -$100
+-- Jonathan received $500 on "2020-08-02" and paid $200 on "2020-08-08",
+-- credit (200 +500 -200) = $500
+-- Winston received $400 on "2020-08-01" and paid $500 on "2020-08-03", 
+-- credit (10000 +400 -500) = $9990
 -- Luis didn't received any transfer, credit = $800
 
 DROP TABLE IF EXISTS Users;
@@ -108,11 +112,46 @@ INSERT INTO Transaction (trans_id, paid_by, paid_to, amount, transacted_on) VALU
 (2, 3, 2, 500, '2020-08-02'),
 (3, 2, 1, 200, '2020-08-03');
 
+-- m1
 SELECT  u.user_id, u.user_name,
-    u.credit + COALESCE(SUM(IF(t.paid_by = u.user_id, -t.amount, IF(t.paid_to = u.user_id, t.amount, 0))), 0) AS credit,
-    IF(u.credit + COALESCE(SUM(IF(t.paid_by = u.user_id, -t.amount, IF(t.paid_to = u.user_id, t.amount, 0))), 0) < 0, 'Yes', 'No') AS credit_limit_breached
+    u.credit + COALESCE(SUM(IF(t.paid_by = u.user_id, -t.amount, 
+    IF(t.paid_to = u.user_id, t.amount, 0))), 0) AS credit,
+    IF(u.credit + COALESCE(SUM(IF(t.paid_by = u.user_id, -t.amount, 
+    IF(t.paid_to = u.user_id, t.amount, 0))), 0) < 0, 'Yes', 'No') AS credit_limit_breached
 FROM Users u
 LEFT JOIN Transaction t 
 ON u.user_id = t.paid_by OR u.user_id = t.paid_to
 GROUP BY u.user_id, u.user_name, u.credit;
 
+------------------------------------------------------------------------------------------------
+-- m2 
+WITH user_info AS (
+    SELECT
+        paid_by AS user_id,
+        -amount AS amount
+    FROM Transaction
+    UNION ALL
+    SELECT
+        paid_to,
+        amount
+    FROM Transaction
+),
+agg_info AS (
+    SELECT 
+        user_id,
+        SUM(amount) AS amount
+    FROM user_info 
+    GROUP BY 
+            user_id
+)
+SELECT 
+        u.user_id,
+        u.user_name,
+        u.credit + IFNULL(ai.amount,0) AS credit,
+        CASE WHEN 
+                u.credit + IFNULL(ai.amount,0) < 0 THEN 'Yes'
+                ELSE 'No'
+        END AS credit_limit_breached
+FROM users u 
+LEFT JOIN agg_info ai 
+ON u.user_id = ai.user_id

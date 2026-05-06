@@ -112,7 +112,7 @@ print(result)
 
 ####################################################################################################
 # m2
-transactions_df = transactions.copy()
+transactions_df = transactions_df.copy()
 
 paid_by_trans = (
                 transactions_df[['paid_by','amount']]
