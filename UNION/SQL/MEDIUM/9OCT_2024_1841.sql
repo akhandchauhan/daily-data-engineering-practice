@@ -26,7 +26,7 @@
 
 -- Write a solution to report the  statistics of the league. The statistics
 -- should be built using the played matches where the winning team gets three points and 
---the losing team gets no points.
+-- the losing team gets no points.
 --  If a match ends with a draw, both teams get one point.
 -- Each row of the result table should contain:
 
@@ -35,7 +35,7 @@
 -- points - The total points the team has so far.
 -- goal_for - The total number of goals scored by the team across all matches.
 -- goal_against - The total number of goals scored by opponent teams against this team
---- across all matches.
+-- - across all matches.
 -- goal_diff - The result of goal_for - goal_against.
 
 -- Return the result table ordered by points in descending order. If two or more teams 
