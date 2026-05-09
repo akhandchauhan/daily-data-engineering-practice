@@ -77,6 +77,8 @@ VALUES
 ('1672', 'prime_eligible', 'Beauty', '8.5'),
 ('4256', 'prime_eligible', 'Furniture', '55.5'),
 ('6325', 'prime_eligible', 'Food', '13.2');
+
+-- m1
 WITH cte as(
 SELECT item_type ,SUM(square_footage) as area,COUNT(item_id) as num,
 FLOOR(500000/SUM(square_footage)) AS max_combo
@@ -84,7 +86,8 @@ FROM Inventory
 GROUP BY item_type
 )
 SELECT item_type,CASE WHEN item_type='prime_eligible' THEN num*max_combo 
-ELSE FLOOR((500000 - (SELECT area*max_combo FROM cte WHERE item_type='prime_eligible'))/(SELECT area FROM cte WHERE item_type='not_prime'))*num END as item_count
+ELSE FLOOR((500000 - (SELECT area*max_combo FROM cte WHERE item_type='prime_eligible'))/
+(SELECT area FROM cte WHERE item_type='not_prime'))*num END as item_count
 FROM cte
 ORDER BY item_count DESC;
 
