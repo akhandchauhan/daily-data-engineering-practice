@@ -1,5 +1,5 @@
 # -- 1440. Evaluate Boolean Expression
-# -- SQL Schema 
+
 # -- Table Variables:
 # -- +---------------+---------+
 # -- | Column Name   | Type    |
@@ -21,6 +21,7 @@
 # -- This table contains a boolean expression that should be evaluated.
 # -- operator is an enum that takes one of the values ('<', '>', '=')
 # -- The values of left_operand and right_operand are guaranteed to be in the Variables table.
+
 # -- Write an  SQL query to evaluate the boolean expressions in Expressions table.
 # -- Return the result table in any order.
 # -- Variables table:
@@ -55,33 +56,53 @@
 # -- As shown, you need find the value of each boolean exprssion in the table using the variables table.
 
 
-# import pandas as pd
+import pandas as pd
+import numpy as np
+pd.set_option("display.max_columns", None)
 
-# variables_data = {'name': ['x', 'y'], 'value': [66, 77]}
-# variables_df = pd.DataFrame(variables_data)
+variables_data = {'name': ['x', 'y'], 'value': [66, 77]}
+variables_df = pd.DataFrame(variables_data)
 
-# expressions_data = {
-#     'left_operand': ['x', 'x', 'x', 'y', 'y', 'x'],
-#     'operator': ['>', '<', '=', '>', '<', '='],
-#     'right_operand': ['y', 'y', 'y', 'x', 'x', 'x']
-# }
-# expressions_df = pd.DataFrame(expressions_data)
+expressions_data = {
+    'left_operand': ['x', 'x', 'x', 'y', 'y', 'x'],
+    'operator': ['>', '<', '=', '>', '<', '='],
+    'right_operand': ['y', 'y', 'y', 'x', 'x', 'x']
+}
+expressions_df = pd.DataFrame(expressions_data)
 
-# df = pd.merge(expressions_df,variables_df,left_on ='left_operand',right_on ='name')
-# df = pd.merge(df,variables_df,left_on ='right_operand',right_on ='name')
+df = (
+    variables_df.merge(expressions_df, left_on = 'name', right_on='left_operand')
+    .merge(variables_df,right_on = 'name', left_on='right_operand' )
+)
 
-# def check(row):
-#     if row['value_x'] > row['value_y'] and row['operator'] == '>':
-#         return True
-#     elif row['value_x'] < row['value_y'] and row['operator'] == '<':
-#         return True
-#     elif row['value_x'] == row['value_y'] and row['operator'] == '=':
-#         return True
-#     else:
-#         return False
-    
+conditions = [
+        (df['operator'] == '>') & (df['value_x'] > df['value_y']),
+        (df['operator'] == '<') & (df['value_x'] < df['value_y']),
+        (df['operator'] == '=') & (df['value_x'] == df['value_y'])
+]
 
-# df['value'] = df.apply(check, axis = 1)
-# df = df[['left_operand', 'operator', 'right_operand','value']]
-# print(df)
+values = ['true','true','true']
 
+df['value'] = np.select(conditions, values, default = 'false')
+
+df = df[['left_operand','operator','right_operand','value']]
+print(df)
+
+#########################################################################################
+# m2 
+
+df = (
+    variables_df.merge(expressions_df, left_on = 'name', right_on='left_operand')
+    .merge(variables_df,right_on = 'name', left_on='right_operand' )
+)
+df['value'] = np.where(
+    (
+        ((df['operator'] == '>') & (df['value_x'] > df['value_y'])) |
+        ((df['operator'] == '<') & (df['value_x'] < df['value_y'])) |
+        ((df['operator'] == '=') & (df['value_x'] == df['value_y']))
+    ),
+    'true',
+    'false'
+)
+df = df[['left_operand','operator','right_operand','value']]
+print(df)
