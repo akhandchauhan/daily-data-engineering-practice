@@ -46,46 +46,48 @@
 # -- Note that for each player we only care about the days when the player logged in.
 
 
-# import pandas as pd
+import pandas as pd
 
-# data = {
-#     'player_id': [1, 1, 1, 3, 3],
-#     'device_id': [2, 2, 3, 1, 4],
-#     'event_date': ['2016-03-01', '2016-05-02', '2017-06-25', '2016-03-02', '2018-07-03'],
-#     'games_played': [5, 6, 1, 0, 5]
-# }
+data = {
+    'player_id': [1, 1, 1, 3, 3],
+    'device_id': [2, 2, 3, 1, 4],
+    'event_date': ['2016-03-01', '2016-05-02', '2017-06-25', '2016-03-02', '2018-07-03'],
+    'games_played': [5, 6, 1, 0, 5]
+}
 
-# df = pd.DataFrame(data)
-# df['event_date'] = pd.to_datetime(df['event_date'])
+df = pd.DataFrame(data)
+df['event_date'] = pd.to_datetime(df['event_date'])
 
 
-
+####################################################################################################
 # m1 using cumsum
 
-# df['games_played_so_far'] = df.groupby('player_id')['games_played'].transform('cumsum')
-# df = df[['player_id','event_date','games_played_so_far']]
-# print(df)
+df = df.copy()
+df = df.sort_values(by = ['player_id','event_date'])
+df['games_played_so_far'] = df.groupby('player_id')['games_played'].transform('cumsum')
+df = df[['player_id','event_date','games_played_so_far']]
+print(df)
 
-
+####################################################################################################
 # m2 using self join
-# df = df.merge(df,on='player_id',how ='inner')
-# df = df.query('event_date_x >= event_date_y')
-# df['games_played_so_far'] = df.groupby(['player_id','event_date_x'])['games_played_y'].transform('cumsum')
-# df = df.groupby(['player_id','event_date_x'])['games_played_so_far'].last()
-# print(df)
+df = df.merge(df,on='player_id',how ='inner')
+df = df.query('event_date_x >= event_date_y')
+df['games_played_so_far'] = df.groupby(['player_id','event_date_x'])['games_played_y'].transform('cumsum')
+df = df.groupby(['player_id','event_date_x'])['games_played_so_far'].last()
+print(df)
+
+####################################################################################################
+# m3 using gpt
 
 
-# using gpt
+result = (
+    df.merge(df, on='player_id', how='inner')
+    .query('event_date_x >= event_date_y')
+    .groupby(['player_id', 'event_date_x'])['games_played_y']
+    .sum()
+    .reset_index()
+    .rename(columns={'event_date_x': 'event_date', 'games_played_y': 'games_played_so_far'})
+    .sort_values(by=['player_id', 'event_date'])
+)
 
-
-# result = (
-#     df.merge(df, on='player_id', how='inner')
-#     .query('event_date_x >= event_date_y')
-#     .groupby(['player_id', 'event_date_x'])['games_played_y']
-#     .sum()
-#     .reset_index()
-#     .rename(columns={'event_date_x': 'event_date', 'games_played_y': 'games_played_so_far'})
-#     .sort_values(by=['player_id', 'event_date'])
-# )
-
-# print(result)
+print(result)
