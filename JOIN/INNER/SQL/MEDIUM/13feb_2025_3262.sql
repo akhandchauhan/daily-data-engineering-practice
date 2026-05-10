@@ -62,7 +62,7 @@
 -- 09:00:00 to 11:00:00
 -- These shifts overlap with each other, resulting in 1 overlapping shift.
 -- The output shows the employee_id and the count of overlapping shifts for each employee 
---who has at least one overlapping shift, ordered by employee_id in ascending order.
+-- who has at least one overlapping shift, ordered by employee_id in ascending order.
 
 DROP TABLE employeeshifts;
 Create table if not exists EmployeeShifts(employee_id int, start_time time, end_time time);
