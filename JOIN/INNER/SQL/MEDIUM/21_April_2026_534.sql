@@ -80,9 +80,14 @@ SELECT
 FROM Activity
 
 ----------------------------------------------------------------------------------------
-
-SELECT *
-FROM Activity a1
- JOIN Activity a2 
-ON a1.player_id = a2.player_id
-AND a1.event_date >= a2.event_date ;
+SELECT 
+       curr_a.player_id,
+       curr_a.event_date,
+       SUM(prev_a.games_played) AS games_played_so_far
+FROM Activity curr_a
+JOIN Activity prev_a 
+ON curr_a.player_id = prev_a.player_id 
+AND curr_a.event_date >= prev_a.event_date
+GROUP BY 
+        curr_a.player_id,
+        curr_a.event_date ;
