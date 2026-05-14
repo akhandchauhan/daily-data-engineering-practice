@@ -122,9 +122,9 @@
 -- By the end of June --> five active drivers (10, 8, 5, 7, 4) and one accepted ride by driver (10).
 -- The percentage is (1 / 5) * 100 = 20%.
 -- By the end of July --> five active drivers (10, 8, 5, 7, 4) and one accepted ride by driver (8). 
---The percentage is (1 / 5) * 100 = 20%.
+-- The percentage is (1 / 5) * 100 = 20%.
 -- By the end of August --> five active drivers (10, 8, 5, 7, 4) and one accepted ride by driver (7)
---. The percentage is (1 / 5) * 100 = 20%.
+-- . The percentage is (1 / 5) * 100 = 20%.
 -- By the end of Septemeber --> five active drivers (10, 8, 5, 7, 4) and no accepted rides. The percentage
 -- is 0%.
 -- By the end of October --> six active drivers (10, 8, 5, 7, 4, 1) and no accepted rides. The percentage
@@ -132,7 +132,7 @@
 -- By the end of November --> six active drivers (10, 8, 5, 7, 4, 1) and two accepted rides by two different
 -- drivers (1, 7). The percentage is (2 / 6) * 100 = 33.33%.
 -- By the end of December --> six active drivers (10, 8, 5, 7, 4, 1) and one accepted ride by driver (4). 
---The percentage is (1 / 6) * 100 = 16.67%.
+-- The percentage is (1 / 6) * 100 = 16.67%.
 
 DROP TABLE Drivers;
 DROP TABLE Rides;
