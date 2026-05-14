@@ -49,21 +49,37 @@
 
 
 import pandas as pd
+import numpy as np
+
 data = {
     "N": [1, 3, 6, 9, 2, 8, 5],
     "P": [2, 2, 8, 8, 5, 5, None]
 }
 df = pd.DataFrame(data)
 
-node = df['P'].tolist()
+# node = df['P'].tolist()
 
-def check(row):
-    if pd.isna(row['P']):
-        return 'Root'
-    elif row['N'] in node:
-        return 'Inner'
-    else:
-        return 'Leaf'
-df['Type'] = df.apply(check, axis = 1)
-df = df.sort_values(by ='N')
-print(df)
+# def check(row):
+#     if pd.isna(row['P']):
+#         return 'Root'
+#     elif row['N'] in node:
+#         return 'Inner'
+#     else:
+#         return 'Leaf'
+# df['Type'] = df.apply(check, axis = 1)
+# df = df.sort_values(by ='N')
+# print(df)
+
+##############################################################################################
+# m2
+
+tree_df = df.copy()
+
+conditions = [tree_df['P'].isna(), tree_df['N'].isin(tree_df['P'])]
+
+values = ['Root', 'Inner']
+
+tree_df['Type'] = np.select(conditions, values, default = 'Leaf')
+
+tree_df = tree_df.sort_values('N')[['N','Type']]
+print(tree_df)
