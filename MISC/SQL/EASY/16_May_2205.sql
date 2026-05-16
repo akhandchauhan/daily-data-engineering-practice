@@ -102,3 +102,5 @@ BEGIN
       WHERE time_stamp BETWEEN startDate AND endDate AND amount >= minAmount;
   );
 END
+
+SELECT getUserIDs('2022-03-08', '2022-03-20', 1000);
