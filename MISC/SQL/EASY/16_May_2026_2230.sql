@@ -61,6 +61,5 @@ BEGIN
 
 END;
 
--- Call Procedure
 CALL getUserIDs('2022-03-08', '2022-03-20', 1000);
 
