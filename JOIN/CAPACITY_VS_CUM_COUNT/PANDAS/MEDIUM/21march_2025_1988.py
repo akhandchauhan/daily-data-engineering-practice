@@ -1,7 +1,5 @@
 # -- 1988. Find Cutoff Score for Each School
-# -- Level
-# -- Medium
-# -- Description
+
 # -- Table: Schools
 # -- +-------------+------+
 # -- | Column Name | Type |
@@ -10,8 +8,9 @@
 # -- | capacity    | int  |
 # -- +-------------+------+
 # -- school_id is the primary key for this table.
-# -- This table contains information about the capacity of some schools. The capacity is the maximum number 
-# --of students the school can accept.
+# -- This table contains information about the capacity of some schools. The capacity is the
+# -- maximum number of students the school can accept.
+
 # -- Table: Exam
 # -- +---------------+------+
 # -- | Column Name   | Type |
@@ -20,13 +19,13 @@
 # -- | student_count | int  |
 # -- +---------------+------+
 # -- score is the primary key for this table.
-# -- Each row in this table indicates that there are student_count students that got at least score points
-# -- in the exam.
-# -- The data in this table will be logically correct, meaning a row recording a higher score will have 
-# --the same or smaller 
-# -- student_count compared to a row recording a lower score. More formally, for every two rows i and j
-# -- in the table, if scorei > scorej then student_counti <= student_countj.
-# -- Every year, each school announces a minimum score requirement that a student needs to apply to it.
+# Each row in this table indicates that there are student_count students that got at least score points
+# in the exam.
+# The data in this table will be logically correct, meaning a row recording a higher score will have 
+# the same or smaller 
+# student_count compared to a row recording a lower score. More formally, for every two rows i and j
+# in the table, if scorei > scorej then student_counti <= student_countj.
+# Every year, each school announces a minimum score requirement that a student needs to apply to it.
 # -- The school chooses 
 # -- the minimum score requirement based on the exam results of all the students:
 
@@ -34,6 +33,7 @@
 # -- the school can accept everyone.
 # -- They also want to maximize the possible number of students that can apply.
 # -- They must use a score that is in the Exam table.
+
 # -- Write an  SQL query to report the minimum score requirement for each school.
 # -- If there are multiple score values 
 # -- satisfying the above conditions, choose the smallest one. If the input data is not 
@@ -47,7 +47,7 @@
 # -- | school_id | capacity |
 # -- +-----------+----------+
 # -- | 11        | 151      |
-# -- | 5         | 48       |
+# -- | 5         | 48  
 # -- | 9         | 9        |
 # -- | 10        | 99       |
 # -- +-----------+----------+
@@ -82,17 +82,36 @@
 # -- - School 9: The data given is not enough to determine the min score requirement. Choosing 975 as the m
 
 import pandas as pd
-import numpy as np
 
-schools_data = {
+schools_df = pd.DataFrame({
     'school_id': [11, 5, 9, 10],
     'capacity': [151, 48, 9, 99]
-}
+})
 
-exam_data = {
+exam_df = pd.DataFrame({
     'score': [975, 966, 844, 749, 744],
     'student_count': [10, 60, 76, 76, 100]
-}
+})
 
+merged_df = (
+    schools_df
+    .merge(exam_df, how='cross')
+    .loc[lambda d: d['student_count'] <= d['capacity']]
+    .assign(
+        max_student_count=lambda d:
+        d.groupby('school_id')['student_count'].transform('max')
+    )
+    .loc[lambda d: d['student_count'] == d['max_student_count']]
+    .groupby('school_id', as_index=False)['score']
+    .min()
+)
 
+result = (
+    schools_df[['school_id']]
+    .merge(merged_df, on='school_id', how='left')
+    .fillna(-1)
+)
 
+result['score'] = result['score'].astype(int)
+
+print(result)
