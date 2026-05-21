@@ -103,3 +103,18 @@ INSERT INTO Actions (user_id, post_id, action_date, action, extra) VALUES
 INSERT INTO Removals (post_id, remove_date) VALUES
 (2, '2019-07-20'),
 (3, '2019-07-18');
+
+SELECT
+    ROUND(AVG(daily_percent), 2) AS average_daily_percent
+FROM (
+    SELECT 
+            a.action_date,
+            COUNT(DISTINCT r.post_id) *100.0/COUNT(DISTINCT a.post_id) AS daily_percent
+    FROM Actions a 
+    LEFT JOIN Removals r
+    ON a.post_id = r.post_id
+    where action = 'report'
+    AND extra = 'spam'
+    GROUP BY 
+            a.action_date
+) a ;
