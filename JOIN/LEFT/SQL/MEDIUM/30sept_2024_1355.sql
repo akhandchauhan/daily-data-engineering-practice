@@ -85,6 +85,7 @@ INSERT INTO Activities (id, name) VALUES
 (2, 'Singing'),
 (3, 'Horse Riding');
 
+-- m1
 WITH cte AS (
     SELECT activity, COUNT(id) AS num_part
     FROM Friends
