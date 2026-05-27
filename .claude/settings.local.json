@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(mkdir \"c:\\\\Users\\\\college work\\\\OneDrive\\\\Documents\\\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\\\\DSA_DE\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK"
+    ]
+  }
+}
