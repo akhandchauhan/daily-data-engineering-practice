@@ -116,7 +116,7 @@ consecutive_id AS (
     HAVING COUNT(*) >= 5
 )
 SELECT 
-    a.id,
+    DISTINCT a.id,
     a.name
 FROM consecutive_id ci 
 JOIN Accounts a
