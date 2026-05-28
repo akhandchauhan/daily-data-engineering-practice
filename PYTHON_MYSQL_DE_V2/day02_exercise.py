@@ -39,12 +39,23 @@ def get_connection():
 #
 # Key observation: the print in finally appears AFTER the except print
 # because Python runs except first, then finally.
-# =============================================================================
+# ============= ================================================================
 
 def prove_finally():
-    pass   # replace with your code
-
-
+    conn = None
+    try:
+        conn = get_connection()
+        raise ValueError("simulated crash")
+    
+    except Exception as e:
+        print("caught: simulated crash")
+        
+    finally:
+        if conn and conn.is_connected():
+            print(f"finally ran — connection closed: {conn.is_connected()}")
+            conn.close()
+            
+            
 # =============================================================================
 # EXERCISE 2 — finally runs even with return
 # =============================================================================
@@ -66,7 +77,15 @@ def prove_finally():
 # =============================================================================
 
 def return_with_finally():
-    pass   # replace with your code
+    conn = None
+    try:
+        conn = get_connection()
+        return "query done"
+    finally:
+        if conn and conn.is_connected():
+            conn.close()
+            print("finally ran before return")
+        
 
 
 # =============================================================================
@@ -90,7 +109,18 @@ def return_with_finally():
 # =============================================================================
 
 def safe_bad_password():
-    pass   # replace with your code
+    conn = None
+    try: 
+        conn = get_connection()
+        
+    except Exception as e:
+        print(f"connection failed: {e}")
+    finally:
+        if conn and conn.is_connected():
+            conn.close()
+            print("closed_connection")
+        else:
+            print("nothing to close")    
 
 
 # =============================================================================
@@ -116,8 +146,21 @@ def unsafe_fetch():
 
 
 def safe_fetch():
-    pass   # rewrite unsafe_fetch() with try / finally
-
+    conn = None
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, name FROM employees LIMIT 5")
+        rows = cursor.fetchall()
+        cursor.close()
+        return rows 
+    except Exception as e:
+        return []
+    
+    finally:
+        if conn and conn.is_connected():
+            conn.close()
+            
 
 # =============================================================================
 # EXERCISE 5 — Multiple operations, one finally
@@ -137,7 +180,20 @@ def safe_fetch():
 # =============================================================================
 
 def multi_op(table: str):
-    pass   # replace with your code
+    conn = None
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM employees")
+        rows = cursor.fetchone()
+        print(f"Count of employees: {rows}")
+        cursor.execute("SELECT DATABASE()")
+        rows = cursor.fetchone()
+        print(f"DATABASE SELECTED: {rows}")
+        cursor.close()
+    finally:
+        if conn and conn.is_connected():
+            conn.close()
 
 
 # =============================================================================
@@ -158,8 +214,14 @@ def multi_op(table: str):
 # =============================================================================
 
 def verify_close():
-    pass   # replace with your code
-
+    conn = None
+    try:
+        conn = get_connection()
+        print(f"Is connected : {conn.is_connected()}")
+    finally:
+        if conn and conn.is_connected():
+            conn.close()
+    print(f"Is connected : {conn.is_connected()}")
 
 # =============================================================================
 # RUN ALL
@@ -169,7 +231,7 @@ if __name__ == "__main__":
     print("=" * 50)
     print("EXERCISE 1 — Prove finally always runs")
     print("=" * 50)
-    prove_finally()
+    #prove_finally()
 
     print("\n" + "=" * 50)
     print("EXERCISE 2 — finally runs even with return")
