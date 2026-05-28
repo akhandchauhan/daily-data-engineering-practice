@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "Bash(mkdir \"c:\\\\Users\\\\college work\\\\OneDrive\\\\Documents\\\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\\\\DSA_DE\")"
+      "Bash(mkdir \"c:\\\\Users\\\\college work\\\\OneDrive\\\\Documents\\\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\\\\DSA_DE\")",
+      "Bash(dir /s /b)",
+      "WebFetch(domain:leetcode.com)"
     ],
     "additionalDirectories": [
       "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK"
