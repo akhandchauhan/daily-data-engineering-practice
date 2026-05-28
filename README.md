@@ -1,17 +1,27 @@
-#                                     🚀 Daily Data Engineering Practice
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=230&section=header&text=Daily%20Data%20Engineering%20Practice&fontSize=38&fontColor=fff&fontAlignY=38&animation=twinkling&desc=SQL%20%7C%20Pandas%20%7C%20PySpark%20%7C%20LeetCode%20Premium&descSize=20&descAlignY=56&descAlignX=50" />
 
 <p align="center">
-  <b>Consistent practice of SQL, Pandas, and PySpark through LeetCode Premium, DataLemur, StrataScratch, and Ankit Bansal problems.</b>
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=20&duration=3000&pause=800&color=F7A828&center=true&vCenter=true&width=700&lines=200%2B+LeetCode+Problems+Solved+%F0%9F%9A%80;SQL+%7C+Pandas+%7C+PySpark+Daily+Practice+%F0%9F%94%A5;Window+Functions+%7C+CTEs+%7C+Joins+%7C+Aggregations;Topic-wise+%7C+Easy+%E2%86%92+Medium+%E2%86%92+Hard;Data+Engineering+Interview+Ready+%F0%9F%8E%AF" alt="Typing SVG" />
 </p>
 
+---
+
 <p align="center">
-  <img src="https://img.shields.io/badge/SQL-Advanced-blue" />
-  <img src="https://img.shields.io/badge/Pandas-Data%20Analysis-yellow" />
-  <img src="https://img.shields.io/badge/PySpark-Big%20Data-orange" />
-  <img src="https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql&logoColor=white" />
-  <img src="https://img.shields.io/badge/Practice-Daily-green" />
-  <img src="https://img.shields.io/badge/Focus-Data%20Engineering-critical" />
+  <a href="https://leetcode.com/u/Panda_Singh/">
+    <img src="https://img.shields.io/badge/LeetCode-Panda__Singh-FFA116?style=for-the-badge&logo=leetcode&logoColor=white" />
+  </a>
+  &nbsp;
+  <img src="https://img.shields.io/badge/SQL-Advanced-0078D4?style=for-the-badge&logo=mysql&logoColor=white" />
+  &nbsp;
+  <img src="https://img.shields.io/badge/Pandas-Data%20Analysis-150458?style=for-the-badge&logo=pandas&logoColor=white" />
+  &nbsp;
+  <img src="https://img.shields.io/badge/PySpark-Big%20Data-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white" />
+  &nbsp;
+  <img src="https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white" />
+  &nbsp;
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
+  &nbsp;
+  <img src="https://img.shields.io/badge/Practice-Daily-28a745?style=for-the-badge&logo=github&logoColor=white" />
 </p>
 
 ---
@@ -35,92 +45,42 @@ The goal is to develop **strong problem-solving ability**, **production-level th
 
 ## 📊 Key Highlights
 
+<p align="center">
+
 | Metric | Count |
-|---|---|
-| SQL Solutions | 199+ |
-| Pandas Solutions | 161+ |
-| Ankit Bansal Problems | 14+ |
-| SQL Topics Covered | 14 |
-| Difficulty Levels | Easy · Medium · Hard |
+|:---:|:---:|
+| 🗄️ SQL Solutions | 199+ |
+| 🐼 Pandas Solutions | 161+ |
+| 🏢 Ankit Bansal Problems | 14+ |
+| 🗂️ SQL Topics Covered | 14 |
+| 📶 Difficulty Levels | Easy · Medium · Hard |
+
+</p>
 
 ---
 
 ## 📁 Repository Structure
 
+Each topic follows the same pattern:
+
 ```
-DAILY_PRACTICE/
-│
-├── CASE WHEN/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── DATE_TIME/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── FRIENDSHIP/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── GROUPBY/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── JOIN/
-│   ├── INNER/
-│   ├── LEFT/
-│   ├── CROSS/
-│   ├── FULL-OUTER-JOIN/
-│   ├── NON-EQUI/
-│   └── CAPACITY_VS_CUM_COUNT/
-│       (each → PANDAS/Easy·Medium·Hard  +  SQL/Easy·Medium·Hard)
-│
-├── MISC/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── PIVOT/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── RECURSIVE_CTE/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── STRING/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── UNION/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── UNPIVOT/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── WHERE/
-│   ├── PANDAS/  →  Easy/  Medium/  Hard/
-│   └── SQL/     →  Easy/  Medium/  Hard/
-│
-├── WINDOW_FUNCTION/
-│   ├── LAG_LEAD/
-│   ├── RANKING/
-│   ├── SUM/
-│   ├── MAXIMUM/
-│   └── CONTINUOUS_FINDING/
-│       (each → PANDAS/Easy·Medium·Hard  +  SQL/Easy·Medium·Hard)
-│
-└── ANKIT_BANSAL/
-    ├── sql/
-    └── pandas/
+TOPIC/ → PANDAS/ → Easy/  Medium/  Hard/
+       → SQL/    → Easy/  Medium/  Hard/
 ```
+
+**Topics:** `CASE WHEN` · `DATE_TIME` · `FRIENDSHIP` · `GROUPBY` · `MISC` · `PIVOT` · `RECURSIVE_CTE` · `STRING` · `UNION` · `UNPIVOT` · `WHERE`
+
+**JOIN →** `INNER` · `LEFT` · `CROSS` · `FULL-OUTER-JOIN` · `NON-EQUI` · `CAPACITY_VS_CUM_COUNT`
+
+**WINDOW_FUNCTION →** `LAG_LEAD` · `RANKING` · `SUM` · `MAXIMUM` · `CONTINUOUS_FINDING`
+
+**ANKIT_BANSAL →** `sql/` · `pandas/`
 
 ---
 
 ## 🗂️ SQL Topics Covered
 
-| Topic | Subtopics |
+| Topic | What's Covered |
 |---|---|
 | **CASE WHEN** | Conditional logic, CASE in aggregations |
 | **DATE_TIME** | Date arithmetic, formatting, intervals |
@@ -139,35 +99,13 @@ DAILY_PRACTICE/
 
 ---
 
-## 📄 File Naming Convention
+## 🏆 LeetCode Stats
 
-All LeetCode solution files follow a standardized format:
-
-```
-Leetcode_Day_MonthName_Year_ProblemNumber.extension
-```
-
-**Examples:**
-```
-Leetcode_26_Jan_2025_1709.sql
-Leetcode_12_Oct_2024_2228.sql
-Leetcode_7_March_2025_2292.py
-Leetcode_3_May_2026_603.py
-```
-
----
-
-## 🧠 What You'll Find Here
-
-- Clean, optimized, and interview-ready solutions
-- Advanced SQL techniques:
-  - Window Functions (LAG, LEAD, RANK, DENSE_RANK, ROW_NUMBER)
-  - Common Table Expressions (CTEs) & Recursive CTEs
-  - All JOIN types including Non-Equi and Cross joins
-  - PIVOT / UNPIVOT patterns
-  - Date-time operations and string manipulations
-- Pandas-based analytical problem solving (parallel to SQL solutions)
-- Real-world SQL case studies from Ankit Bansal
+<p align="center">
+  <a href="https://leetcode.com/u/Panda_Singh/">
+    <img src="https://leetcard.jacoblin.cool/Panda_Singh?theme=dark&font=Baloo_2&ext=heatmap" alt="LeetCode Stats" />
+  </a>
+</p>
 
 ---
 
@@ -175,17 +113,34 @@ Leetcode_3_May_2026_603.py
 
 Beyond LeetCode, this repo includes real-world SQL challenges from **Ankit Bansal's** YouTube series — company-level case studies used in actual data interviews:
 
-- Blinkit — delivery analytics
-- Naukri — job platform queries
-- LinkedIn — social graph SQL
-- Vyapar — business reporting
-- Revenue Leakage, Comeback Customers, Ticket Escalation, Shift Handover, Silent Best Sellers
+- 🛒 **Blinkit** — delivery analytics
+- 💼 **Naukri** — job platform queries
+- 🔗 **LinkedIn** — social graph SQL
+- 📊 **Vyapar** — business reporting
+- 💸 **Revenue Leakage**, **Comeback Customers**, **Ticket Escalation**, **Shift Handover**, **Silent Best Sellers**
+
+---
+
+## 🧠 What You'll Find Here
+
+- ✅ Clean, optimized, and interview-ready solutions
+- ✅ Advanced SQL techniques:
+  - Window Functions (LAG, LEAD, RANK, DENSE_RANK, ROW_NUMBER)
+  - Common Table Expressions (CTEs) & Recursive CTEs
+  - All JOIN types including Non-Equi and Cross joins
+  - PIVOT / UNPIVOT patterns
+  - Date-time operations and string manipulations
+- ✅ Pandas-based analytical problem solving (parallel to SQL solutions)
+- ✅ Real-world SQL case studies from Ankit Bansal
 
 ---
 
 ## 📌 Learning Approach
 
-- Solve → Optimize → Document
+```
+Solve  →  Optimize  →  Document
+```
+
 - Focus on **clarity, efficiency, and scalability**
 - Prioritize **real-world applicable patterns**
 - Each topic covered at Easy → Medium → Hard progression
@@ -199,6 +154,7 @@ This repository serves as:
 - 📘 A structured learning archive
 - 💼 A portfolio for recruiters
 - 🔗 A public consistency tracker for LinkedIn
+- 🏆 LeetCode profile: [Panda_Singh](https://leetcode.com/u/Panda_Singh/)
 
 ---
 
@@ -208,6 +164,7 @@ This repository serves as:
 - ✔️ Topic-wise structured coverage
 - ✔️ Gradual progression from Easy → Hard
 - ✔️ Parallel SQL + Pandas solutions for every problem
-- ✔️ Standardized file naming across all 360+ solutions
 
 ---
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=130&section=footer" />
