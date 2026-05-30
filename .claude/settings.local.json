@@ -6,7 +6,10 @@
       "Bash(dir /s /b)",
       "WebFetch(domain:leetcode.com)",
       "Bash(ls 'c:\\\\Users\\\\college work\\\\.claude\\\\projects\\\\c--Users-college-work-OneDrive-Documents-DAILY-PRACTICE-SQL-PANDAS-PYSPARK\\\\')",
-      "Read(//c/Users/college work/.claude/projects/c--Users-college-work-OneDrive-Documents-DAILY-PRACTICE-SQL-PANDAS-PYSPARK/**)"
+      "Read(//c/Users/college work/.claude/projects/c--Users-college-work-OneDrive-Documents-DAILY-PRACTICE-SQL-PANDAS-PYSPARK/**)",
+      "Bash(grep -oE '\\\\.[a-z]+$')",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK"
