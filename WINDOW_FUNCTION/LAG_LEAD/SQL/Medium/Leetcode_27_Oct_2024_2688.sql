@@ -39,21 +39,41 @@
 -- - User with user_id 8 has only one transaction, so he is not an active user.
 -- - User with user_id 4 has two transactions; first on 2021-09-02, second on 2021-09-13.
 --   The distance is > 7 days, so he is not an active user.
-
+DROP TABLE transaction;
 DROP TABLE Users;
 Create table If Not Exists Users (user_id int, item varchar(100), created_at date, amount int);
 Truncate table Users;
-insert into Users (user_id, item, created_at, amount) values ('5', 'Smart Crock Pot', '2021-09-18', '698882');
-insert into Users (user_id, item, created_at, amount) values ('6', 'Smart Lock', '2021-09-14', '11487');
-insert into Users (user_id, item, created_at, amount) values ('6', 'Smart Thermostat', '2021-09-10', '674762');
-insert into Users (user_id, item, created_at, amount) values ('8', 'Smart Light Strip', '2021-09-29', '630773');
-insert into Users (user_id, item, created_at, amount) values ('4', 'Smart Cat Feeder', '2021-09-02', '693545');
-insert into Users (user_id, item, created_at, amount) values ('4', 'Smart Bed', '2021-09-13', '170249');
+INSERT INTO Users (user_id, item, created_at, amount) VALUES
+(5, 'Smart Crock Pot', '2021-09-18', 698882),
+(6, 'Smart Lock', '2021-09-14', 11487),
+(6, 'Smart Thermostat', '2021-09-10', 674762),
+(8, 'Smart Light Strip', '2021-09-29', 630773),
+(4, 'Smart Cat Feeder', '2021-09-02', 693545),
+(4, 'Smart Bed', '2021-09-13', 170249);
 
-WITH cte AS (
-    SELECT *, LEAD(created_at) OVER(PARTITION BY user_id ORDER BY created_at) AS nxt
-    FROM Users
+-- m1
+WITH user_info AS (
+    SELECT
+        user_id,
+        created_at,
+        LEAD(created_at) OVER(
+                        PARTITION BY user_id 
+                        ORDER BY created_at
+        ) AS next_created_at
+    FROM Users u 
 )
-SELECT DISTINCT user_id
-FROM cte
-WHERE DATEDIFF(nxt, created_at) <= 7;
+SELECT 
+    DISTINCT user_id
+FROM user_info
+WHERE DATEDIFF(next_created_at, created_at) <= 7;
+
+
+--------------------------------------------------------------------------------
+-- m2 = if there is duplicate than this cant handle, since created_at will be same
+
+SELECT DISTINCT u1.user_id
+FROM Users u1
+JOIN Users u2 
+ON u1.user_id = u2.user_id
+AND u1.created_at < u2.created_at
+WHERE DATEDIFF(u2.created_at,u1.created_at) <= 7 ;
