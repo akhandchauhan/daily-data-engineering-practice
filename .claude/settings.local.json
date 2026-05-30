@@ -9,7 +9,8 @@
       "Read(//c/Users/college work/.claude/projects/c--Users-college-work-OneDrive-Documents-DAILY-PRACTICE-SQL-PANDAS-PYSPARK/**)",
       "Bash(grep -oE '\\\\.[a-z]+$')",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK"
