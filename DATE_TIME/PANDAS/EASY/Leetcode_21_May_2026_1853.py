@@ -33,3 +33,12 @@ import pandas as pd
 days = pd.DataFrame({
     'day': pd.to_datetime(['2022-04-12', '2021-08-09', '2020-06-26'])
 })
+
+df = days.copy()
+df['day'] = (
+    df['day'].dt.day_name() + ", "          # Tuesday
+    + df['day'].dt.month_name() + " "       # April
+    + df['day'].dt.day.astype(str) + ", "   # 12,
+    + df['day'].dt.year.astype(str)         # 2022
+)
+print(df)

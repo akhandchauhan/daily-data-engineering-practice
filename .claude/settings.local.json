@@ -11,7 +11,8 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(python \"DATE_TIME/PANDAS/EASY/Leetcode_21_May_2026_1853.py\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK"
