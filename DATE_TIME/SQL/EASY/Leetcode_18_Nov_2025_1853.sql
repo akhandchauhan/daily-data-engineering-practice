@@ -27,12 +27,20 @@
 -- | Monday, August 9, 2021  |
 -- | Friday, June 26, 2020   |
 -- +-------------------------+
-
+DROP TABLE Days;
 CREATE TABLE Days (
     day DATE PRIMARY KEY
 );
 
 INSERT INTO Days (day) VALUES ('2022-04-12'), ('2021-08-09'), ('2020-06-26');
 
+-- m1 
 SELECT DATE_FORMAT(day, '%W, %M %e, %Y') AS day
+FROM Days;
+
+--------------------------------------------------------------------------------
+--m2
+
+SELECT
+    CONCAT(DAYNAME(day),', ',MONTHNAME(day)," ",DAY(day),", ",YEAR(day)) AS day
 FROM Days;
