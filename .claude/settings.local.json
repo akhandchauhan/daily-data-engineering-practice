@@ -12,7 +12,22 @@
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
       "Bash(python -c ' *)",
-      "Bash(python \"DATE_TIME/PANDAS/EASY/Leetcode_21_May_2026_1853.py\")"
+      "Bash(python \"DATE_TIME/PANDAS/EASY/Leetcode_21_May_2026_1853.py\")",
+      "Read(//c/Users/college work/AppData/Local/Microsoft/OneNote/16.0/**)",
+      "Read(//c/Users/college work/AppData/Local/Microsoft/OneNote/16.0/Backup/**)",
+      "Read(//c/Users/college work/Downloads/**)",
+      "WebFetch(domain:www.youtube.com)",
+      "Read(//c/Users/college work/AppData/Local/Temp/onenote_sql_img/**)",
+      "Bash(rm -f _yt_phaseA.py _missing.json _remaining.json _todo.json _searched.json)",
+      "Bash(python -c \"import PIL; print\\('Pillow', PIL.__version__\\)\")",
+      "Bash(pip install *)",
+      "Read(//c/Users/college work/AppData/Local/Temp/**)",
+      "Bash(cd \"/c/Users/college work/OneDrive/Documents/DAILY_PRACTICE-SQL,PANDAS,PYSPARK/SQL_INTERVIEW_NOTES/assets\" && ls -1 | sort && echo \"---count---\" && ls -1 | wc -l)",
+      "Read(//c/c/Users/college work/OneDrive/Documents/DAILY_PRACTICE-SQL,PANDAS,PYSPARK/SQL_INTERVIEW_NOTES/**)",
+      "Bash(cd \"/c/Users/college work/OneDrive/Documents/DAILY_PRACTICE-SQL,PANDAS,PYSPARK/SQL_INTERVIEW_NOTES/assets\" && ls -1 | sort && printf \"count: \" && ls -1 | wc -l)",
+      "WebFetch(domain:leetcode.ca)",
+      "WebFetch(domain:walkccc.me)",
+      "WebFetch(domain:github.com)"
     ],
     "additionalDirectories": [
       "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK"
