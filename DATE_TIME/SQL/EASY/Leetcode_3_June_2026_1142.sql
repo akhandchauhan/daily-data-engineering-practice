@@ -78,18 +78,18 @@ INSERT INTO Activity (user_id, session_id, activity_date, activity_type) VALUES
 (4, 3, '2019-06-25', 'end_session');
 
 -- m1
-SELECT ROUND(
-            AVG(unique_session_cnt), 2) AS average_sessions_per_user
+SELECT IFNULL(ROUND(
+            AVG(unique_session_cnt), 2), 0) AS average_sessions_per_user
 FROM (
-    SELECT 
+    SELECT
             user_id,
             COUNT(DISTINCT session_id) AS unique_session_cnt
-    FROM Activity 
-    WHERE 
+    FROM Activity
+    WHERE
         DATEDIFF('2019-07-27',activity_date) between 0 and 29
-    GROUP BY 
-            user_id 
+    GROUP BY
+            user_id
 ) A ;
- 
+
 -- DATEDIFF = 0 → 2019-07-27 (included)
 -- DATEDIFF = 29 → 2019-06-28 (included, the 30th day back)
