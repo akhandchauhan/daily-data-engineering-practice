@@ -67,12 +67,12 @@ activity = pd.DataFrame({
 })
 
 avg_duration = (
-    activity.loc[lambda d : 
+    activity.loc[lambda d :
                     (pd.to_datetime('2019-07-27') - d['activity_date']).dt.days.between(0,29)]
     .groupby('user_id', as_index = False)['session_id'].nunique()
     ['session_id']
     .mean()
-    .round(2)
 )
+avg_duration = pd.Series([avg_duration]).fillna(0).round(2).iloc[0]
 result = pd.DataFrame({'average_sessions_per_user':[avg_duration]})
 print(result)
