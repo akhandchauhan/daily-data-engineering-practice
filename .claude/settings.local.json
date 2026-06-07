@@ -27,10 +27,13 @@
       "Bash(cd \"/c/Users/college work/OneDrive/Documents/DAILY_PRACTICE-SQL,PANDAS,PYSPARK/SQL_INTERVIEW_NOTES/assets\" && ls -1 | sort && printf \"count: \" && ls -1 | wc -l)",
       "WebFetch(domain:leetcode.ca)",
       "WebFetch(domain:walkccc.me)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(not exist *)",
+      "Bash(mkdir -p \"c:/Users/college work/OneDrive/Documents/DAILY_PRACTICE-SQL,PANDAS,PYSPARK/WINDOW_FUNCTION/RANKING/PANDAS/Hard\")"
     ],
     "additionalDirectories": [
-      "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK"
+      "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK",
+      "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\\WINDOW_FUNCTION\\RANKING\\PANDAS\\Hard"
     ]
   }
 }

@@ -145,7 +145,7 @@ ORDER BY dcc.start_date
 ;
 
 ------------------------------------------------------------------------------------------------
--- m2
+-- m2 = BEST SOLUTION
 WITH user_day AS (
     SELECT 
         user_id,
@@ -164,7 +164,6 @@ FROM user_day
 GROUP BY spend_date
 
 UNION ALL
-
 SELECT 
     spend_date,
     'desktop',
@@ -174,7 +173,6 @@ FROM user_day
 GROUP BY spend_date
 
 UNION ALL
-
 SELECT 
     spend_date,
     'both',
@@ -182,3 +180,64 @@ SELECT
     SUM(CASE WHEN mobile_amt > 0 AND desktop_amt > 0 THEN 1 ELSE 0 END)
 FROM user_day
 GROUP BY spend_date;
+
+--------------------------------------------------------------------------------
+
+-- m3
+WITH combo_info AS (
+    SELECT *
+    FROM (
+        SELECT DISTINCT spend_date
+        FROM spending
+    ) AS a
+    CROSS JOIN (
+        SELECT DISTINCT platform 
+        FROM spending
+        UNION ALL
+        SELECT 'both' COLLATE utf8mb4_unicode_ci
+    ) AS b
+),
+platform_info AS (
+    SELECT
+        user_id,
+        spend_date,
+        COUNT(DISTINCT platform) AS unique_platform_count
+    FROM Spending
+    GROUP BY 
+        user_id,
+        spend_date
+),
+final_spend_info AS (
+    SELECT 
+            s.user_id,
+            s.spend_date,
+            MAX(CASE 
+                WHEN unique_platform_count = 2 THEN 'both'
+                WHEN s.platform = 'mobile' THEN 'mobile'
+                WHEN s.platform = 'desktop' THEN 'desktop'
+            END) AS platform,
+            SUM(s.amount) AS amount   
+    FROM Spending s
+    JOIN platform_info pi 
+    ON s.user_id = pi.user_id
+    AND s.spend_date = pi.spend_date
+    GROUP BY 
+            s.user_id,
+            s.spend_date
+)
+SELECT 
+    ci.spend_date,
+    ci.platform,
+    IFNULL(SUM(fsi.amount), 0) AS total_amount,
+    COUNT(fsi.user_id) AS total_users
+FROM combo_info ci 
+LEFT JOIN final_spend_info fsi 
+ON ci.spend_date = fsi.spend_date
+AND ci.platform = fsi.platform
+GROUP BY 
+        ci.spend_date,
+        ci.platform
+ORDER BY 
+        ci.spend_date,
+        ci.platform ;
+
