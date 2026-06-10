@@ -53,12 +53,16 @@
       "PowerShell(cmd /c \"dir /b \"\"E:\\\\Obsidian\\\\DAILY_WORK\\\\\"\" 2>nul | findstr /i \"\"Exported image\"\"\")",
       "Read(//e/Obsidian/DAILY_WORK/OneNote/company porter/Porter/**)",
       "Read(//e/Obsidian/DAILY_WORK/.obsidian/**)",
-      "Read(//e/Obsidian/DAILY_WORK/OneNote/company porter/**)"
+      "Read(//e/Obsidian/DAILY_WORK/OneNote/company porter/**)",
+      "Bash(git -C \"c:\\\\Users\\\\college work\\\\OneDrive\\\\Documents\\\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\" status)",
+      "Bash(git -C \"c:\\\\Users\\\\college work\\\\OneDrive\\\\Documents\\\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\" diff --name-only)",
+      "Bash(git -C \"c:\\\\Users\\\\college work\\\\OneDrive\\\\Documents\\\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\" show --stat HEAD)"
     ],
     "additionalDirectories": [
       "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK",
       "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\\WINDOW_FUNCTION\\RANKING\\PANDAS\\Hard",
-      "C:\\Users\\college work\\.claude\\skills"
+      "C:\\Users\\college work\\.claude\\skills",
+      "E:\\Obsidian\\DAILY_WORK\\OneNote\\company porter\\Porter\\01_Reference"
     ]
   }
 }
