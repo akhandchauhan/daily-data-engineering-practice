@@ -1,5 +1,5 @@
 -- 1264. Page Recommendations
--- SQL Schema
+
 -- Table: Friendship
 -- +---------------+---------+
 -- | Column Name   | Type    |
@@ -8,7 +8,9 @@
 -- | user2_id      | int     |
 -- +---------------+---------+
 -- (user1_id, user2_id) is the primary key for this table.
--- Each row of this table indicates that there is a friendship relation between user1_id and user2_id.
+-- Each row of this table indicates that there is a friendship relation 
+-- between user1_id and user2_id.
+
 -- Table: Likes
 -- +-------------+---------+
 -- | Column Name | Type    |
@@ -18,8 +20,10 @@
 -- +-------------+---------+
 -- (user_id, page_id) is the primary key for this table.
 -- Each row of this table indicates that user_id likes page_id.
--- Write an SQL query to recommend pages to the user with user_id = 1 using the pages that your
--- friends liked. It should not recommend pages you already liked.
+
+-- Write an SQL query to recommend pages to the user with user_id = 1 using 
+-- the pages that your friends liked. It should not recommend pages you 
+-- already liked.
 -- Return result table in any order without duplicates.
 -- Friendship table:
 -- +----------+----------+
@@ -97,6 +101,7 @@ INSERT INTO Likes (user_id, page_id) VALUES
 (3, 77),
 (6, 88);
 
+-- m1
 WITH T AS (
     SELECT user1_id AS user_id FROM Friendship WHERE user2_id = 1
     UNION
@@ -106,3 +111,48 @@ SELECT DISTINCT page_id AS recommended_page
 FROM T
 JOIN Likes USING (user_id)
 WHERE page_id NOT IN (SELECT page_id FROM Likes WHERE user_id = 1);
+
+--------------------------------------------------------------------------------
+-- m2
+
+WITH friendship_union AS (
+    SELECT
+            user1_id,
+            user2_id
+    FROM Friendship
+    UNION 
+    SELECT 
+        user2_id,
+        user1_id
+    FROM Friendship
+),
+friendship_info AS (
+    SELECT 
+        user2_id
+    FROM friendship_union 
+    WHERE user1_id = 1
+)
+SELECT 
+     DISTINCT l.page_id AS recommended_page
+FROM friendship_info fi 
+JOIN Likes l
+ON fi.user2_id = l.user_id 
+WHERE l.page_id NOT IN (
+    SELECT page_id
+    FROM likes
+    WHERE user_id = 1
+);
+
+--------------------------------------------------------------------------------
+-- m3
+
+WITH cte AS
+(SELECT CASE WHEN user1_id = 1 THEN user2_id
+WHEN user2_id = 1 THEN user1_id END AS friends
+FROM Friendship)
+
+SELECT DISTINCT page_id AS recommended_page
+FROM Likes
+WHERE user_id IN (SELECT friends FROM cte)
+AND page_id NOT IN (SELECT page_id FROM Likes
+WHERE user_id = 1);
