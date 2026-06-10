@@ -29,11 +29,36 @@
       "WebFetch(domain:walkccc.me)",
       "WebFetch(domain:github.com)",
       "Bash(not exist *)",
-      "Bash(mkdir -p \"c:/Users/college work/OneDrive/Documents/DAILY_PRACTICE-SQL,PANDAS,PYSPARK/WINDOW_FUNCTION/RANKING/PANDAS/Hard\")"
+      "Bash(mkdir -p \"c:/Users/college work/OneDrive/Documents/DAILY_PRACTICE-SQL,PANDAS,PYSPARK/WINDOW_FUNCTION/RANKING/PANDAS/Hard\")",
+      "Bash(ls \"$HOME/.claude/skills\" 2>/dev/null || echo \"no skills dir\")",
+      "Read(//c/Users/college work/.claude/skills/**)",
+      "Bash(ls -la \"/c/Users/college work/.claude/skills\" 2>&1; echo \"---\"; ls -la \"/c/Users/college work/.claude\" 2>&1 | head -30)",
+      "Read(//c/Users/college work/.claude/**)",
+      "Bash(mkdir -p \"/c/Users/college work/.claude/skills/explain-anything\")",
+      "Edit(~/.claude/skills/explain-anything/**)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\college work\" -Recurse -Filter \".obsidian\" -Directory -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object FullName)",
+      "Bash(find \"/mnt/c/Users/college work\" -type d -name \".obsidian\" 2>/dev/null)",
+      "Read(//mnt/c/Users/**)",
+      "PowerShell($userPath = $env:USERPROFILE; Write-Host $userPath; Get-ChildItem -Path $userPath -Recurse -Filter \".obsidian\" -Directory -ErrorAction SilentlyContinue | Select-Object FullName)",
+      "PowerShell(cmd /c \"dir /b /s /ad \"\"%USERPROFILE%\\\\.obsidian\"\" 2>nul\")",
+      "PowerShell(cmd /c \"dir /b /s /ad \"\"%USERPROFILE%\"\" 2>nul | findstr /i obsidian\")",
+      "Read(//c/Users/college work/AppData/Roaming/obsidian/**)",
+      "PowerShell(cmd /c \"dir /b /s \"\"E:\\\\Obsidian\\\\DAILY_WORK\"\" 2>nul\")",
+      "PowerShell(cmd /c \"dir /b \"\"E:\\\\Obsidian\\\\DAILY_WORK\"\" 2>nul\")",
+      "PowerShell(cmd /c \"dir /b /s /ad \"\"E:\\\\Obsidian\\\\DAILY_WORK\"\" 2>nul\")",
+      "PowerShell(cmd /c \"dir /b /s \"\"E:\\\\Obsidian\\\\DAILY_WORK\\\\OneNote\\\\company porter\"\" 2>nul\")",
+      "PowerShell(cmd /c \"dir /b \"\"E:\\\\Obsidian\\\\DAILY_WORK\\\\Attachments\\\\\"\" 2>nul | find /c \"\"Exported image\"\"\")",
+      "PowerShell(cmd /c \"dir /b \"\"E:\\\\Obsidian\\\\DAILY_WORK\\\\\"\" 2>nul | find /c \"\"Exported image\"\"\")",
+      "PowerShell(cmd /c \"dir /b \"\"E:\\\\Obsidian\\\\DAILY_WORK\\\\\"\" 2>nul | findstr /i \"\"Exported image\"\"\")",
+      "Read(//e/Obsidian/DAILY_WORK/OneNote/company porter/Porter/**)",
+      "Read(//e/Obsidian/DAILY_WORK/.obsidian/**)",
+      "Read(//e/Obsidian/DAILY_WORK/OneNote/company porter/**)"
     ],
     "additionalDirectories": [
       "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK",
-      "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\\WINDOW_FUNCTION\\RANKING\\PANDAS\\Hard"
+      "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\\WINDOW_FUNCTION\\RANKING\\PANDAS\\Hard",
+      "C:\\Users\\college work\\.claude\\skills"
     ]
   }
 }
