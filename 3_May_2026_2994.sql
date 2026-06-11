@@ -71,6 +71,53 @@ INSERT INTO Purchases (user_id, purchase_date, amount_spend) VALUES
 (10, '2023-11-12', 8266),
 (13, '2023-11-24', 12000);
 
-SELECT *,
-        LIMIT
-FROM Purchases
+WITH RECURSIVE date_generation_cte AS (
+    SELECT '2023-11-01' AS dt
+    UNION ALL
+    SELECT DATE_ADD(dt, INTERVAL 1 DAY)
+    FROM date_generation_cte 
+    WHERE dt < '2023-11-30'
+),
+month_info AS (
+    SELECT 
+           dt AS purchase_date,
+           CEIL(DAYOFMONTH(dt)/7) AS week_of_month
+    FROM date_generation_cte
+    WHERE DAYNAME(dt) = 'Friday'
+),
+purchase_info AS (
+    SELECT  purchase_date, 
+            SUM(amount_spend) AS total_amount
+    FROM Purchases
+    WHERE DAYNAME(purchase_date) = 'Friday'
+    GROUP BY 
+            purchase_date
+)
+SELECT 
+        mi.week_of_month,
+        mi.purchase_date,
+        COALESCE(pi.total_amount, 0) AS total_amount
+FROM month_info mi 
+LEFT JOIN purchase_info pi 
+ON mi.purchase_date = pi.purchase_date
+ORDER BY 
+        mi.week_of_month ;
+
+--------------------------------------------------------------------------------
+-- m2
+WITH RECURSIVE T AS (
+  SELECT '2023-11-01' AS purchase_date
+  UNION ALL
+  SELECT DATE_ADD(purchase_date, INTERVAL 1 DAY)
+  FROM T
+  WHERE purchase_date < '2023-11-30'
+)
+SELECT
+  CEIL(DAYOFMONTH(purchase_date) / 7) AS week_of_month,
+  purchase_date,
+  IFNULL(SUM(amount_spend), 0)        AS total_amount
+FROM T
+LEFT JOIN Purchases USING (purchase_date)
+WHERE DAYOFWEEK(purchase_date) = 6
+GROUP BY purchase_date
+ORDER BY week_of_month;
