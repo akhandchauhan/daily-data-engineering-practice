@@ -8,9 +8,8 @@
       "Bash(ls 'c:\\\\Users\\\\college work\\\\.claude\\\\projects\\\\c--Users-college-work-OneDrive-Documents-DAILY-PRACTICE-SQL-PANDAS-PYSPARK\\\\')",
       "Read(//c/Users/college work/.claude/projects/c--Users-college-work-OneDrive-Documents-DAILY-PRACTICE-SQL-PANDAS-PYSPARK/**)",
       "Bash(grep -oE '\\\\.[a-z]+$')",
-      "Bash(git add *)",
-      "Bash(git commit -m ' *)",
-      "Bash(git push *)",
+      "Bash(git *)",
+      "PowerShell(git *)",
       "Bash(python -c ' *)",
       "Bash(python \"DATE_TIME/PANDAS/EASY/Leetcode_21_May_2026_1853.py\")",
       "Read(//c/Users/college work/AppData/Local/Microsoft/OneNote/16.0/**)",
@@ -54,9 +53,11 @@
       "Read(//e/Obsidian/DAILY_WORK/OneNote/company porter/Porter/**)",
       "Read(//e/Obsidian/DAILY_WORK/.obsidian/**)",
       "Read(//e/Obsidian/DAILY_WORK/OneNote/company porter/**)",
-      "Bash(git -C \"c:\\\\Users\\\\college work\\\\OneDrive\\\\Documents\\\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\" status)",
-      "Bash(git -C \"c:\\\\Users\\\\college work\\\\OneDrive\\\\Documents\\\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\" diff --name-only)",
-      "Bash(git -C \"c:\\\\Users\\\\college work\\\\OneDrive\\\\Documents\\\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK\" show --stat HEAD)"
+      "Bash(mkdir -p \"C:/Users/college work/.claude/skills/git-commit-push\")",
+      "Bash(ls \"E:\\\\Obsidian\\\\DAILY_WORK\")",
+      "Read(//e/Obsidian/DAILY_WORK/**)",
+      "Bash(dir /s \"E:\\\\Obsidian\\\\DAILY_WORK\\\\OneNote\\\\PLACEMENT PREPARATION\")",
+      "PowerShell(Get-ChildItem -Path \"E:\\\\Obsidian\\\\DAILY_WORK\\\\OneNote\\\\PLACEMENT PREPARATION\" -Recurse | Where-Object {$_.PSIsContainer -eq $false} | Select-Object FullName)"
     ],
     "additionalDirectories": [
       "c:\\Users\\college work\\OneDrive\\Documents\\DAILY_PRACTICE-SQL,PANDAS,PYSPARK",

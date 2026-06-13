@@ -8,7 +8,9 @@ A daily problem-solving archive for Data Engineering interview prep. Problems ar
 
 ## File naming convention
 
-All `.sql` and `.py` files inside SQL topic folders follow this format:
+### LeetCode / DataLemur / StrataScratch problems
+
+Files inside SQL topic folders:
 
 ```
 Leetcode_DD_MonthName_YYYY_ProblemNumber.extension
@@ -16,7 +18,22 @@ Leetcode_DD_MonthName_YYYY_ProblemNumber.extension
 
 Example: `Leetcode_27_Oct_2024_2854.sql`
 
-**ANKIT_BANSAL** is excluded from this convention — files there use free-form names.
+### Ankit Bansal playlist problems
+
+Files also go inside SQL topic folders (NOT the legacy `ANKIT_BANSAL/` flat folder):
+
+```
+Ankit_DD_MonthName_YYYY_<PlaylistIndex>_<CompanyName>_<problem_name>.extension
+```
+
+- `PlaylistIndex` = zero-padded 3-digit index from the YouTube playlist URL (`&index=N`)
+- `CompanyName` = PascalCase (e.g. `Google`, `Blinkit`, `Flipkart`)
+- `problem_name` = short snake_case description of the problem
+
+Example: `Ankit_13_June_2026_024_Google_salary_comparison.sql`
+
+Placed in the matching topic + difficulty folder, e.g.:
+`WINDOW_FUNCTION/SQL/Medium/Ankit_13_June_2026_024_Google_salary_comparison.sql`
 
 ## Folder structure
 
@@ -42,15 +59,17 @@ Current SQL topics: `CASE WHEN`, `DATE_TIME`, `FRIENDSHIP`, `GROUPBY`, `JOIN`, `
 
 `WINDOW_FUNCTION` has sub-type folders (`RANKING`, `LAG_LEAD`, `SUM`, `MAXIMUM`, `AVERAGE`, `CONTINUOUS_FINDING`) — same structure.
 
-### ANKIT_BANSAL
+### ANKIT_BANSAL (legacy — do not add new files here)
 
-Real-world company SQL problems (Blinkit, Naukri, LinkedIn, Vyapar, etc.). Structure is flat:
+Early real-world company SQL problems solved before the playlist workflow. Structure is flat:
 
 ```
 ANKIT_BANSAL/
  ├── sql/
  └── pandas/
 ```
+
+New Ankit Bansal problems go into topic folders using the `Ankit_` naming convention above.
 
 ### PYTHON_MYSQL_DE_V2
 
