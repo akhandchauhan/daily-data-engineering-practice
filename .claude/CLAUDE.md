@@ -105,6 +105,22 @@ MySQL must be running locally on port 3306 with user `root`, database `sql_pract
 
 SQL files contain both the DDL/INSERT setup and one or more solution queries (labelled `-- m1`, `-- m2`, etc.). Problem tables live in the `leetcode_practice` database (local MySQL 8, `root@localhost:3306`). Run them with the Database Client VS Code extension (`cweijan.vscode-mysql-client2`) or the `mysql` CLI.
 
+### Auto-connect a `.sql` file after VS Code restarts
+
+Database Client binds a file to a connection via an `-- Active:` mark on line 1 (setting `database-client.bindConnectionByActiveMark`, default `true`). Once a file has the mark, it reconnects automatically on every restart — no clicking, no password prompt.
+
+To add the mark (once per file):
+1. Open the `.sql` file.
+2. Ctrl+Shift+P → `Change Active Connection` (command `mysql.db.active`).
+3. Pick the `127.0.0.1` connection, then `leetcode_practice` in **Choose Active Schema**.
+4. Line 1 becomes `-- Active: 1773041149497@@127.0.0.1@3306@leetcode_practice` → Ctrl+S.
+
+Files without the mark need the database clicked in the **Database** sidebar once per session, otherwise running a query shows "No active connection found!". The mark holds no password, so it is safe to commit.
+
+### Known issue: Result panel shows "Total 0"
+
+Database Client 9.0.3 throws `Cannot read properties of undefined (reading 'kill')` when opening the Result panel, so rows never display even though the query succeeds (check the **Database Client** output log for `N rows retrieved`). Local fix: in `~/.vscode/extensions/cweijan.vscode-mysql-client2-9.0.3/out/extension.js` change `e.dialect.kill({})` to `e.dialect?.kill?.({})`, then Developer: Reload Window. An extension update overwrites this patch — re-apply if the issue returns.
+
 ## Pandas notebooks
 
 Every pandas solution is a `.ipynb` with this cell layout:
@@ -114,6 +130,14 @@ Every pandas solution is a `.ipynb` with this cell layout:
 3. One code cell per approach, first line `# m1`, `# m2`, ... so each method runs on its own
 
 Kernel: Python 3.11.9 (`~\AppData\Local\Programs\Python\Python311\python.exe`) — has `pandas` and `ipykernel`. Needs the `ms-python.python` + `ms-toolsai.jupyter` VS Code extensions.
+
+### Selecting cells in VS Code notebooks
+
+- **All cells**: click a cell → **Esc** (command mode: left border highlighted, no text cursor) → **Ctrl+A**. In edit mode, Ctrl+A only selects text inside the current cell.
+- **Range**: click the first cell, **Shift+click** the last.
+- **Specific cells**: **Ctrl+click** each one.
+- **Extend one at a time**: **Shift+↓ / Shift+↑** in command mode.
+- With cells selected: **Ctrl+C / Ctrl+X** copy/cut whole cells, **Delete** removes them. To run everything, use **Run All** in the notebook toolbar — no selection needed.
 
 ## Key patterns to follow
 
