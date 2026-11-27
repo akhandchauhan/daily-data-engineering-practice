@@ -18,6 +18,8 @@ Leetcode_DD_MonthName_YYYY_ProblemNumber.extension
 
 Example: `Leetcode_27_Oct_2024_2854.sql`
 
+Extension: `.sql` in `SQL/` folders, `.ipynb` (Jupyter notebook) in `PANDAS/` folders — e.g. `Leetcode_18_March_2025_1421.ipynb`. Do not add new pandas `.py` files.
+
 ### Ankit Bansal playlist problems
 
 Files also go inside SQL topic folders (NOT the legacy `ANKIT_BANSAL/` flat folder):
@@ -86,7 +88,9 @@ DB_CONFIG = {"host": "localhost", "port": 3306, "user": "root", "password": "asd
 
 Days completed: 01–03. Thread map: Days 01–05 Connection & Setup → 06–12 Cursors & SELECT → 13–18 CRUD + Safe Writes → 19–22 Transactions → 23–26 Context Managers + Streaming → 27–30 Batch Inserts + Capstone.
 
-## Running Python files
+## Running Python files (curriculum only)
+
+`PYTHON_MYSQL_DE_V2/` and `DSA_DE/` stay as `.py` because they run from the terminal:
 
 ```bash
 python PYTHON_MYSQL_DE_V2/day03_error_handling.py   # runs run_demo()
@@ -99,11 +103,21 @@ MySQL must be running locally on port 3306 with user `root`, database `sql_pract
 
 ## SQL files
 
-SQL files contain both the DDL/INSERT setup and one or more solution queries (labelled `-- m1`, `-- m2`, etc.). Run them in any MySQL client against the `sql_practice` database.
+SQL files contain both the DDL/INSERT setup and one or more solution queries (labelled `-- m1`, `-- m2`, etc.). Problem tables live in the `leetcode_practice` database (local MySQL 8, `root@localhost:3306`). Run them with the Database Client VS Code extension (`cweijan.vscode-mysql-client2`) or the `mysql` CLI.
+
+## Pandas notebooks
+
+Every pandas solution is a `.ipynb` with this cell layout:
+
+1. Markdown cell — `# <ProblemNumber>. <Title>` + the problem statement verbatim inside a ```` ```text ```` fence
+2. Code cell `# setup` — `import pandas as pd` + the sample data as DataFrames
+3. One code cell per approach, first line `# m1`, `# m2`, ... so each method runs on its own
+
+Kernel: Python 3.11.9 (`~\AppData\Local\Programs\Python\Python311\python.exe`) — has `pandas` and `ipykernel`. Needs the `ms-python.python` + `ms-toolsai.jupyter` VS Code extensions.
 
 ## Key patterns to follow
 
-- Pandas solutions mirror the SQL logic for the same problem number.
+- Pandas solutions mirror the SQL logic for the same problem number, and their output must match the SQL output — e.g. cast back to `int` after `fillna(0)` so `113` doesn't print as `113.0`.
 - Window function solutions often include multiple approaches (M1 = concise LAG/DATEDIFF pattern; M2 = islands/gaps technique).
 - `ANKIT_BANSAL` files do not follow the `Leetcode_` naming convention — leave them as-is.
 - When creating a new day file for `PYTHON_MYSQL_DE_V2`, follow the exact header and section format of existing day files (block comment headers, CONCEPT N sections, Python tip section, `run_demo()`, `if __name__ == "__main__"`).
