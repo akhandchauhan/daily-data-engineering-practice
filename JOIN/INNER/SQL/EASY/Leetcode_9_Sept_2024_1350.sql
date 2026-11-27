@@ -18,13 +18,14 @@
 -- | department_id | int     |
 -- +---------------+---------+
 -- In SQL, id is the primary key of this table.
--- The table has information about the id of each student at a university and the id 
+-- The table has information about the id of each student at a university and the id
 --of the department he/she studies at.
+
 -- Find the id and the name of all students who are enrolled in departments that no longer exist.
 -- Return the result table in any order.
 -- The result format is in the following example.
 -- Example 1:
--- Input: 
+-- Input:
 -- Departments table:
 -- +------+--------------------------+
 -- | id   | name                     |
@@ -48,7 +49,7 @@
 -- | 7    | Daiana   | 33            |
 -- | 11   | Madelynn | 1             |
 -- +------+----------+---------------+
--- Output: 
+-- Output:
 -- +------+----------+
 -- | id   | name     |
 -- +------+----------+
@@ -57,12 +58,13 @@
 -- | 4    | Jasmine  |
 -- | 3    | Steve    |
 -- +------+----------+
--- Explanation: 
--- John, Daiana, Steve, and Jasmine are enrolled in departments 14, 33, 74, and 77 respectively. 
+-- Explanation:
+-- John, Daiana, Steve, and Jasmine are enrolled in departments 14, 33, 74, and 77 respectively.
 --department 14, 33, 74, and 77 do not exist in the Departments table.
 
-drop table Departments;
+
 drop table Students;
+drop table Departments; 
 -- Create Departments table
 CREATE TABLE Departments (
     id INT PRIMARY KEY,
@@ -70,11 +72,11 @@ CREATE TABLE Departments (
 );
 
 -- Insert sample values into Departments table
-INSERT INTO Departments (id, name)
-VALUES 
-(1, 'Electrical Engineering'),
-(7, 'Computer Engineering'),
-(13, 'Business Administration');
+INSERT INTO
+    Departments (id, name)
+VALUES (1, 'Electrical Engineering'),
+    (7, 'Computer Engineering'),
+    (13, 'Business Administration');
 
 -- Create Students table
 CREATE TABLE Students (
@@ -84,36 +86,33 @@ CREATE TABLE Students (
 );
 
 -- Insert sample values into Students table
-INSERT INTO Students (id, name, department_id)
-VALUES
-(23, 'Alice', 1),
-(1, 'Bob', 7),
-(5, 'Jennifer', 13),
-(2, 'John', 14),
-(4, 'Jasmine', 77),
-(3, 'Steve', 74),
-(6, 'Luis', 1),
-(8, 'Jonathan', 7),
-(7, 'Daiana', 33),
-(11, 'Madelynn', 1);
+INSERT INTO
+    Students (id, name, department_id)
+VALUES (23, 'Alice', 1),
+    (1, 'Bob', 7),
+    (5, 'Jennifer', 13),
+    (2, 'John', 14),
+    (4, 'Jasmine', 77),
+    (3, 'Steve', 74),
+    (6, 'Luis', 1),
+    (8, 'Jonathan', 7),
+    (7, 'Daiana', 33),
+    (11, 'Madelynn', 1);
 
--- m1 
-SELECT s.id,
-       s.name
-FROM Students s
+-- m1
+SELECT 
+    s.id,
+    s.name
+FROM Students s 
 LEFT JOIN Departments d 
-ON s.department_id=d.id
-WHERE d.id IS NULL;
+ON s.department_id = d.id
+WHERE d.id IS NULL ;
 
 ------------------------------------------------------------------------------------------------------------
 --method 2 =subquery
 
-select id, name 
-from Students
-where department_id not in
-(select id from Departments);
-
-
-
-
-
+SELECT 
+    s.id,
+    s.name
+FROM students s 
+WHERE department_id NOT IN (SELECT id FROM departments) ;
