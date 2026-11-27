@@ -29,7 +29,6 @@ A **daily problem-solving log** for Data Engineering interviews. Every problem i
 ```diff
 + SQL      →  joins · window functions · CTEs · ranking · pivots
 + Pandas   →  one Jupyter notebook per problem, one cell per approach
-+ PySpark  →  scalable, distributed versions of the same patterns
 ```
 
 **Sources:** LeetCode Premium · DataLemur · StrataScratch · Ankit Bansal (real company case studies)
