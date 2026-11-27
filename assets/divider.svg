@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="16" viewBox="0 0 1200 16" role="img" aria-label="divider">
+  <defs>
+    <linearGradient id="base" x1="0" x2="1">
+      <stop offset="0" stop-color="#00f0ff" stop-opacity="0"/>
+      <stop offset="0.15" stop-color="#00f0ff"/>
+      <stop offset="0.5" stop-color="#8a5cff"/>
+      <stop offset="0.85" stop-color="#ff2bd6"/>
+      <stop offset="1" stop-color="#ff2bd6" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="pulse" x1="0" x2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-5%" y="-300%" width="110%" height="700%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect x="0" y="7" width="1200" height="2" fill="url(#base)" filter="url(#glow)" opacity="0.8"/>
+  <rect x="-200" y="6.5" width="200" height="3" fill="url(#pulse)" filter="url(#glow)">
+    <animate attributeName="x" values="-200;1200" dur="3.5s" repeatCount="indefinite"/>
+  </rect>
+  <g fill="#00f0ff"><rect x="596" y="4" width="8" height="8" transform="rotate(45 600 8)" filter="url(#glow)"/></g>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="150" viewBox="0 0 1200 150" role="img" aria-label="Solve, optimize, document">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#12052a"/>
+      <stop offset="1" stop-color="#02030a"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="m"><rect width="1200" height="150" fill="url(#fade)"/></mask>
+    <filter id="glow" x="-10%" y="-80%" width="120%" height="260%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="frame"><rect width="1200" height="150" rx="18"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="150" fill="url(#bg)"/>
+    <!-- inverted grid receding upward -->
+    <g mask="url(#m)" stroke="#8a5cff" stroke-width="1" opacity="0.6">
+      <line x1="600" y1="0" x2="600" y2="150"/>
+      <line x1="760" y1="0" x2="640" y2="150"/><line x1="440" y1="0" x2="560" y2="150"/>
+      <line x1="920" y1="0" x2="680" y2="150"/><line x1="280" y1="0" x2="520" y2="150"/>
+      <line x1="1080" y1="0" x2="720" y2="150"/><line x1="120" y1="0" x2="480" y2="150"/>
+      <line x1="1260" y1="0" x2="760" y2="150"/><line x1="-60" y1="0" x2="440" y2="150"/>
+      <line x1="0" x2="1200" y1="12" y2="12"/><line x1="0" x2="1200" y1="34" y2="34"/>
+      <line x1="0" x2="1200" y1="60" y2="60"/><line x1="0" x2="1200" y1="92" y2="92"/>
+    </g>
+    <g font-family="Consolas, 'SF Mono', Menlo, 'Courier New', monospace" text-anchor="middle">
+      <text x="600" y="72" font-size="22" letter-spacing="6" fill="#00f0ff" filter="url(#glow)">[ SOLVE ] → [ OPTIMIZE ] → [ DOCUMENT ]</text>
+      <text x="600" y="108" font-size="12" letter-spacing="4" fill="#ff5fe0" opacity="0.85">END_OF_TRANSMISSION · SEE YOU TOMORROW</text>
+      <rect x="832" y="98" width="9" height="13" fill="#ff5fe0"><animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite" calcMode="discrete"/></rect>
+    </g>
+  </g>
+</svg>

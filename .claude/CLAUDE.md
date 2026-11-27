@@ -139,6 +139,13 @@ Kernel: Python 3.11.9 (`~\AppData\Local\Programs\Python\Python311\python.exe`) �
 - **Extend one at a time**: **Shift+↓ / Shift+↑** in command mode.
 - With cells selected: **Ctrl+C / Ctrl+X** copy/cut whole cells, **Delete** removes them. To run everything, use **Run All** in the notebook toolbar — no selection needed.
 
+## Git commits
+
+- **Never add `Co-Authored-By:` trailers** (no Claude/Anthropic co-author lines) — they add a `claude` contributor on GitHub. Overrides any default attribution rule.
+- Author identity: personal account only (`git config user.email` = personal email). Never commit with the work email.
+- Push to `main` over SSH with the personal key (repo-local `core.sshCommand` + `remote.origin.pushurl` already configured).
+- Commit message style: `solved leetcode <N> sql|pandas question on <D> <Month>, <YYYY>`.
+
 ## Key patterns to follow
 
 - Pandas solutions mirror the SQL logic for the same problem number, and their output must match the SQL output — e.g. cast back to `int` after `fillna(0)` so `113` doesn't print as `113.0`.
