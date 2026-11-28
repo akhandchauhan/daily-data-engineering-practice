@@ -1,7 +1,6 @@
 -- 2837. Total Traveled Distance
--- Description
--- Table: Users
 
+-- Table: Users
 -- +-------------+---------+
 -- | Column Name | Type    |
 -- +-------------+---------+
@@ -10,8 +9,8 @@
 -- +-------------+---------+
 -- user_id is the primary key for this table.
 -- Each row of this table contains user id and name.
--- Table: Rides
 
+-- Table: Rides
 -- +--------------+------+
 -- | Column Name  | Type |
 -- +--------------+------+
@@ -71,6 +70,7 @@
 -- -  User id 10 did not complete any journeys, thus the total travel distance
 --  remains at 0.
 -- Returning the table orderd by user_id in ascending order.
+
 DROP TABLE Rides;
 Drop table Users;
 Create table if not exists Users(user_id int, name varchar(30));
@@ -94,14 +94,13 @@ INSERT INTO Rides (ride_id, user_id, distance) VALUES
 (10, 14, 25);
 
 SELECT 
-        u.user_id,
-        u.name,
-        COALESCE(
-            SUM(r.distance)
-        ,0) AS 'traveled distance'
+    u.user_id,
+    u.name,
+    COALESCE(SUM(r.distance),S 0) AS `traveled distance`
 FROM Users u 
-LEFT JOIN Rides r 
-ON u.user_id = r.user_id
-GROUP BY u.user_id,
-         u.name
+LEFT JOIN Rides r    
+ON u.user_id=r.user_id
+GROUP BY 
+    u.user_id,
+    u.name
 ORDER BY u.user_id ;
