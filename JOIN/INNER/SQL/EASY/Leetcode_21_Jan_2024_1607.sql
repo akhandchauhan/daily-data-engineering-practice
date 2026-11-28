@@ -131,16 +131,21 @@ WITH cte as(
 )
 SELECT seller_name
 FROM Seller
-WHERE seller_id NOT IN (SELECT seller_id FROM cte);
-
+WHERE seller_id NOT IN (SELECT seller_id FROM cte)
+ORDER BY seller_name;
 --------------------------------------------------------------------------------------------
 -- m2
-SELECT s.seller_name
-FROM Seller s
-LEFT JOIN Orders o
-ON s.seller_id = o.seller_id
-GROUP BY s.seller_name
-HAVING SUM(YEAR(sale_date)=2020) = 0;
+SELECT 
+    s.seller_name
+FROM Seller s 
+LEFT JOIN Orders o  
+ON s.seller_id=o.seller_id
+AND YEAR(o.sale_date) = 2020
+GROUP BY  
+    s.seller_id,
+    s.seller_name
+HAVING SUM(CASE WHEN YEAR(o.sale_date)=2020 THEN 1 ELSE 0 END) = 0
+ORDER BY seller_name;
 
 --------------------------------------------------------------------------------------------
 -- m3 
@@ -201,4 +206,4 @@ WITH cte AS (
 SELECT seller_name
 FROM Seller
 WHERE seller_id NOT IN (SELECT seller_id FROM cte)
-ORDER BY seller_name;
+ORDER BY seller_name ;
